@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://maxwell-cross.com/sitemap.xml

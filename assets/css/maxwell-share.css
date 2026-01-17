@@ -1,0 +1,222 @@
+/* ============================================
+   MAXWELL CROSS - SHARE POPUP STYLES
+   Add this to your maxwell-cross-post.css
+   ============================================ */
+
+/* ===========================================
+   SHARE CONTAINER
+   =========================================== */
+
+.mc-share-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* ===========================================
+   SHARE BUTTON
+   =========================================== */
+
+.mc-share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #8b949e;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mc-share-btn:hover {
+    color: #00ff88;
+    background: rgba(0, 255, 136, 0.08);
+    border-color: rgba(0, 255, 136, 0.25);
+}
+
+.mc-share-btn.is-active {
+    color: #00ff88;
+    background: rgba(0, 255, 136, 0.1);
+    border-color: rgba(0, 255, 136, 0.3);
+}
+
+.mc-share-btn svg {
+    flex-shrink: 0;
+}
+
+/* ===========================================
+   SHARE POPUP
+   =========================================== */
+
+.mc-share-popup {
+    position: absolute;
+    top: calc(100% + 0.75rem);
+    left: 0;
+    z-index: 100;
+    min-width: 200px;
+    
+    /* Hidden by default */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all 0.2s ease;
+    pointer-events: none;
+}
+
+.mc-share-popup.is-active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.mc-share-popup__inner {
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    border-radius: 8px;
+    padding: 0.5rem;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(0, 255, 136, 0.05);
+}
+
+/* Arrow/pointer */
+.mc-share-popup__inner::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 24px;
+    width: 12px;
+    height: 12px;
+    background: #0d1117;
+    border-left: 1px solid rgba(0, 255, 136, 0.2);
+    border-top: 1px solid rgba(0, 255, 136, 0.2);
+    transform: rotate(45deg);
+}
+
+/* ===========================================
+   SHARE LINKS
+   =========================================== */
+
+.mc-share-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.65rem 0.875rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #c9d1d9;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    text-align: left;
+}
+
+.mc-share-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.mc-share-link svg {
+    flex-shrink: 0;
+    opacity: 0.8;
+}
+
+.mc-share-link:hover svg {
+    opacity: 1;
+}
+
+/* Platform-specific colors on hover */
+.mc-share-link--twitter:hover {
+    color: #fff;
+    background: rgba(29, 161, 242, 0.15);
+}
+
+.mc-share-link--twitter:hover svg {
+    color: #1da1f2;
+}
+
+.mc-share-link--linkedin:hover {
+    color: #fff;
+    background: rgba(0, 119, 181, 0.15);
+}
+
+.mc-share-link--linkedin:hover svg {
+    color: #0077b5;
+}
+
+.mc-share-link--reddit:hover {
+    color: #fff;
+    background: rgba(255, 69, 0, 0.15);
+}
+
+.mc-share-link--reddit:hover svg {
+    color: #ff4500;
+}
+
+.mc-share-link--copy:hover {
+    color: #00ff88;
+    background: rgba(0, 255, 136, 0.1);
+}
+
+.mc-share-link--copy:hover svg {
+    color: #00ff88;
+}
+
+.mc-share-link--copy.copied {
+    color: #00ff88;
+    background: rgba(0, 255, 136, 0.15);
+}
+
+/* ===========================================
+   DIVIDER (optional, between social and copy)
+   =========================================== */
+
+.mc-share-popup__divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 0.5rem 0;
+}
+
+/* ===========================================
+   RESPONSIVE
+   =========================================== */
+
+@media (max-width: 480px) {
+    .mc-share-popup {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        min-width: 100%;
+        transform: translateY(100%);
+    }
+    
+    .mc-share-popup.is-active {
+        transform: translateY(0);
+    }
+    
+    .mc-share-popup__inner {
+        border-radius: 16px 16px 0 0;
+        padding: 1rem;
+        padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+    }
+    
+    .mc-share-popup__inner::before {
+        display: none;
+    }
+    
+    .mc-share-link {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+}

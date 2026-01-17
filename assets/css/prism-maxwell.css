@@ -1,0 +1,562 @@
+/* ============================================
+   MAXWELL CROSS - PRISM.JS TACTICAL THEME
+   Code Block Styling for Red Team Content
+   ============================================ */
+
+/* ===========================================
+   CODE BLOCK CONTAINER
+   =========================================== */
+
+/* Wrapper for enhanced code blocks */
+.mc-code-block {
+    position: relative;
+    margin: 2rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+    border: 1px solid rgba(0, 255, 136, 0.15);
+    box-shadow: 
+        0 4px 24px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(0, 255, 136, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.mc-code-block::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(0, 255, 136, 0.3) 20%, 
+        rgba(0, 255, 136, 0.5) 50%, 
+        rgba(0, 255, 136, 0.3) 80%, 
+        transparent
+    );
+}
+
+/* ===========================================
+   CODE BLOCK HEADER (Language + Copy Button)
+   =========================================== */
+
+.mc-code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 1rem;
+    background: rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+}
+
+/* Language Label */
+.mc-code-lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #00ff88;
+    padding: 0.25rem 0.6rem;
+    background: rgba(0, 255, 136, 0.08);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    border-radius: 4px;
+}
+
+.mc-code-lang::before {
+    content: '◆';
+    font-size: 0.5rem;
+    opacity: 0.7;
+}
+
+/* Language-specific colors */
+.mc-code-lang[data-lang="python"] { color: #3572A5; border-color: rgba(53, 114, 165, 0.3); background: rgba(53, 114, 165, 0.1); }
+.mc-code-lang[data-lang="bash"],
+.mc-code-lang[data-lang="shell"] { color: #89e051; border-color: rgba(137, 224, 81, 0.3); background: rgba(137, 224, 81, 0.1); }
+.mc-code-lang[data-lang="powershell"] { color: #012456; border-color: rgba(1, 36, 86, 0.3); background: rgba(1, 36, 86, 0.1); color: #5391FE; }
+.mc-code-lang[data-lang="javascript"],
+.mc-code-lang[data-lang="js"] { color: #f7df1e; border-color: rgba(247, 223, 30, 0.3); background: rgba(247, 223, 30, 0.1); }
+.mc-code-lang[data-lang="json"] { color: #f5a623; border-color: rgba(245, 166, 35, 0.3); background: rgba(245, 166, 35, 0.1); }
+.mc-code-lang[data-lang="yaml"],
+.mc-code-lang[data-lang="yml"] { color: #cb171e; border-color: rgba(203, 23, 30, 0.3); background: rgba(203, 23, 30, 0.1); }
+.mc-code-lang[data-lang="sql"] { color: #e38c00; border-color: rgba(227, 140, 0, 0.3); background: rgba(227, 140, 0, 0.1); }
+.mc-code-lang[data-lang="c"],
+.mc-code-lang[data-lang="cpp"] { color: #555555; border-color: rgba(85, 85, 85, 0.3); background: rgba(85, 85, 85, 0.1); color: #a8b9cc; }
+.mc-code-lang[data-lang="csharp"],
+.mc-code-lang[data-lang="cs"] { color: #178600; border-color: rgba(23, 134, 0, 0.3); background: rgba(23, 134, 0, 0.1); }
+.mc-code-lang[data-lang="html"],
+.mc-code-lang[data-lang="xml"] { color: #e34c26; border-color: rgba(227, 76, 38, 0.3); background: rgba(227, 76, 38, 0.1); }
+.mc-code-lang[data-lang="css"] { color: #563d7c; border-color: rgba(86, 61, 124, 0.3); background: rgba(86, 61, 124, 0.1); color: #a78bfa; }
+.mc-code-lang[data-lang="ini"],
+.mc-code-lang[data-lang="conf"] { color: #d1d5da; border-color: rgba(209, 213, 218, 0.3); background: rgba(209, 213, 218, 0.1); }
+
+/* Copy Button */
+.mc-code-copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #8b949e;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mc-code-copy:hover {
+    color: #00ff88;
+    background: rgba(0, 255, 136, 0.08);
+    border-color: rgba(0, 255, 136, 0.25);
+}
+
+.mc-code-copy:active {
+    transform: scale(0.97);
+}
+
+.mc-code-copy.copied {
+    color: #00ff88;
+    background: rgba(0, 255, 136, 0.15);
+    border-color: rgba(0, 255, 136, 0.4);
+}
+
+.mc-code-copy svg {
+    width: 14px;
+    height: 14px;
+    stroke-width: 2;
+}
+
+.mc-code-copy .copy-icon { display: block; }
+.mc-code-copy .check-icon { display: none; }
+.mc-code-copy.copied .copy-icon { display: none; }
+.mc-code-copy.copied .check-icon { display: block; }
+
+/* ===========================================
+   PRISM.JS OVERRIDES - TACTICAL THEME
+   =========================================== */
+
+/* Base Code Styling */
+code[class*="language-"],
+pre[class*="language-"] {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', Monaco, 'Andale Mono', monospace;
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: #e6edf3;
+    text-shadow: none;
+    direction: ltr;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    tab-size: 4;
+    hyphens: none;
+    background: transparent;
+}
+
+/* Pre Block Inside Container */
+.mc-code-block pre[class*="language-"] {
+    margin: 0;
+    padding: 1.25rem 1.5rem;
+    overflow-x: auto;
+    background: transparent;
+}
+
+/* Scrollbar Styling */
+.mc-code-block pre[class*="language-"]::-webkit-scrollbar {
+    height: 8px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.mc-code-block pre[class*="language-"]::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 136, 0.2);
+    border-radius: 4px;
+}
+
+.mc-code-block pre[class*="language-"]::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 136, 0.35);
+}
+
+/* Inline Code (not in pre) */
+:not(pre) > code[class*="language-"] {
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    background: rgba(0, 255, 136, 0.08);
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.15);
+    font-size: 0.9em;
+}
+
+/* ===========================================
+   TOKEN COLORS - TACTICAL PALETTE
+   =========================================== */
+
+/* Comments - Muted tactical gray */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: #6a737d;
+    font-style: italic;
+}
+
+/* Punctuation */
+.token.punctuation {
+    color: #8b949e;
+}
+
+/* Namespace */
+.token.namespace {
+    opacity: 0.8;
+}
+
+/* Strings - Bright tactical green */
+.token.string,
+.token.attr-value {
+    color: #7ee787;
+}
+
+/* Chars and regex */
+.token.char,
+.token.regex {
+    color: #a5d6ff;
+}
+
+/* Keywords - Tactical cyan */
+.token.keyword,
+.token.selector,
+.token.important,
+.token.atrule {
+    color: #ff7b72;
+    font-weight: 500;
+}
+
+/* Built-ins, constants - Electric blue */
+.token.builtin,
+.token.constant {
+    color: #79c0ff;
+}
+
+/* Classes, types - Purple highlight */
+.token.class-name,
+.token.maybe-class-name {
+    color: #d2a8ff;
+}
+
+/* Functions - Bright tactical accent */
+.token.function {
+    color: #d2a8ff;
+}
+
+/* Numbers */
+.token.number {
+    color: #79c0ff;
+}
+
+/* Boolean, null */
+.token.boolean,
+.token.null {
+    color: #ff7b72;
+}
+
+/* Property names */
+.token.property {
+    color: #79c0ff;
+}
+
+/* Tags (HTML/XML) */
+.token.tag {
+    color: #7ee787;
+}
+
+/* Attribute names */
+.token.attr-name {
+    color: #79c0ff;
+}
+
+/* Operators */
+.token.operator,
+.token.entity,
+.token.url {
+    color: #79c0ff;
+}
+
+/* Variables */
+.token.variable {
+    color: #ffa657;
+}
+
+/* Symbols */
+.token.symbol {
+    color: #ffa657;
+}
+
+/* Inserts (diff) */
+.token.inserted {
+    color: #7ee787;
+    background: rgba(46, 160, 67, 0.15);
+}
+
+/* Deletions (diff) */
+.token.deleted {
+    color: #ff7b72;
+    background: rgba(248, 81, 73, 0.15);
+}
+
+/* Important, bold */
+.token.important,
+.token.bold {
+    font-weight: bold;
+}
+
+/* Italic */
+.token.italic {
+    font-style: italic;
+}
+
+/* Entities */
+.token.entity {
+    cursor: help;
+}
+
+/* ===========================================
+   LANGUAGE-SPECIFIC TWEAKS
+   =========================================== */
+
+/* Bash/Shell - Command prefix highlighting */
+.language-bash .token.function,
+.language-shell .token.function {
+    color: #d2a8ff;
+}
+
+/* PowerShell cmdlets */
+.language-powershell .token.function {
+    color: #ffa657;
+}
+
+.language-powershell .token.namespace {
+    color: #d2a8ff;
+}
+
+/* Python decorators */
+.language-python .token.decorator {
+    color: #ffa657;
+}
+
+/* Python f-strings */
+.language-python .token.string-interpolation .token.interpolation {
+    color: #79c0ff;
+}
+
+/* SQL keywords more prominent */
+.language-sql .token.keyword {
+    color: #ff7b72;
+    text-transform: uppercase;
+}
+
+/* ===========================================
+   LINE NUMBERS (OPTIONAL)
+   =========================================== */
+
+.mc-code-block.line-numbers {
+    padding-left: 3.5rem;
+    counter-reset: linenumber;
+}
+
+.mc-code-block.line-numbers pre[class*="language-"]::before {
+    content: counter(linenumber);
+    counter-increment: linenumber;
+    color: #484f58;
+    font-size: 0.75rem;
+    text-align: right;
+    min-width: 2.5rem;
+    padding-right: 1rem;
+    margin-right: 1rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ===========================================
+   HIGHLIGHT LINES (For emphasizing code)
+   =========================================== */
+
+.mc-code-block .highlight-line {
+    display: block;
+    background: rgba(0, 255, 136, 0.08);
+    margin: 0 -1.5rem;
+    padding: 0 1.5rem;
+    border-left: 3px solid #00ff88;
+}
+
+/* ===========================================
+   FILE PATH / FILENAME DISPLAY
+   =========================================== */
+
+.mc-code-filename {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: #8b949e;
+}
+
+.mc-code-filename::before {
+    content: '📄';
+    font-size: 0.875rem;
+}
+
+.mc-code-filename code {
+    color: #00ff88;
+    background: none;
+    padding: 0;
+    border: none;
+}
+
+/* ===========================================
+   TERMINAL OUTPUT STYLING
+   =========================================== */
+
+.mc-terminal-output {
+    position: relative;
+    margin: 2rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #000;
+    border: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.mc-terminal-output::before {
+    content: '● ● ●';
+    display: block;
+    padding: 0.6rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: #6a737d;
+}
+
+.mc-terminal-output pre {
+    margin: 0;
+    padding: 1rem 1.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: #00ff88;
+    overflow-x: auto;
+}
+
+.mc-terminal-output .prompt {
+    color: #6a737d;
+    user-select: none;
+}
+
+.mc-terminal-output .output {
+    color: #e6edf3;
+}
+
+.mc-terminal-output .error {
+    color: #ff7b72;
+}
+
+.mc-terminal-output .success {
+    color: #7ee787;
+}
+
+/* ===========================================
+   RESPONSIVE ADJUSTMENTS
+   =========================================== */
+
+@media (max-width: 768px) {
+    .mc-code-block {
+        margin: 1.5rem -1rem;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+    
+    code[class*="language-"],
+    pre[class*="language-"] {
+        font-size: 0.8rem;
+    }
+    
+    .mc-code-header {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .mc-code-block pre[class*="language-"] {
+        padding: 1rem;
+    }
+    
+    .mc-code-lang {
+        font-size: 0.6rem;
+        padding: 0.2rem 0.5rem;
+    }
+    
+    .mc-code-copy {
+        font-size: 0.6rem;
+        padding: 0.3rem 0.5rem;
+    }
+    
+    .mc-code-copy span {
+        display: none;
+    }
+}
+
+/* ===========================================
+   PRINT STYLES
+   =========================================== */
+
+@media print {
+    .mc-code-block {
+        border: 1px solid #ccc;
+        box-shadow: none;
+    }
+    
+    .mc-code-copy {
+        display: none;
+    }
+    
+    code[class*="language-"],
+    pre[class*="language-"] {
+        color: #000;
+        text-shadow: none;
+    }
+    
+    .token.comment { color: #666; }
+    .token.string { color: #080; }
+    .token.keyword { color: #008; }
+    .token.function { color: #800; }
+}
+
+/* ===========================================
+   DARK MODE ENHANCEMENTS
+   (For systems with prefers-color-scheme)
+   =========================================== */
+
+@media (prefers-color-scheme: dark) {
+    /* Already optimized for dark - this is the default */
+}
+
+/* ===========================================
+   SELECTION STYLING
+   =========================================== */
+
+code[class*="language-"]::selection,
+pre[class*="language-"]::selection,
+code[class*="language-"] ::selection,
+pre[class*="language-"] ::selection {
+    background: rgba(0, 255, 136, 0.2);
+    color: inherit;
+}

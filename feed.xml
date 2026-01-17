@@ -3,7 +3,7 @@
     <title>Maxwell Cross</title>
     <link href="https://maxwell-cross.com/feed.xml" rel="self" />
     <link href="https://maxwell-cross.com" />
-    <updated>2026-01-17T13:03:13-05:00</updated>
+    <updated>2026-01-17T15:43:08-05:00</updated>
     <author>
         <name>Maxwell Cross</name>
     </author>
@@ -16,16 +16,19 @@
         </author>
         <link href="https://maxwell-cross.com/30-days-of-red-team-day-16-windows-privilege-escalation.html"/>
         <id>https://maxwell-cross.com/30-days-of-red-team-day-16-windows-privilege-escalation.html</id>
+        <media:content url="https://maxwell-cross.com/media/posts/3/Adobe-Express-file.png" medium="image" />
 
         <updated>2026-01-17T13:03:13-05:00</updated>
             <summary type="html">
                 <![CDATA[
+                        <img src="https://maxwell-cross.com/media/posts/3/Adobe-Express-file.png" alt="" />
                     You have a shell. The target answered. The C2 is stable. You’re in. But you’re just a regular user. No admin rights. No SYSTEM access. No credential harvesting. No lateral movement. You’re trapped in a low-privilege cage while the real targets — passwords, hashes, domain&hellip;
                 ]]>
             </summary>
         <content type="html">
             <![CDATA[
-                <p id="47eb" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">You have a shell. The target answered. The C2 is stable. You’re in.</p>
+                    <p><img src="https://maxwell-cross.com/media/posts/3/Adobe-Express-file.png" class="type:primaryImage" alt="" /></p>
+                <p id="47eb" data-selectable-paragraph="">You have a shell. The target answered. The C2 is stable. You’re in.</p>
 <p id="18f3" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">But you’re just a regular user. No admin rights. No SYSTEM access. No credential harvesting. No lateral movement. You’re trapped in a low-privilege cage while the real targets — passwords, hashes, domain admin credentials — sit just out of reach behind administrator permissions.</p>
 <p id="9509" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">This is where most amateur operators give up. This is where professionals get creative.</strong></p>
 <p id="1450" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">Because here’s what separates the good from the great: <strong class="acd he">Windows privilege escalation isn’t about finding the perfect exploit. It’s about finding the dozen misconfigurations that Windows admins leave everywhere.</strong></p>

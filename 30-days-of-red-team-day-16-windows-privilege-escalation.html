@@ -1,358 +1,44 @@
 <!DOCTYPE html><html lang="en-gb"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>30 Days of Red Team: Day 16 — Windows Privilege Escalation - Maxwell Cross</title><meta name="description" content="You have a shell. The target answered. The C2 is stable. You’re in. But you’re just a regular user. No admin rights. No SYSTEM access. No credential harvesting. No lateral movement. You’re trapped in a low-privilege cage while the real targets — passwords, hashes, domain&hellip;"><meta name="generator" content="Publii Open-Source CMS for Static Site"><link rel="canonical" href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-16-windows-privilege-escalation-9a2ed6f64791/"><link rel="alternate" type="application/atom+xml" href="https://maxwell-cross.com/feed.xml" title="Maxwell Cross - RSS"><link rel="alternate" type="application/json" href="https://maxwell-cross.com/feed.json" title="Maxwell Cross - JSON"><meta property="og:title" content="30 Days of Red Team: Day 16 — Windows Privilege Escalation"><meta property="og:image" content="https://maxwell-cross.com/media/posts/3/Adobe-Express-file.png"><meta property="og:image:width" content="1080"><meta property="og:image:height" content="596"><meta property="og:site_name" content="Maxwell Cross"><meta property="og:description" content="You have a shell. The target answered. The C2 is stable. You’re in. But you’re just a regular user. No admin rights. No SYSTEM access. No credential harvesting. No lateral movement. You’re trapped in a low-privilege cage while the real targets — passwords, hashes, domain&hellip;"><meta property="og:url" content="https://maxwell-cross.com/30-days-of-red-team-day-16-windows-privilege-escalation.html"><meta property="og:type" content="article"><link rel="stylesheet" href="https://maxwell-cross.com/assets/css/style.css?v=356ea83af5e3c6b89120e70f2d6be8c5"><script type="application/ld+json">{"@context":"http://schema.org","@type":"Article","mainEntityOfPage":{"@type":"WebPage","@id":"https://maxwell-cross.com/30-days-of-red-team-day-16-windows-privilege-escalation.html"},"headline":"30 Days of Red Team: Day 16 — Windows Privilege Escalation","datePublished":"2026-01-17T13:03-05:00","dateModified":"2026-01-17T15:43-05:00","image":{"@type":"ImageObject","url":"https://maxwell-cross.com/media/posts/3/Adobe-Express-file.png","height":596,"width":1080},"description":"You have a shell. The target answered. The C2 is stable. You’re in. But you’re just a regular user. No admin rights. No SYSTEM access. No credential harvesting. No lateral movement. You’re trapped in a low-privilege cage while the real targets — passwords, hashes, domain&hellip;","author":{"@type":"Person","name":"Maxwell Cross","url":"https://maxwell-cross.com/authors/maxwell-cross/"},"publisher":{"@type":"Organization","name":"Maxwell Cross"}}</script><noscript><style>img[loading] {
                     opacity: 1;
-                }</style></noscript></head><body class="post-template"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://maxwell-cross.com/assets/css/maxwell-cross-post.css"><div class="mc-post-page"><header class="mc-navbar top js-header"><div class="mc-navbar__inner"><a class="mc-navbar__logo logo" href="https://maxwell-cross.com/"><span class="mc-navbar__logo-text">Maxwell Cross</span></a><nav class="navbar js-navbar"><button class="navbar__toggle js-toggle" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><span class="navbar__toggle-box"><span class="navbar__toggle-inner">Menu</span></span></button><ul class="navbar__menu"><li><a href="https://maxwell-cross.com/newsletter.html" target="_self"><span class="menu-label">Newsletter</span></a></li></ul></nav><style>/* Menu Arrow Icon */
-                .mc-navbar .navbar__menu .menu-arrow {
-                    margin-left: 4px;
-                    opacity: 0.5;
-                    transition: all 0.2s ease;
-                }
-                
-                .mc-navbar .navbar__menu > li:hover .menu-arrow {
-                    opacity: 1;
-                    transform: rotate(180deg);
-                }
-                
-                /* Menu Label */
-                .mc-navbar .navbar__menu .menu-label {
-                    position: relative;
-                }
-                
-                /* Active indicator */
-                .mc-navbar .navbar__menu > li.active > a .menu-label::after {
-                    content: '';
-                    position: absolute;
-                    bottom: -4px;
-                    left: 0;
-                    right: 0;
-                    height: 2px;
-                    background: #e63946;
-                    border-radius: 1px;
-                }
-                
-                /* Mobile menu arrow behavior */
-                @media (max-width: 900px) {
-                    .mc-navbar .navbar__menu .menu-arrow {
-                        margin-left: auto;
-                    }
-                    
-                    .mc-navbar .navbar__menu > li.is-expanded .menu-arrow {
-                        transform: rotate(180deg);
-                    }
-                }</style><div class="mc-navbar__actions"><a href="https://maxwell-cross.com//newsletter/" class="mc-navbar__cta"><span>Join</span></a></div></div></header><style>/* ============================================
-       MAXWELL CROSS NAVBAR STYLES
-       ============================================ */
-    .mc-navbar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-        background: rgba(5, 5, 5, 0.85);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-bottom: 1px solid rgba(26, 26, 26, 0.8);
-        transition: all 0.3s ease;
-    }
-    
-    .mc-navbar.is-scrolled {
-        background: rgba(5, 5, 5, 0.95);
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-    }
-    
-    .mc-navbar__inner {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 2rem;
-        height: 70px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 2rem;
-    }
-    
-    /* Logo */
-    .mc-navbar__logo {
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        flex-shrink: 0;
-    }
-    
-    .mc-navbar__logo img {
-        height: 36px;
-        width: auto;
-    }
-    
-    .mc-navbar__logo-text {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: #f1f1f1;
-        letter-spacing: 0.05em;
-        transition: color 0.2s ease;
-    }
-    
-    .mc-navbar__logo:hover .mc-navbar__logo-text {
-        color: #e63946;
-    }
-    
-    /* Menu Overrides */
-    .mc-navbar .navbar {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-    }
-    
-    .mc-navbar .navbar__menu {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-    
-    .mc-navbar .navbar__menu > li {
-        position: relative;
-    }
-    
-    .mc-navbar .navbar__menu > li > a,
-    .mc-navbar .navbar__menu > li > .is-separator {
-        display: inline-flex;
-        align-items: center;
-        padding: 8px 16px;
-        font-family: 'Outfit', -apple-system, sans-serif;
-        font-size: 14px;
-        font-weight: 500;
-        color: #888;
-        text-decoration: none;
-        border-radius: 6px;
-        transition: all 0.2s ease;
-    }
-    
-    .mc-navbar .navbar__menu > li > a:hover,
-    .mc-navbar .navbar__menu > li.active > a {
-        color: #f1f1f1;
-        background: rgba(255, 255, 255, 0.05);
-    }
-    
-    .mc-navbar .navbar__menu > li.active > a {
-        color: #e63946;
-    }
-    
-    /* Dropdown Submenu */
-    .mc-navbar .navbar__submenu {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        min-width: 200px;
-        padding: 8px 0;
-        background: #0a0a0a;
-        border: 1px solid #1a1a1a;
-        border-radius: 10px;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        list-style: none;
-        margin: 0;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(10px);
-        transition: all 0.2s ease;
-    }
-    
-    .mc-navbar .navbar__menu > li:hover > .navbar__submenu {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-    }
-    
-    .mc-navbar .navbar__submenu li a {
-        display: block;
-        padding: 10px 20px;
-        font-family: 'Outfit', sans-serif;
-        font-size: 14px;
-        color: #888;
-        text-decoration: none;
-        transition: all 0.2s ease;
-    }
-    
-    .mc-navbar .navbar__submenu li a:hover {
-        color: #e63946;
-        background: rgba(230, 57, 70, 0.1);
-    }
-    
-    /* Actions */
-    .mc-navbar__actions {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        flex-shrink: 0;
-    }
-    
-    /* Newsletter CTA Button */
-    .mc-navbar__cta {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 8px 18px;
-        background: #e63946;
-        border-radius: 6px;
-        font-family: 'Outfit', sans-serif;
-        font-size: 13px;
-        font-weight: 600;
-        color: white;
-        text-decoration: none;
-        transition: all 0.2s ease;
-    }
-    
-    .mc-navbar__cta:hover {
-        background: #ff4d5a;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 15px rgba(230, 57, 70, 0.4);
-    }
-    
-    /* Search Button */
-    .mc-navbar__search-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 38px;
-        height: 38px;
-        background: transparent;
-        border: 1px solid #1a1a1a;
-        border-radius: 8px;
-        color: #888;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-    
-    .mc-navbar__search-btn:hover {
-        border-color: #e63946;
-        color: #e63946;
-    }
-    
-    /* Mobile Toggle */
-    .mc-navbar .navbar__toggle {
-        display: none;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 44px;
-        height: 44px;
-        background: transparent;
-        border: 1px solid #1a1a1a;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-    
-    .mc-navbar .navbar__toggle:hover {
-        border-color: #e63946;
-    }
-    
-    .mc-navbar .navbar__toggle-box {
-        position: relative;
-        width: 20px;
-        height: 14px;
-    }
-    
-    .mc-navbar .navbar__toggle-inner,
-    .mc-navbar .navbar__toggle-inner::before,
-    .mc-navbar .navbar__toggle-inner::after {
-        position: absolute;
-        width: 20px;
-        height: 2px;
-        background: #888;
-        border-radius: 2px;
-        transition: all 0.2s ease;
-    }
-    
-    .mc-navbar .navbar__toggle-inner {
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 0;
-        color: transparent;
-    }
-    
-    .mc-navbar .navbar__toggle-inner::before {
-        content: '';
-        top: -6px;
-    }
-    
-    .mc-navbar .navbar__toggle-inner::after {
-        content: '';
-        bottom: -6px;
-    }
-    
-    .mc-navbar .navbar__toggle:hover .navbar__toggle-inner,
-    .mc-navbar .navbar__toggle:hover .navbar__toggle-inner::before,
-    .mc-navbar .navbar__toggle:hover .navbar__toggle-inner::after {
-        background: #e63946;
-    }
-    
-    /* Mobile Styles */
-    @media (max-width: 900px) {
-        .mc-navbar__inner {
-            padding: 0 1.25rem;
-            height: 60px;
-        }
-        
-        .mc-navbar .navbar__toggle {
-            display: flex;
-        }
-        
-        .mc-navbar .navbar {
-            position: fixed;
-            top: 60px;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #050505;
-            border-top: 1px solid #1a1a1a;
-            padding: 2rem;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-            overflow-y: auto;
-        }
-        
-        .mc-navbar .navbar.is-active {
-            transform: translateX(0);
-        }
-        
-        .mc-navbar .navbar__menu {
-            flex-direction: column;
-            align-items: stretch;
-            gap: 0.5rem;
-        }
-        
-        .mc-navbar .navbar__menu > li > a,
-        .mc-navbar .navbar__menu > li > .is-separator {
-            padding: 14px 16px;
-            font-size: 16px;
-            border-radius: 8px;
-        }
-        
-        .mc-navbar .navbar__submenu {
-            position: static;
-            opacity: 1;
-            visibility: visible;
-            transform: none;
-            box-shadow: none;
-            background: transparent;
-            border: none;
-            padding: 0 0 0 1rem;
-            margin-top: 0.5rem;
-        }
-        
-        .mc-navbar__cta {
-            display: none;
-        }
-    }
-    
-    @media (max-width: 600px) {
-        .mc-navbar__logo-text {
-            font-size: 1rem;
-        }
-    }</style><div class="mc-grid-bg"></div><main class="mc-post-main"><article class="mc-article"><header class="mc-article__header"><div class="mc-wrapper"><div class="mc-article__classification"><span class="mc-article__tag-icon">◆</span> <span class="mc-article__tag-text">TRANSMISSION</span></div><h1 class="mc-article__title">30 Days of Red Team: Day 16 — Windows Privilege Escalation</h1><div class="mc-article__meta"><a href="https://maxwell-cross.com/authors/maxwell-cross/" class="mc-article__author"><span>Maxwell Cross</span> </a><span class="mc-article__meta-divider">•</span> <time datetime="2026-01-17T13:03" class="mc-article__date">Jan 17, 2026</time></div></div></header><div class="mc-article__hero-image"><div class="mc-wrapper mc-wrapper--wide"><figure class="mc-article__figure"><img src="https://maxwell-cross.com/media/posts/3/Adobe-Express-file.png" srcset="https://maxwell-cross.com/media/posts/3/responsive/Adobe-Express-file-xs.png 640w, https://maxwell-cross.com/media/posts/3/responsive/Adobe-Express-file-sm.png 768w, https://maxwell-cross.com/media/posts/3/responsive/Adobe-Express-file-md.png 1024w, https://maxwell-cross.com/media/posts/3/responsive/Adobe-Express-file-lg.png 1366w, https://maxwell-cross.com/media/posts/3/responsive/Adobe-Express-file-xl.png 1600w, https://maxwell-cross.com/media/posts/3/responsive/Adobe-Express-file-2xl.png 1920w" sizes="88vw" loading="eager" height="596" width="1080" alt=""></figure></div></div><div class="mc-article__content"><div class="mc-wrapper mc-wrapper--narrow"><div class="mc-article__body"><p id="47eb" data-selectable-paragraph="">You have a shell. The target answered. The C2 is stable. You’re in.</p><p id="18f3" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">But you’re just a regular user. No admin rights. No SYSTEM access. No credential harvesting. No lateral movement. You’re trapped in a low-privilege cage while the real targets — passwords, hashes, domain admin credentials — sit just out of reach behind administrator permissions.</p><p id="9509" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">This is where most amateur operators give up. This is where professionals get creative.</strong></p><p id="1450" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">Because here’s what separates the good from the great: <strong class="acd he">Windows privilege escalation isn’t about finding the perfect exploit. It’s about finding the dozen misconfigurations that Windows admins leave everywhere.</strong></p><p id="bc0c" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">Real attackers don’t waste time searching for zero-days when there’s an unquoted service path sitting right there. They don’t compile kernel exploits when AlwaysInstallElevated is enabled. They don’t need UAC bypasses when there’s a scheduled task running as SYSTEM with a writable script path.</p><p id="eae8" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">Windows privilege escalation is a hunt. And you’re about to learn where Windows hides its weaknesses.</strong></p><p id="eb46" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">Today, you’re learning every technique that turns regular users into SYSTEM. By the end of this day, you’ll understand:</p><ul><li id="41a9" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Automated enumeration</strong> — Finding all privilege escalation vectors systematically</li><li id="02aa" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Service exploitation</strong> — Unquoted paths, weak permissions, DLL hijacking</li><li id="2e6b" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Token impersonation</strong> — The Potato family attacks for instant SYSTEM</li><li id="ef97" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Registry abuse</strong> — AlwaysInstallElevated, Autoruns, stored credentials</li><li id="8158" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Scheduled task exploitation</strong> — Hijacking SYSTEM-level tasks</li><li id="4428" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">UAC bypass techniques</strong> — Multiple methods for different Windows versions</li><li id="6583" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Credential theft at higher privileges</strong> — What changes with admin/SYSTEM access</li><li id="50b9" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">OPSEC-conscious escalation</strong> — Clean exploitation that avoids detection</li></ul><p id="7491" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">This isn’t about theory. This is about finding the weak spots that administrators accidentally create every single day. This is about systematic privilege escalation that works on 80% of Windows environments.</p><p id="b816" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">Let’s escalate.</p><hr><div class="ky wb wc wd we"><div class="o q"><div class="eb n ec ed ee ef"><h2 id="206d" class="adg adh wg as adi mk adj ml mo mp adk mq mt mu adl mv my mz adm na nd ne adn nf ni ado co" data-selectable-paragraph="">What You Should Have From Days 1–15</h2><p id="a59e" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph="">Before privilege escalation, verify you have:</p><p id="b6dd" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><a class="bj kp" rel="noopener" href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-15-credential-harvesting-829737ccc5e6" data-discover="true"><strong class="acd he">From Day 15 (Credential Harvesting)</strong></a><strong class="acd he">:</strong></p><ul><li id="ce16" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">✅ Understanding of credential storage mechanisms</li><li id="49b5" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Knowledge of what’s possible with SYSTEM access</li><li id="3dd4" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Motivation to GET those elevated privileges</li></ul><p id="1973" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">From Week 2 (Days 8–14):</strong></p><ul><li id="06a9" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">✅ Stable shell/C2 access</li><li id="486b" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Persistence mechanisms</li><li id="69dd" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ File upload/download capabilities</li><li id="cfd8" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Command execution on target</li></ul><p id="0888" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">Current State:</strong></p><ul><li id="3864" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">✅ You have a shell as a regular user</li><li id="7b14" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ No administrator privileges</li><li id="a06b" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Limited access to system resources</li><li id="2546" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Need to escalate to admin/SYSTEM</li></ul><p id="e86c" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">Technical Requirements:</strong></p><ul><li id="d82b" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">Python 3.8+ with <code class="dh adu adv adw adx b">pywin32</code>, <code class="dh adu adv adw adx b">wmi</code></li><li id="d113" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">PowerShell access on target</li><li id="3ece" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Understanding of Windows permissions</li><li id="f9c2" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Test lab environment (never on production)</li><li id="10d9" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Patience (privilege escalation is a hunt, not a sprint)</li></ul><hr><h2 id="0f0f" class="adg adh wg as adi mk adj ml mo mp adk mq mt mu adl mv my mz adm na nd ne adn nf ni ado co" data-selectable-paragraph="">The Privilege Escalation Mindset</h2><p id="1dd0" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph="">Let me tell you about a real engagement:</p><p id="8f8a" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">Junior operator gets a shell on a corporate workstation. Low-privilege user. They immediately start searching for kernel exploits. “Windows 10 1809… let me find the right exploit… compile it… upload it…” Two hours later, exploit fails. Blue team notices suspicious process. Operator gets caught.</p><p id="420c" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">The professional operator does this:</strong></p><p id="eab6" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">They run automated enumeration. 30 seconds later, they find:</p><ul><li id="e804" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">AlwaysInstallElevated enabled in registry</li><li id="7726" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Scheduled task running as SYSTEM with writable script</li><li id="9b51" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Service with unquoted path and weak folder permissions</li><li id="97ad" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">SeImpersonatePrivilege enabled on current user</li></ul><p id="55d7" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">They create an MSI installer, execute it. <strong class="acd he">SYSTEM shell in 60 seconds.</strong></p><h3 id="d247" class="ady adh wg as adi uq adz ur mo us aea ut mt uu aeb uv uw ux aec uy uz va aed vb vc aee co" data-selectable-paragraph="">The Philosophy</h3><pre class="language-bash"><code>Misconfigurations are more common than exploits
+                }</style></noscript></head><body class="post-template"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://maxwell-cross.com/assets/css/maxwell-cross-post.css"><div class="mc-post-page"><header class="top js-header"><a class="logo" href="https://maxwell-cross.com/">Maxwell Cross</a><nav class="navbar js-navbar"><button class="navbar__toggle js-toggle" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><span class="navbar__toggle-box"><span class="navbar__toggle-inner">Menu</span></span></button><ul class="navbar__menu"><li><a href="https://maxwell-cross.com/newsletter.html" target="_self"><span class="menu-label">Newsletter</span></a></li></ul></nav><style>/* Menu Arrow Icon */
+          .mc-navbar .navbar__menu .menu-arrow {
+              margin-left: 4px;
+              opacity: 0.5;
+              transition: all 0.2s ease;
+          }
+          
+          .mc-navbar .navbar__menu > li:hover .menu-arrow {
+              opacity: 1;
+              transform: rotate(180deg);
+          }
+          
+          /* Menu Label */
+          .mc-navbar .navbar__menu .menu-label {
+              position: relative;
+          }
+          
+          /* Active indicator */
+          .mc-navbar .navbar__menu > li.active > a .menu-label::after {
+              content: '';
+              position: absolute;
+              bottom: -4px;
+              left: 0;
+              right: 0;
+              height: 2px;
+              background: #e63946;
+              border-radius: 1px;
+          }
+          
+          /* Mobile menu arrow behavior */
+          @media (max-width: 900px) {
+              .mc-navbar .navbar__menu .menu-arrow {
+                  margin-left: auto;
+              }
+              
+              .mc-navbar .navbar__menu > li.is-expanded .menu-arrow {
+                  transform: rotate(180deg);
+              }
+          }</style></header><div class="mc-grid-bg"></div><main class="mc-post-main"><article class="mc-article"><header class="mc-article__header"><div class="mc-wrapper"><div class="mc-article__classification"><span class="mc-article__tag-icon">◆</span> <span class="mc-article__tag-text">TRANSMISSION</span></div><h1 class="mc-article__title">30 Days of Red Team: Day 16 — Windows Privilege Escalation</h1><div class="mc-article__meta"><a href="https://maxwell-cross.com/authors/maxwell-cross/" class="mc-article__author"><span>Maxwell Cross</span> </a><span class="mc-article__meta-divider">•</span> <time datetime="2026-01-17T13:03" class="mc-article__date">Jan 17, 2026</time></div></div></header><div class="mc-article__hero-image"><div class="mc-wrapper mc-wrapper--wide"><figure class="mc-article__figure"><img src="https://maxwell-cross.com/media/posts/3/Adobe-Express-file.png" srcset="https://maxwell-cross.com/media/posts/3/responsive/Adobe-Express-file-xs.png 640w, https://maxwell-cross.com/media/posts/3/responsive/Adobe-Express-file-sm.png 768w, https://maxwell-cross.com/media/posts/3/responsive/Adobe-Express-file-md.png 1024w, https://maxwell-cross.com/media/posts/3/responsive/Adobe-Express-file-lg.png 1366w, https://maxwell-cross.com/media/posts/3/responsive/Adobe-Express-file-xl.png 1600w, https://maxwell-cross.com/media/posts/3/responsive/Adobe-Express-file-2xl.png 1920w" sizes="88vw" loading="eager" height="596" width="1080" alt=""></figure></div></div><div class="mc-article__content"><div class="mc-wrapper mc-wrapper--narrow"><div class="mc-article__body"><p id="47eb" data-selectable-paragraph="">You have a shell. The target answered. The C2 is stable. You’re in.</p><p id="18f3" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">But you’re just a regular user. No admin rights. No SYSTEM access. No credential harvesting. No lateral movement. You’re trapped in a low-privilege cage while the real targets — passwords, hashes, domain admin credentials — sit just out of reach behind administrator permissions.</p><p id="9509" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">This is where most amateur operators give up. This is where professionals get creative.</strong></p><p id="1450" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">Because here’s what separates the good from the great: <strong class="acd he">Windows privilege escalation isn’t about finding the perfect exploit. It’s about finding the dozen misconfigurations that Windows admins leave everywhere.</strong></p><p id="bc0c" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">Real attackers don’t waste time searching for zero-days when there’s an unquoted service path sitting right there. They don’t compile kernel exploits when AlwaysInstallElevated is enabled. They don’t need UAC bypasses when there’s a scheduled task running as SYSTEM with a writable script path.</p><p id="eae8" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">Windows privilege escalation is a hunt. And you’re about to learn where Windows hides its weaknesses.</strong></p><p id="eb46" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">Today, you’re learning every technique that turns regular users into SYSTEM. By the end of this day, you’ll understand:</p><ul><li id="41a9" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Automated enumeration</strong> — Finding all privilege escalation vectors systematically</li><li id="02aa" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Service exploitation</strong> — Unquoted paths, weak permissions, DLL hijacking</li><li id="2e6b" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Token impersonation</strong> — The Potato family attacks for instant SYSTEM</li><li id="ef97" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Registry abuse</strong> — AlwaysInstallElevated, Autoruns, stored credentials</li><li id="8158" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Scheduled task exploitation</strong> — Hijacking SYSTEM-level tasks</li><li id="4428" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">UAC bypass techniques</strong> — Multiple methods for different Windows versions</li><li id="6583" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Credential theft at higher privileges</strong> — What changes with admin/SYSTEM access</li><li id="50b9" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">OPSEC-conscious escalation</strong> — Clean exploitation that avoids detection</li></ul><p id="7491" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">This isn’t about theory. This is about finding the weak spots that administrators accidentally create every single day. This is about systematic privilege escalation that works on 80% of Windows environments.</p><p id="b816" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">Let’s escalate.</p><hr><div class="ky wb wc wd we"><div class="o q"><div class="eb n ec ed ee ef"><h2 id="206d" class="adg adh wg as adi mk adj ml mo mp adk mq mt mu adl mv my mz adm na nd ne adn nf ni ado co" data-selectable-paragraph="">What You Should Have From Days 1–15</h2><p id="a59e" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph="">Before privilege escalation, verify you have:</p><p id="b6dd" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><a class="bj kp" rel="noopener" href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-15-credential-harvesting-829737ccc5e6" data-discover="true"><strong class="acd he">From Day 15 (Credential Harvesting)</strong></a><strong class="acd he">:</strong></p><ul><li id="ce16" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">✅ Understanding of credential storage mechanisms</li><li id="49b5" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Knowledge of what’s possible with SYSTEM access</li><li id="3dd4" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Motivation to GET those elevated privileges</li></ul><p id="1973" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">From Week 2 (Days 8–14):</strong></p><ul><li id="06a9" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">✅ Stable shell/C2 access</li><li id="486b" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Persistence mechanisms</li><li id="69dd" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ File upload/download capabilities</li><li id="cfd8" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Command execution on target</li></ul><p id="0888" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">Current State:</strong></p><ul><li id="3864" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">✅ You have a shell as a regular user</li><li id="7b14" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ No administrator privileges</li><li id="a06b" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Limited access to system resources</li><li id="2546" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Need to escalate to admin/SYSTEM</li></ul><p id="e86c" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">Technical Requirements:</strong></p><ul><li id="d82b" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">Python 3.8+ with <code class="dh adu adv adw adx b">pywin32</code>, <code class="dh adu adv adw adx b">wmi</code></li><li id="d113" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">PowerShell access on target</li><li id="3ece" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Understanding of Windows permissions</li><li id="f9c2" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Test lab environment (never on production)</li><li id="10d9" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Patience (privilege escalation is a hunt, not a sprint)</li></ul><hr><h2 id="0f0f" class="adg adh wg as adi mk adj ml mo mp adk mq mt mu adl mv my mz adm na nd ne adn nf ni ado co" data-selectable-paragraph="">The Privilege Escalation Mindset</h2><p id="1dd0" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph="">Let me tell you about a real engagement:</p><p id="8f8a" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">Junior operator gets a shell on a corporate workstation. Low-privilege user. They immediately start searching for kernel exploits. “Windows 10 1809… let me find the right exploit… compile it… upload it…” Two hours later, exploit fails. Blue team notices suspicious process. Operator gets caught.</p><p id="420c" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">The professional operator does this:</strong></p><p id="eab6" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">They run automated enumeration. 30 seconds later, they find:</p><ul><li id="e804" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">AlwaysInstallElevated enabled in registry</li><li id="7726" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Scheduled task running as SYSTEM with writable script</li><li id="9b51" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Service with unquoted path and weak folder permissions</li><li id="97ad" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">SeImpersonatePrivilege enabled on current user</li></ul><p id="55d7" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">They create an MSI installer, execute it. <strong class="acd he">SYSTEM shell in 60 seconds.</strong></p><h3 id="d247" class="ady adh wg as adi uq adz ur mo us aea ut mt uu aeb uv uw ux aec uy uz va aed vb vc aee co" data-selectable-paragraph="">The Philosophy</h3><pre class="language-bash"><code>Misconfigurations are more common than exploits
 Misconfigurations are quieter than exploits
 Misconfigurations work across Windows versions
 Misconfigurations are what administrators create every day</code></pre><p> <strong class="acd he">The Hunt Methodology:</strong></p><ol><li id="4e2f" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act aen acv acw co" data-selectable-paragraph=""><strong class="acd he">Enumerate everything</strong> — Services, tasks, registry, permissions</li><li id="1aa4" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act aen acv acw co" data-selectable-paragraph=""><strong class="acd he">Prioritize by noise level</strong> — Quiet techniques first</li><li id="2c61" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act aen acv acw co" data-selectable-paragraph=""><strong class="acd he">Test systematically</strong> — Don’t skip the obvious</li><li id="ee51" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act aen acv acw co" data-selectable-paragraph=""><strong class="acd he">Maintain access</strong> — Escalate, then persist at new privilege level</li><li id="98ad" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act aen acv acw co" data-selectable-paragraph=""><strong class="acd he">Cover tracks</strong> — Clean up artifacts after successful escalation</li></ol><p id="eecc" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">Key Insight:</strong> Windows privilege escalation is 90% enumeration, 10% exploitation. If you can’t find a way to escalate, you haven’t enumerated thoroughly enough.</p><hr><div class="ky wb wc wd we"><div class="o q"><div class="eb n ec ed ee ef"><h2 id="8783" class="adg adh wg as adi mk adj ml mo mp adk mq mt mu adl mv my mz adm na nd ne adn nf ni ado co" data-selectable-paragraph="">Understanding Windows Privilege Levels</h2><p id="f26d" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph="">Before escalating, understand what you’re escalating TO and FROM.</p><h3 id="18be" class="ady adh wg as adi uq adz ur mo us aea ut mt uu aeb uv uw ux aec uy uz va aed vb vc aee co" data-selectable-paragraph="">The Privilege Hierarchy</h3><p id="955f" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">1. User</strong> (Your typical starting point)</p><ul><li id="2e4c" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">Standard user account</li><li id="d91b" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Can run most applications</li><li id="9463" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Cannot modify system settings</li><li id="d52c" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Cannot access other users’ files</li><li id="57c4" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">This is where you usually start</strong></li></ul><p id="3792" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">2. Administrator</strong> (Your first target)</p><ul><li id="2fc6" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">Local admin on the machine</li><li id="33f2" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Can install software and modify system settings</li><li id="9300" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Can access LSASS, SAM, registry secrets</li><li id="541f" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Still subject to UAC (User Access Control)</li><li id="ff9e" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Most privilege escalation aims here</strong></li></ul><p id="a2c4" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">3. SYSTEM</strong> (The ultimate goal)</p><ul><li id="3c32" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">Highest privilege level</li><li id="129f" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">NT AUTHORITY\SYSTEM account</li><li id="f6c4" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Unrestricted access to all resources</li><li id="0c2e" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Not subject to UAC</li><li id="d327" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Used by Windows services and kernel</li><li id="d034" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Where professionals always push to</strong></li></ul><h3 id="66e4" class="ady adh wg as adi uq adz ur mo us aea ut mt uu aeb uv uw ux aec uy uz va aed vb vc aee co" data-selectable-paragraph="">Why SYSTEM &gt; Administrator</h3><p id="0f8b" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph="">Even as Administrator, you face restrictions:</p><ul><li id="d353" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">UAC prompts for sensitive operations</li><li id="d7a0" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Some registry keys require SYSTEM</li><li id="1fb1" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Certain processes can’t be accessed</li><li id="8671" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Credential Guard/PPL may block LSASS access</li></ul><p id="382a" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">As SYSTEM:</p><ul><li id="bf62" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">Zero UAC restrictions</li><li id="419a" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Full registry access</li><li id="cd8d" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Can access ANY process</li><li id="a8e5" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Can read/write ANY file</li><li id="28b6" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Can impersonate any user token</li></ul><p id="9b20" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">Pro Tip:</strong> Many operators stop at Administrator. Professionals always push to SYSTEM.</p><hr><h2 id="304b" class="adg adh wg as adi mk adj ml mo mp adk mq mt mu adl mv my mz adm na nd ne adn nf ni ado co" data-selectable-paragraph="">Automated Privilege Escalation Enumeration</h2><p id="597c" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph="">Professional privilege escalation starts with comprehensive enumeration.</p><h3 id="8cd1" class="ady adh wg as adi uq adz ur mo us aea ut mt uu aeb uv uw ux aec uy uz va aed vb vc aee co" data-selectable-paragraph="">The Professional Enumeration Approach</h3><pre class="language-python"><code>class PrivEscEnumerator:

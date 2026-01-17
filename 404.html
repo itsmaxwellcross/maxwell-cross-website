@@ -276,359 +276,45 @@
 
 .mc-404 .navbar__menu a:hover {
     color: #e63946;
-}</style><div class="mc-404"><header class="mc-navbar top js-header"><div class="mc-navbar__inner"><a class="mc-navbar__logo logo" href="https://maxwell-cross.com/"><span class="mc-navbar__logo-text">Maxwell Cross</span></a><nav class="navbar js-navbar"><button class="navbar__toggle js-toggle" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><span class="navbar__toggle-box"><span class="navbar__toggle-inner">Menu</span></span></button><ul class="navbar__menu"><li><a href="https://maxwell-cross.com/newsletter.html" target="_self"><span class="menu-label">Newsletter</span></a></li></ul></nav><style>/* Menu Arrow Icon */
-                .mc-navbar .navbar__menu .menu-arrow {
-                    margin-left: 4px;
-                    opacity: 0.5;
-                    transition: all 0.2s ease;
-                }
-                
-                .mc-navbar .navbar__menu > li:hover .menu-arrow {
-                    opacity: 1;
-                    transform: rotate(180deg);
-                }
-                
-                /* Menu Label */
-                .mc-navbar .navbar__menu .menu-label {
-                    position: relative;
-                }
-                
-                /* Active indicator */
-                .mc-navbar .navbar__menu > li.active > a .menu-label::after {
-                    content: '';
-                    position: absolute;
-                    bottom: -4px;
-                    left: 0;
-                    right: 0;
-                    height: 2px;
-                    background: #e63946;
-                    border-radius: 1px;
-                }
-                
-                /* Mobile menu arrow behavior */
-                @media (max-width: 900px) {
-                    .mc-navbar .navbar__menu .menu-arrow {
-                        margin-left: auto;
-                    }
-                    
-                    .mc-navbar .navbar__menu > li.is-expanded .menu-arrow {
-                        transform: rotate(180deg);
-                    }
-                }</style><div class="mc-navbar__actions"><a href="https://maxwell-cross.com//newsletter/" class="mc-navbar__cta"><span>Join</span></a></div></div></header><style>/* ============================================
-       MAXWELL CROSS NAVBAR STYLES
-       ============================================ */
-    .mc-navbar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-        background: rgba(5, 5, 5, 0.85);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-bottom: 1px solid rgba(26, 26, 26, 0.8);
-        transition: all 0.3s ease;
-    }
-    
-    .mc-navbar.is-scrolled {
-        background: rgba(5, 5, 5, 0.95);
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-    }
-    
-    .mc-navbar__inner {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 2rem;
-        height: 70px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 2rem;
-    }
-    
-    /* Logo */
-    .mc-navbar__logo {
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        flex-shrink: 0;
-    }
-    
-    .mc-navbar__logo img {
-        height: 36px;
-        width: auto;
-    }
-    
-    .mc-navbar__logo-text {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: #f1f1f1;
-        letter-spacing: 0.05em;
-        transition: color 0.2s ease;
-    }
-    
-    .mc-navbar__logo:hover .mc-navbar__logo-text {
-        color: #e63946;
-    }
-    
-    /* Menu Overrides */
-    .mc-navbar .navbar {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-    }
-    
-    .mc-navbar .navbar__menu {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-    
-    .mc-navbar .navbar__menu > li {
-        position: relative;
-    }
-    
-    .mc-navbar .navbar__menu > li > a,
-    .mc-navbar .navbar__menu > li > .is-separator {
-        display: inline-flex;
-        align-items: center;
-        padding: 8px 16px;
-        font-family: 'Outfit', -apple-system, sans-serif;
-        font-size: 14px;
-        font-weight: 500;
-        color: #888;
-        text-decoration: none;
-        border-radius: 6px;
-        transition: all 0.2s ease;
-    }
-    
-    .mc-navbar .navbar__menu > li > a:hover,
-    .mc-navbar .navbar__menu > li.active > a {
-        color: #f1f1f1;
-        background: rgba(255, 255, 255, 0.05);
-    }
-    
-    .mc-navbar .navbar__menu > li.active > a {
-        color: #e63946;
-    }
-    
-    /* Dropdown Submenu */
-    .mc-navbar .navbar__submenu {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        min-width: 200px;
-        padding: 8px 0;
-        background: #0a0a0a;
-        border: 1px solid #1a1a1a;
-        border-radius: 10px;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        list-style: none;
-        margin: 0;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(10px);
-        transition: all 0.2s ease;
-    }
-    
-    .mc-navbar .navbar__menu > li:hover > .navbar__submenu {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-    }
-    
-    .mc-navbar .navbar__submenu li a {
-        display: block;
-        padding: 10px 20px;
-        font-family: 'Outfit', sans-serif;
-        font-size: 14px;
-        color: #888;
-        text-decoration: none;
-        transition: all 0.2s ease;
-    }
-    
-    .mc-navbar .navbar__submenu li a:hover {
-        color: #e63946;
-        background: rgba(230, 57, 70, 0.1);
-    }
-    
-    /* Actions */
-    .mc-navbar__actions {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        flex-shrink: 0;
-    }
-    
-    /* Newsletter CTA Button */
-    .mc-navbar__cta {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 8px 18px;
-        background: #e63946;
-        border-radius: 6px;
-        font-family: 'Outfit', sans-serif;
-        font-size: 13px;
-        font-weight: 600;
-        color: white;
-        text-decoration: none;
-        transition: all 0.2s ease;
-    }
-    
-    .mc-navbar__cta:hover {
-        background: #ff4d5a;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 15px rgba(230, 57, 70, 0.4);
-    }
-    
-    /* Search Button */
-    .mc-navbar__search-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 38px;
-        height: 38px;
-        background: transparent;
-        border: 1px solid #1a1a1a;
-        border-radius: 8px;
-        color: #888;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-    
-    .mc-navbar__search-btn:hover {
-        border-color: #e63946;
-        color: #e63946;
-    }
-    
-    /* Mobile Toggle */
-    .mc-navbar .navbar__toggle {
-        display: none;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 44px;
-        height: 44px;
-        background: transparent;
-        border: 1px solid #1a1a1a;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-    
-    .mc-navbar .navbar__toggle:hover {
-        border-color: #e63946;
-    }
-    
-    .mc-navbar .navbar__toggle-box {
-        position: relative;
-        width: 20px;
-        height: 14px;
-    }
-    
-    .mc-navbar .navbar__toggle-inner,
-    .mc-navbar .navbar__toggle-inner::before,
-    .mc-navbar .navbar__toggle-inner::after {
-        position: absolute;
-        width: 20px;
-        height: 2px;
-        background: #888;
-        border-radius: 2px;
-        transition: all 0.2s ease;
-    }
-    
-    .mc-navbar .navbar__toggle-inner {
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 0;
-        color: transparent;
-    }
-    
-    .mc-navbar .navbar__toggle-inner::before {
-        content: '';
-        top: -6px;
-    }
-    
-    .mc-navbar .navbar__toggle-inner::after {
-        content: '';
-        bottom: -6px;
-    }
-    
-    .mc-navbar .navbar__toggle:hover .navbar__toggle-inner,
-    .mc-navbar .navbar__toggle:hover .navbar__toggle-inner::before,
-    .mc-navbar .navbar__toggle:hover .navbar__toggle-inner::after {
-        background: #e63946;
-    }
-    
-    /* Mobile Styles */
-    @media (max-width: 900px) {
-        .mc-navbar__inner {
-            padding: 0 1.25rem;
-            height: 60px;
-        }
-        
-        .mc-navbar .navbar__toggle {
-            display: flex;
-        }
-        
-        .mc-navbar .navbar {
-            position: fixed;
-            top: 60px;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #050505;
-            border-top: 1px solid #1a1a1a;
-            padding: 2rem;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-            overflow-y: auto;
-        }
-        
-        .mc-navbar .navbar.is-active {
-            transform: translateX(0);
-        }
-        
-        .mc-navbar .navbar__menu {
-            flex-direction: column;
-            align-items: stretch;
-            gap: 0.5rem;
-        }
-        
-        .mc-navbar .navbar__menu > li > a,
-        .mc-navbar .navbar__menu > li > .is-separator {
-            padding: 14px 16px;
-            font-size: 16px;
-            border-radius: 8px;
-        }
-        
-        .mc-navbar .navbar__submenu {
-            position: static;
-            opacity: 1;
-            visibility: visible;
-            transform: none;
-            box-shadow: none;
-            background: transparent;
-            border: none;
-            padding: 0 0 0 1rem;
-            margin-top: 0.5rem;
-        }
-        
-        .mc-navbar__cta {
-            display: none;
-        }
-    }
-    
-    @media (max-width: 600px) {
-        .mc-navbar__logo-text {
-            font-size: 1rem;
-        }
-    }</style><div class="mc-grid-bg"></div><main class="mc-404__main"><div class="mc-404__content"><div class="mc-404__badge"><span class="mc-404__badge-icon">⚠</span> <span class="mc-404__badge-text">ACCESS DENIED</span></div><h1 class="mc-404__code">404</h1><div class="mc-404__terminal"><div class="mc-404__terminal-header"><span class="mc-404__terminal-dot mc-404__terminal-dot--red"></span> <span class="mc-404__terminal-dot mc-404__terminal-dot--yellow"></span> <span class="mc-404__terminal-dot mc-404__terminal-dot--green"></span> <span class="mc-404__terminal-title">error_log</span></div><div class="mc-404__terminal-body"><p class="mc-404__terminal-line"><span class="mc-404__terminal-prompt">$</span> <span class="mc-404__terminal-command">locate requested_page</span></p><p class="mc-404__terminal-line"><span class="mc-404__terminal-error">[ERROR]</span> Transmission not found</p><p class="mc-404__terminal-line"><span class="mc-404__terminal-warning">[WARN]</span> Path does not exist or access restricted</p><p class="mc-404__terminal-line"><span class="mc-404__terminal-prompt">$</span> <span class="mc-404__terminal-cursor"></span></p></div></div><h2 class="mc-404__title">Transmission Not Found</h2><p class="mc-404__desc">The page you're looking for doesn't exist, has been moved, or you don't have clearance to access it.</p><a href="https://maxwell-cross.com/" class="mc-404__btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> <span>Return to Base</span></a></div></main></div><footer class="mc-footer"><div class="mc-footer__inner"><div class="mc-footer__wrapper"><div class="mc-footer__top"><div class="mc-footer__brand"><a href="https://maxwell-cross.com/" class="mc-footer__logo"><span class="mc-footer__logo-text">Maxwell Cross</span></a><p class="mc-footer__tagline">Offensive Security. No Filter.</p></div><div class="mc-footer__nav-section"><span class="mc-footer__nav-title">// NAVIGATE</span><nav class="mc-footer__nav"><ul><li><a href="https://maxwell-cross.com/">Home</a></li><li><a href="https://maxwell-cross.com//newsletter/">Newsletter</a></li></ul></nav></div><div class="mc-footer__social-section"><span class="mc-footer__nav-title">// CONNECT</span><div class="mc-footer__social"><a href="https://medium.com/@maxwellcross" target="_blank" rel="noopener" aria-label="Follow on Medium" class="mc-footer__social-link"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg> </a><a href="https://github.com/maxwellcross" target="_blank" rel="noopener" aria-label="Follow on GitHub" class="mc-footer__social-link"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a></div></div></div><div class="mc-footer__divider"></div><div class="mc-footer__bottom"><p class="mc-footer__copyright">© <span id="mc-year"></span> Maxwell Cross. All rights reserved.</p><p class="mc-footer__legal"><a href="https://maxwell-cross.com//privacy/">Privacy</a> <span class="mc-footer__legal-divider">•</span> <a href="https://maxwell-cross.com//terms/">Terms</a></p></div></div></div><button id="backToTop" class="mc-footer__bttop" aria-label="Back to top" title="Back to top"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg></button></footer><style>/* ============================================
+}</style><div class="mc-404"><header class="top js-header"><a class="logo" href="https://maxwell-cross.com/">Maxwell Cross</a><nav class="navbar js-navbar"><button class="navbar__toggle js-toggle" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><span class="navbar__toggle-box"><span class="navbar__toggle-inner">Menu</span></span></button><ul class="navbar__menu"><li><a href="https://maxwell-cross.com/newsletter.html" target="_self"><span class="menu-label">Newsletter</span></a></li></ul></nav><style>/* Menu Arrow Icon */
+          .mc-navbar .navbar__menu .menu-arrow {
+              margin-left: 4px;
+              opacity: 0.5;
+              transition: all 0.2s ease;
+          }
+          
+          .mc-navbar .navbar__menu > li:hover .menu-arrow {
+              opacity: 1;
+              transform: rotate(180deg);
+          }
+          
+          /* Menu Label */
+          .mc-navbar .navbar__menu .menu-label {
+              position: relative;
+          }
+          
+          /* Active indicator */
+          .mc-navbar .navbar__menu > li.active > a .menu-label::after {
+              content: '';
+              position: absolute;
+              bottom: -4px;
+              left: 0;
+              right: 0;
+              height: 2px;
+              background: #e63946;
+              border-radius: 1px;
+          }
+          
+          /* Mobile menu arrow behavior */
+          @media (max-width: 900px) {
+              .mc-navbar .navbar__menu .menu-arrow {
+                  margin-left: auto;
+              }
+              
+              .mc-navbar .navbar__menu > li.is-expanded .menu-arrow {
+                  transform: rotate(180deg);
+              }
+          }</style></header><div class="mc-grid-bg"></div><main class="mc-404__main"><div class="mc-404__content"><div class="mc-404__badge"><span class="mc-404__badge-icon">⚠</span> <span class="mc-404__badge-text">ACCESS DENIED</span></div><h1 class="mc-404__code">404</h1><div class="mc-404__terminal"><div class="mc-404__terminal-header"><span class="mc-404__terminal-dot mc-404__terminal-dot--red"></span> <span class="mc-404__terminal-dot mc-404__terminal-dot--yellow"></span> <span class="mc-404__terminal-dot mc-404__terminal-dot--green"></span> <span class="mc-404__terminal-title">error_log</span></div><div class="mc-404__terminal-body"><p class="mc-404__terminal-line"><span class="mc-404__terminal-prompt">$</span> <span class="mc-404__terminal-command">locate requested_page</span></p><p class="mc-404__terminal-line"><span class="mc-404__terminal-error">[ERROR]</span> Transmission not found</p><p class="mc-404__terminal-line"><span class="mc-404__terminal-warning">[WARN]</span> Path does not exist or access restricted</p><p class="mc-404__terminal-line"><span class="mc-404__terminal-prompt">$</span> <span class="mc-404__terminal-cursor"></span></p></div></div><h2 class="mc-404__title">Transmission Not Found</h2><p class="mc-404__desc">The page you're looking for doesn't exist, has been moved, or you don't have clearance to access it.</p><a href="https://maxwell-cross.com/" class="mc-404__btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> <span>Return to Base</span></a></div></main></div><footer class="mc-footer"><div class="mc-footer__inner"><div class="mc-footer__wrapper"><div class="mc-footer__top"><div class="mc-footer__brand"><a href="https://maxwell-cross.com/" class="mc-footer__logo"><span class="mc-footer__logo-text">Maxwell Cross</span></a><p class="mc-footer__tagline">Offensive Security. No Filter.</p></div><div class="mc-footer__nav-section"><span class="mc-footer__nav-title">// NAVIGATE</span><nav class="mc-footer__nav"><ul><li><a href="https://maxwell-cross.com/">Home</a></li><li><a href="https://maxwell-cross.com//newsletter/">Newsletter</a></li></ul></nav></div><div class="mc-footer__social-section"><span class="mc-footer__nav-title">// CONNECT</span><div class="mc-footer__social"><a href="https://medium.com/@maxwellcross" target="_blank" rel="noopener" aria-label="Follow on Medium" class="mc-footer__social-link"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg> </a><a href="https://github.com/maxwellcross" target="_blank" rel="noopener" aria-label="Follow on GitHub" class="mc-footer__social-link"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a></div></div></div><div class="mc-footer__divider"></div><div class="mc-footer__bottom"><p class="mc-footer__copyright">© <span id="mc-year"></span> Maxwell Cross. All rights reserved.</p><p class="mc-footer__legal"><a href="https://maxwell-cross.com//privacy/">Privacy</a> <span class="mc-footer__legal-divider">•</span> <a href="https://maxwell-cross.com//terms/">Terms</a></p></div></div></div><button id="backToTop" class="mc-footer__bttop" aria-label="Back to top" title="Back to top"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg></button></footer><style>/* ============================================
    MAXWELL CROSS FOOTER STYLES
    ============================================ */
 .mc-footer {

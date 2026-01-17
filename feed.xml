@@ -3,7 +3,7 @@
     <title>Maxwell Cross</title>
     <link href="https://maxwell-cross.com/feed.xml" rel="self" />
     <link href="https://maxwell-cross.com" />
-    <updated>2026-01-17T17:22:14-05:00</updated>
+    <updated>2026-01-17T17:23:59-05:00</updated>
     <author>
         <name>Maxwell Cross</name>
     </author>
@@ -161,7 +161,73 @@ Misconfigurations are what administrators create every day</code></pre>
 <h2 id="304b" class="adg adh wg as adi mk adj ml mo mp adk mq mt mu adl mv my mz adm na nd ne adn nf ni ado co" data-selectable-paragraph="">Automated Privilege Escalation Enumeration</h2>
 <p id="597c" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph="">Professional privilege escalation starts with comprehensive enumeration.</p>
 <h3 id="8cd1" class="ady adh wg as adi uq adz ur mo us aea ut mt uu aeb uv uw ux aec uy uz va aed vb vc aee co" data-selectable-paragraph="">The Professional Enumeration Approach</h3>
-<p>```python<br>class PrivEscEnumerator:<br>    """Systematic Windows privilege escalation enumeration"""<br>    <br>    def __init__(self):<br>        self.findings = {<br>            'high': [],      # High-probability escalation paths<br>            'medium': [],    # Potential paths<br>            'low': [],       # Low-probability paths<br>            'info': []       # Informational findings<br>        }<br>    <br>    def enumerate_all_vectors(self):<br>        """<br>        Complete privilege escalation enumeration<br>        <br>        This is the professional workflow:<br>        1. Check current privileges (what can we do now?)<br>        2. Enumerate services (unquoted paths, weak permissions)<br>        3. Check scheduled tasks (writable scripts as SYSTEM)<br>        4. Scan registry (AlwaysInstallElevated, Autoruns)<br>        5. Check file permissions (writable system folders)<br>        6. Search for credentials (stored passwords, tokens)<br>        7. Analyze dangerous privileges (SeImpersonate, etc.)<br>        """<br>        print("[*] Starting comprehensive privilege escalation enumeration...")<br>        <br>        # Phase 1: Current state<br>        is_admin = self.check_current_privileges()<br>        <br>        if is_admin:<br>            print("[+] Already Administrator - focus on SYSTEM escalation")<br>            self.enumerate_system_escalation_paths()<br>        else:<br>            print("[*] Regular user - need admin escalation first")<br>            self.enumerate_admin_escalation_paths()<br>        <br>        # Phase 2: Generate prioritized report<br>        report = self.generate_escalation_report()<br>        <br>        return report<br>    <br>    def check_current_privileges(self):<br>        """<br>        Check what we can do right now<br>        <br>        Critical privileges for escalation:<br>        - SeImpersonatePrivilege → Potato attacks<br>        - SeDebugPrivilege → Process injection<br>        - SeLoadDriverPrivilege → Kernel driver loading<br>        - SeRestorePrivilege → File system manipulation<br>        """<br>        import ctypes<br>        is_admin = ctypes.windll.shell32.IsUserAnAdmin()<br>        <br>        # Check for powerful privileges<br>        powerful_privs = self.get_enabled_privileges()<br>        <br>        for priv in powerful_privs:<br>            if priv == 'SeImpersonatePrivilege':<br>                self.findings['high'].append({<br>                    'category': 'Dangerous Privilege',<br>                    'finding': 'SeImpersonatePrivilege enabled',<br>                    'exploitation': 'Use PrintSpoofer, JuicyPotato, or RoguePotato',<br>                    'impact': 'Critical - Direct path to SYSTEM'<br>                })<br>        <br>        return is_admin<br>```</p>
+<pre class="language-python"><code>class PrivEscEnumerator:
+    """Systematic Windows privilege escalation enumeration"""
+    
+    def __init__(self):
+        self.findings = {
+            'high': [],      # High-probability escalation paths
+            'medium': [],    # Potential paths
+            'low': [],       # Low-probability paths
+            'info': []       # Informational findings
+        }
+    
+    def enumerate_all_vectors(self):
+        """
+        Complete privilege escalation enumeration
+        
+        This is the professional workflow:
+        1. Check current privileges (what can we do now?)
+        2. Enumerate services (unquoted paths, weak permissions)
+        3. Check scheduled tasks (writable scripts as SYSTEM)
+        4. Scan registry (AlwaysInstallElevated, Autoruns)
+        5. Check file permissions (writable system folders)
+        6. Search for credentials (stored passwords, tokens)
+        7. Analyze dangerous privileges (SeImpersonate, etc.)
+        """
+        print("[*] Starting comprehensive privilege escalation enumeration...")
+        
+        # Phase 1: Current state
+        is_admin = self.check_current_privileges()
+        
+        if is_admin:
+            print("[+] Already Administrator - focus on SYSTEM escalation")
+            self.enumerate_system_escalation_paths()
+        else:
+            print("[*] Regular user - need admin escalation first")
+            self.enumerate_admin_escalation_paths()
+        
+        # Phase 2: Generate prioritized report
+        report = self.generate_escalation_report()
+        
+        return report
+    
+    def check_current_privileges(self):
+        """
+        Check what we can do right now
+        
+        Critical privileges for escalation:
+        - SeImpersonatePrivilege → Potato attacks
+        - SeDebugPrivilege → Process injection
+        - SeLoadDriverPrivilege → Kernel driver loading
+        - SeRestorePrivilege → File system manipulation
+        """
+        import ctypes
+        is_admin = ctypes.windll.shell32.IsUserAnAdmin()
+        
+        # Check for powerful privileges
+        powerful_privs = self.get_enabled_privileges()
+        
+        for priv in powerful_privs:
+            if priv == 'SeImpersonatePrivilege':
+                self.findings['high'].append({
+                    'category': 'Dangerous Privilege',
+                    'finding': 'SeImpersonatePrivilege enabled',
+                    'exploitation': 'Use PrintSpoofer, JuicyPotato, or RoguePotato',
+                    'impact': 'Critical - Direct path to SYSTEM'
+                })
+        
+        return is_admin</code></pre>
 </div>
 </div>
 </div>

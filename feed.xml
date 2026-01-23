@@ -3,12 +3,81 @@
     <title>Maxwell Cross</title>
     <link href="https://maxwell-cross.com/feed.xml" rel="self" />
     <link href="https://maxwell-cross.com" />
-    <updated>2026-01-17T17:40:11-05:00</updated>
+    <updated>2026-01-23T09:24:04-05:00</updated>
     <author>
         <name>Maxwell Cross</name>
     </author>
     <id>https://maxwell-cross.com</id>
 
+    <entry>
+        <title>30 Days of Red Team: Day 1 — Mastering the Kill Chain</title>
+        <author>
+            <name>Maxwell Cross</name>
+        </author>
+        <link href="https://maxwell-cross.com/30-days-red-team-day-1.html"/>
+        <id>https://maxwell-cross.com/30-days-red-team-day-1.html</id>
+
+        <updated>2026-01-23T09:24:04-05:00</updated>
+            <summary type="html">
+                <![CDATA[
+                    Most security courses lie to you. They teach the Cyber Kill Chain as a linear, orderly process: Recon → Weaponize → Deliver → Win. But real-world Red Teaming is messy. It’s non-linear. You gain access, you hit a wall, you re-recon, you pivot, and you&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <h3 data-path-to-node="11"><strong data-path-to-node="11" data-index-in-node="0">Most security courses lie to you.</strong></h3>
+<p data-path-to-node="12">They teach the Cyber Kill Chain as a linear, orderly process: <i data-path-to-node="12" data-index-in-node="62">Recon → Weaponize → Deliver → Win.</i></p>
+<p data-path-to-node="13">But real-world Red Teaming is messy. It’s non-linear. You gain access, you hit a wall, you re-recon, you pivot, and you try again.</p>
+<p data-path-to-node="14">In <strong data-path-to-node="14" data-index-in-node="3">Day 1</strong>, we stop treating the Kill Chain like a vocabulary list and start using it as an operational roadmap. If you don't understand this framework, you aren't a Red Teamer—you're just a script kiddie flailing in the dark.</p>
+<hr>
+<h3 data-path-to-node="16"><strong data-path-to-node="16" data-index-in-node="0">A Glimpse of the Code: Automating Reconnaissance</strong></h3>
+<p data-path-to-node="17">We aren't just covering theory. In Day 1, we start building your personal toolkit immediately.</p>
+<p data-path-to-node="18">Finding subdomains is the first step in mapping an attack surface. Why? Because <code data-path-to-node="18" data-index-in-node="80">dev.target.com</code> usually has weaker security than <code data-path-to-node="18" data-index-in-node="128">www.target.com</code>.</p>
+<p data-path-to-node="19">Here is a snippet of the custom <strong data-path-to-node="19" data-index-in-node="32">DNS Enumerator</strong> we build in the full article:</p>
+<pre class="language-python"><code>def enumerate_subdomains(domain, wordlist):
+    """
+    Enumerate subdomains using DNS queries
+    """
+    found_subdomains = []
+    
+    with open(wordlist, 'r') as f:
+        subdomains = f.read().splitlines()
+    
+    for subdomain in subdomains:
+        test_domain = f"{subdomain}.{domain}"
+        try:
+            answers = dns.resolver.resolve(test_domain, 'A')
+            for rdata in answers:
+                print(f"[+] Found: {test_domain} -&gt; {rdata}")
+                found_subdomains.append(test_domain)
+        except dns.resolver.NXDOMAIN:
+            pass  # Subdomain doesn't exist
+        except Exception as e:
+            pass  # Other DNS errors
+    
+    return found_subdomains</code></pre>
+<p>This simple logic allows us to find the hidden doors into an organization's network. But finding them is only Step 1.</p>
+<hr>
+<h3 data-path-to-node="23"><strong data-path-to-node="23" data-index-in-node="0">Read the full guide on Medium to get:</strong></h3>
+<ul data-path-to-node="24">
+<li>
+<p data-path-to-node="24,0,0"><strong data-path-to-node="24,0,0" data-index-in-node="0">The Complete Toolset:</strong> Get the full source code for the DNS Enumerator <i data-path-to-node="24,0,0" data-index-in-node="70">and</i> a Web Service Fingerprinter that grabs headers and SSL certs.</p>
+</li>
+<li>
+<p data-path-to-node="24,1,0"><strong data-path-to-node="24,1,0" data-index-in-node="0">The 30-Day Roadmap:</strong> A complete breakdown of the series, from Reconnaissance (Days 1–7) to Domain Dominance (Days 22–28).</p>
+</li>
+<li>
+<p data-path-to-node="24,2,0"><strong data-path-to-node="24,2,0" data-index-in-node="0">A Real-World Case Study:</strong> How I used simple reconnaissance to find critical vulnerabilities in a mid-sized tech company’s Jenkins and GitLab instances—without ever firing an exploit.</p>
+</li>
+<li>
+<p data-path-to-node="24,3,0"><strong data-path-to-node="24,3,0" data-index-in-node="0">The "Dirty" Truth:</strong> Why the real Kill Chain loops back on itself and how to survive the chaos of a live engagement.</p>
+</li>
+</ul>
+<p data-path-to-node="25">The theory ends here. Today, we start building the framework you’ll use to break into the network.</p>
+<p data-path-to-node="25"><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-1-understanding-the-kill-chain-your-roadmap-to-domain-admin-9e496bbf91dd" target="_blank" rel="noopener noreferrer">START THE JOURNEY ON MEDIUM ➔</a></p>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>30 Days of Red Team: Day 15 — Credential Harvesting</title>
         <author>

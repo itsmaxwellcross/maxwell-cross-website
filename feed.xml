@@ -3,12 +3,79 @@
     <title>Maxwell Cross</title>
     <link href="https://maxwell-cross.com/feed.xml" rel="self" />
     <link href="https://maxwell-cross.com" />
-    <updated>2026-01-23T18:29:54-05:00</updated>
+    <updated>2026-01-23T18:33:01-05:00</updated>
     <author>
         <name>Maxwell Cross</name>
     </author>
     <id>https://maxwell-cross.com</id>
 
+    <entry>
+        <title>30 Days of Red Team: Day 12 — Data Exfiltration</title>
+        <author>
+            <name>Maxwell Cross</name>
+        </author>
+        <link href="https://maxwell-cross.com/30-days-red-team-day-12.html"/>
+        <id>https://maxwell-cross.com/30-days-red-team-day-12.html</id>
+
+        <updated>2026-01-23T18:33:01-05:00</updated>
+            <summary type="html">
+                <![CDATA[
+                    Access means nothing if you can't get the data out. You have Domain Admin. You have the persistence. You have the Crown Jewels. But if you try to drag-and-drop 50GB of data across the network, you will trigger every alarm in the Security Operations Center&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <h4 data-path-to-node="10"><strong data-path-to-node="10" data-index-in-node="0">Access means nothing if you can't get the data out.</strong></h4>
+<p data-path-to-node="11">You have Domain Admin. You have the persistence. You have the Crown Jewels.</p>
+<p data-path-to-node="12">But if you try to drag-and-drop 50GB of data across the network, you will trigger every alarm in the Security Operations Center (SOC).</p>
+<p data-path-to-node="13">Amateurs think exfiltration is about speed. Professionals know it is about <strong data-path-to-node="13" data-index-in-node="75">Invisibility</strong>.</p>
+<p data-path-to-node="14">Today, we learn how to move data past Firewalls, IDS, and Data Loss Prevention (DLP) systems by breaking it into microscopic chunks and hiding it where defenders never look.</p>
+<hr>
+<h3 data-path-to-node="16"><strong data-path-to-node="16" data-index-in-node="0">A Glimpse of the Code: Steganography</strong></h3>
+<p data-path-to-node="17">DLP systems scan for keywords like "Confidential" or file types like <code data-path-to-node="17" data-index-in-node="69">.sql</code>. They don't look inside your vacation photos.</p>
+<p data-path-to-node="18">In Day 12, we build a <strong data-path-to-node="18" data-index-in-node="22">Steganography Toolkit</strong> that hides sensitive data inside the pixels of an image using Least Significant Bit (LSB) encoding.</p>
+<p data-path-to-node="19">Here is the logic that turns a JPEG into a data mule:</p>
+<pre class="language-python"><code>def encode_data(self, image_path, data, output_path):
+    """
+    Hide data inside an image using LSB encoding.
+    This modifies the last bit of each pixel, making the change 
+    invisible to the human eye but readable by our C2.
+    """
+    # Load image as pixel array
+    img = Image.open(image_path)
+    img_array = np.array(img)
+    
+    # Flatten image and encode data into LSBs
+    flat_img = img_array.flatten()
+    for i, bit in enumerate(binary_data):
+        # Modify only the last bit (0xFE mask)
+        flat_img[i] = (flat_img[i] &amp; 0xFE) | int(bit)
+        
+    # Reshape and save as a new image
+    result = Image.fromarray(flat_img.reshape(img_array.shape))
+    result.save(output_path)</code></pre>
+<p>To the DLP, it's a picture of a beach. To you, it's the entire customer database.</p>
+<hr>
+<h4 data-path-to-node="23"><strong data-path-to-node="23" data-index-in-node="0">Read the full guide on Medium to get:</strong></h4>
+<ul data-path-to-node="24">
+<li>
+<p data-path-to-node="24,0,0"><strong data-path-to-node="24,0,0" data-index-in-node="0">The DNS Exfiltration Engine:</strong> How to tunnel data through DNS queries (which almost no firewall blocks).</p>
+</li>
+<li>
+<p data-path-to-node="24,1,0"><strong data-path-to-node="24,1,0" data-index-in-node="0">Cloud Exfiltration:</strong> Using legitimate services like AWS S3 and Google Drive to blend your theft with normal business traffic.</p>
+</li>
+<li>
+<p data-path-to-node="24,2,0"><strong data-path-to-node="24,2,0" data-index-in-node="0">The "Chunker":</strong> A script that splits massive files into tiny, unnoticeable packets and reassembles them on your C2 server.</p>
+</li>
+<li>
+<p data-path-to-node="24,3,0"><strong data-path-to-node="24,3,0" data-index-in-node="0">Bandwidth Throttling:</strong> How to programmatically limit your transfer speed to stay below the "Anomaly Detection" threshold.</p>
+</li>
+</ul>
+<p data-path-to-node="25">We have the data. Now, let's steal it without leaving a trace.</p>
+<p data-path-to-node="25"><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-12-data-exfiltration-methods-3d030ca56cc0" target="_blank" rel="noopener noreferrer">READ THE FULL GUIDE ON MEDIUM ➔</a></p>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>30 Days of Red Team: Day 11 — Alternative C2 Channels</title>
         <author>
@@ -610,65 +677,6 @@ WantedBy=default.target
 </ul>
 <p data-path-to-node="24">We are building the gun. Tomorrow, we learn how to aim it.</p>
 <p data-path-to-node="24"><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-3-weaponization-building-payloads-that-evade-detection-6268da00344e" target="_blank" rel="noopener noreferrer">READ THE FULL GUIDE ON MEDIUM <strong data-path-to-node="25" data-index-in-node="2">➔</strong></a></p>
-            ]]>
-        </content>
-    </entry>
-    <entry>
-        <title>30 Days of Red Team: Day 2 — Weaponizing OSINT</title>
-        <author>
-            <name>Maxwell Cross</name>
-        </author>
-        <link href="https://maxwell-cross.com/30-days-red-team-day-2.html"/>
-        <id>https://maxwell-cross.com/30-days-red-team-day-2.html</id>
-
-        <updated>2026-01-23T09:35:20-05:00</updated>
-            <summary type="html">
-                <![CDATA[
-                    If Day 1 was learning to walk, Day 2 is learning to run. Most defenders focus on firewalls and intrusion detection systems. But attackers? We are building detailed maps of their infrastructure using nothing but public information. Open Source Intelligence (OSINT) is the art of&hellip;
-                ]]>
-            </summary>
-        <content type="html">
-            <![CDATA[
-                <h4 data-path-to-node="11"><strong data-path-to-node="11" data-index-in-node="0">If Day 1 was learning to walk, Day 2 is learning to run.</strong></h4>
-<p data-path-to-node="12">Most defenders focus on firewalls and intrusion detection systems. But attackers? We are building detailed maps of their infrastructure using nothing but public information.</p>
-<p data-path-to-node="13"><strong data-path-to-node="13" data-index-in-node="0">Open Source Intelligence (OSINT)</strong> is the art of finding the data companies don't even realize they are exposing.</p>
-<p data-path-to-node="14">Every time a company posts a job listing, updates their SSL certificate, or pushes code to GitHub, they are handing us ammunition. Today, we automate the process of collecting it.</p>
-<hr>
-<h4 data-path-to-node="16"><strong data-path-to-node="16" data-index-in-node="0">A Glimpse of the Code: Automated Google Dorking</strong></h4>
-<p data-path-to-node="17">Google is the most powerful hacking tool ever created, but manual searching is too slow. In Day 2, we build a tool to automate "Dorking"—using search operators to find sensitive files.</p>
-<p data-path-to-node="18">Here is the core logic from the <strong data-path-to-node="18" data-index-in-node="32">Auto-Dorker</strong> we build in the full article:</p>
-<pre class="language-python"><code>def build_dork(self, dork_type):
-    """
-    Build targeted queries for different reconnaissance objectives
-    """
-    dorks = {
-        'subdomains': f'site:*.{self.domain} -site:www.{self.domain}',
-        'files': f'site:{self.domain} (ext:pdf OR ext:doc OR ext:xls)',
-        'logins': f'site:{self.domain} (inurl:login OR inurl:admin)',
-        'configs': f'site:{self.domain} (ext:xml OR ext:conf OR ext:cfg)',
-        'backup_files': f'site:{self.domain} (ext:bkf OR ext:bak OR ext:old)',
-        'credentials': f'site:{self.domain} (password OR passwd OR pwd)'
-    }
-    return dorks.get(dork_type, '')</code></pre>
-<p>I once used a script like this to find a database backup file (<code data-path-to-node="20" data-index-in-node="63">.bak</code>) indexed by Google for a major financial institution. It contained admin credentials. I never even had to touch their server.</p>
-<hr>
-<h4 data-path-to-node="22"><strong data-path-to-node="22" data-index-in-node="0">Read the full guide on Medium to get:</strong></h4>
-<ul data-path-to-node="23">
-<li>
-<p data-path-to-node="23,0,0"><strong data-path-to-node="23,0,0" data-index-in-node="0">The "Auto-Dorker" Tool:</strong> A Python script that iterates through 7 different dork types to find exposed secrets automatically.</p>
-</li>
-<li>
-<p data-path-to-node="23,1,0"><strong data-path-to-node="23,1,0" data-index-in-node="0">Email Enumeration Strategy:</strong> How to generate valid employee email lists using pattern detection and LinkedIn mining (crucial for the phishing attacks we do later).</p>
-</li>
-<li>
-<p data-path-to-node="23,2,0"><strong data-path-to-node="23,2,0" data-index-in-node="0">Tech Stack Fingerprinting:</strong> A script that analyzes HTTP headers and cookies to tell you exactly what software the target is running—and what exploits will work.</p>
-</li>
-<li>
-<p data-path-to-node="23,3,0"><strong data-path-to-node="23,3,0" data-index-in-node="0">The "Passive" Guarantee:</strong> How to map an entire organization without sending a single packet to their network, keeping you completely invisible.</p>
-</li>
-</ul>
-<p data-path-to-node="24">We are building the map today so we can attack tomorrow.</p>
-<p data-path-to-node="24"><strong data-path-to-node="25" data-index-in-node="2"><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-2-advanced-osint-external-reconnaissance-finding-what-they-dont-f2de32dfc1b4" target="_blank" rel="noopener noreferrer">READ THE FULL GUIDE ON MEDIUM ➔</a></strong></p>
             ]]>
         </content>
     </entry>

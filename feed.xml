@@ -3,12 +3,74 @@
     <title>Maxwell Cross</title>
     <link href="https://maxwell-cross.com/feed.xml" rel="self" />
     <link href="https://maxwell-cross.com" />
-    <updated>2026-01-23T10:20:07-05:00</updated>
+    <updated>2026-01-23T10:24:03-05:00</updated>
     <author>
         <name>Maxwell Cross</name>
     </author>
     <id>https://maxwell-cross.com</id>
 
+    <entry>
+        <title>30 Days of Red Team: Day 6 — Post-Exploitation</title>
+        <author>
+            <name>Maxwell Cross</name>
+        </author>
+        <link href="https://maxwell-cross.com/30-days-red-team-day-6.html"/>
+        <id>https://maxwell-cross.com/30-days-red-team-day-6.html</id>
+
+        <updated>2026-01-23T10:24:03-05:00</updated>
+            <summary type="html">
+                <![CDATA[
+                    Getting in is easy. Staying in is hard. Yesterday, you gained your first foothold. But this is the moment where most attacks fail. The difference between a professional Red Teamer and a script kiddie isn't the exploit they used—it's what happens in the first 15&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <h4 data-path-to-node="10"><strong data-path-to-node="10" data-index-in-node="0">Getting in is easy. Staying in is hard.</strong></h4>
+<p data-path-to-node="11">Yesterday, you gained your first foothold. But this is the moment where most attacks fail.</p>
+<p data-path-to-node="12">The difference between a professional Red Teamer and a script kiddie isn't the exploit they used—it's what happens in the first 15 minutes <i data-path-to-node="12" data-index-in-node="139">after</i> the shell pops. Do you panic and run loud commands? Or do you methodically map your surroundings?</p>
+<p data-path-to-node="13">Today, we cover <strong data-path-to-node="13" data-index-in-node="16">Situational Awareness</strong>: the art of understanding where you are, what you control, and how to move deeper without tripping every alarm in the SOC.</p>
+<hr>
+<h3 data-path-to-node="15"><strong data-path-to-node="15" data-index-in-node="0">A Glimpse of the Code: Shell Stabilization</strong></h3>
+<p data-path-to-node="16">We've all been there: you get a reverse shell, you type <code data-path-to-node="16" data-index-in-node="56">Ctrl+C</code> to stop a command, and you accidentally kill your own connection.</p>
+<p data-path-to-node="17">In Day 6, we build a <strong data-path-to-node="17" data-index-in-node="21">Shell Stabilizer</strong> that automatically upgrades "dumb" shells into fully interactive TTY sessions. Here is the Python logic that saves your session:</p>
+<pre class="language-python"><code>def linux_stabilization(self):
+    """
+    The 'Python PTY' trick to stabilize a reverse shell.
+    Run this inside your victim shell to get a proper terminal.
+    """
+    commands = [
+        # Spawns a pseudo-terminal (PTY) so tools like 'su' and 'sudo' work
+        'python3 -c \'import pty; pty.spawn("/bin/bash")\'',
+        
+        # Background the shell (Ctrl+Z), then run this on your machine:
+        'stty raw -echo; fg',
+        
+        # Reset the terminal to fix formatting
+        'export TERM=xterm'
+    ]
+    return commands</code></pre>
+<p>This simple technique gives you tab completion, command history, and the ability to run interactive tools like <code data-path-to-node="19" data-index-in-node="111">vim</code> or <code data-path-to-node="19" data-index-in-node="118">nano</code> on the victim machine.</p>
+<hr>
+<h4 data-path-to-node="21"><strong data-path-to-node="21" data-index-in-node="0">Read the full guide on Medium to get:</strong></h4>
+<ul data-path-to-node="22">
+<li>
+<p data-path-to-node="22,0,0"><strong data-path-to-node="22,0,0" data-index-in-node="0">The Situational Awareness Tool:</strong> An automated script that fingerprints the OS, checks for EDR/AV, and lists accessible privileges in seconds.</p>
+</li>
+<li>
+<p data-path-to-node="22,1,0"><strong data-path-to-node="22,1,0" data-index-in-node="0">The Credential Harvester:</strong> A regex-powered tool that scrapes passwords from <code data-path-to-node="22,1,0" data-index-in-node="76">bash_history</code>, config files, and environment variables.</p>
+</li>
+<li>
+<p data-path-to-node="22,2,0"><strong data-path-to-node="22,2,0" data-index-in-node="0">Network Discovery:</strong> How to map the internal network and find Lateral Movement targets (like Domain Controllers) from your initial beachhead.</p>
+</li>
+<li>
+<p data-path-to-node="22,3,0"><strong data-path-to-node="22,3,0" data-index-in-node="0">Data Exfiltration Helper:</strong> A stealthy way to move sensitive files out of the network using encrypted HTTP, Netcat, or ICMP covert channels.</p>
+</li>
+</ul>
+<p data-path-to-node="23">You are inside. Now, let's look around.</p>
+<p data-path-to-node="23"><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-6-post-exploitation-youre-in-now-what-254b09f2688e" target="_blank" rel="noopener noreferrer">READ THE FULL GUIDE ON MEDIUM ➔</a></p>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>30 Days of Red Team: Day 5 — Initial Exploitation</title>
         <author>

@@ -3,12 +3,75 @@
     <title>Maxwell Cross</title>
     <link href="https://maxwell-cross.com/feed.xml" rel="self" />
     <link href="https://maxwell-cross.com" />
-    <updated>2026-01-23T10:24:03-05:00</updated>
+    <updated>2026-01-23T18:17:35-05:00</updated>
     <author>
         <name>Maxwell Cross</name>
     </author>
     <id>https://maxwell-cross.com</id>
 
+    <entry>
+        <title>30 Days of Red Team: Day 7 — The Master Framework</title>
+        <author>
+            <name>Maxwell Cross</name>
+        </author>
+        <link href="https://maxwell-cross.com/30-days-red-team-day-7.html"/>
+        <id>https://maxwell-cross.com/30-days-red-team-day-7.html</id>
+
+        <updated>2026-01-23T18:17:35-05:00</updated>
+            <summary type="html">
+                <![CDATA[
+                    A collection of scripts doesn't make you dangerous. For six days, you have been building individual tools: a port scanner here, a payload generator there. But professional Red Teaming isn't about running random scripts. It's about Orchestration. Today, we take every tool we built in&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <h4 data-path-to-node="10"><strong data-path-to-node="10" data-index-in-node="0">A collection of scripts doesn't make you dangerous.</strong></h4>
+<p data-path-to-node="11">For six days, you have been building individual tools: a port scanner here, a payload generator there. But professional Red Teaming isn't about running random scripts. It's about <strong data-path-to-node="11" data-index-in-node="179">Orchestration</strong>.</p>
+<p data-path-to-node="12">Today, we take every tool we built in Week 1—from Reconnaissance to Post-Exploitation—and fuse them into a single, automated attack engine.</p>
+<p data-path-to-node="13">We are moving from "I have a tool" to "I have a campaign."</p>
+<hr>
+<h4 data-path-to-node="15"><strong data-path-to-node="15" data-index-in-node="0">A Glimpse of the Code: The Automation Engine</strong></h4>
+<p data-path-to-node="16">Manual hacking is slow and prone to error. In Day 7, we write the logic that chains our tools together automatically.</p>
+<p data-path-to-node="17">Here is the <code data-path-to-node="17" data-index-in-node="12">run_full_engagement</code> method from our <strong data-path-to-node="17" data-index-in-node="48">Master Framework</strong>. It executes the entire Cyber Kill Chain with a single command:</p>
+<pre class="language-python"><code>def run_full_engagement(self):
+    """Execute complete engagement workflow"""
+    phases = [
+        ('Phase 1: Reconnaissance', self.phase_1_reconnaissance),
+        ('Phase 2: Weaponization', self.phase_2_weaponization),
+        ('Phase 3: Delivery', self.phase_3_delivery),
+        ('Phase 4: Exploitation', self.phase_4_exploitation),
+        ('Phase 5: Post-Exploitation', self.phase_5_post_exploitation)
+    ]
+    
+    for phase_name, phase_func in phases:
+        self.log(f"Starting {phase_name}...")
+        phase_func()
+        
+        # Configurable delay to evade behavioral detection
+        if self.config['options'].get('delay_between_phases', 0) &gt; 0:
+            time.sleep(self.config['options']['delay_between_phases'])</code></pre>
+<p>This script allows you to launch a standardized attack campaign against a target while you sit back and analyze the incoming data.</p>
+<hr>
+<h4 data-path-to-node="21"><strong data-path-to-node="21" data-index-in-node="0">Read the full guide on Medium to get:</strong></h4>
+<ul data-path-to-node="22">
+<li>
+<p data-path-to-node="22,0,0"><strong data-path-to-node="22,0,0" data-index-in-node="0">The Master Framework:</strong> A unified Python script that orchestrates your Recon, Weaponization, and Exploitation tools.</p>
+</li>
+<li>
+<p data-path-to-node="22,1,0"><strong data-path-to-node="22,1,0" data-index-in-node="0">Attack Chain Templates:</strong> Pre-built workflows for common scenarios (e.g., "Web App Takeover," "Domain Compromise").</p>
+</li>
+<li>
+<p data-path-to-node="22,2,0"><strong data-path-to-node="22,2,0" data-index-in-node="0">The Week 1 CTF:</strong> A custom Capture-The-Flag challenge I built to test your new skills (6 flags, 100 points).</p>
+</li>
+<li>
+<p data-path-to-node="22,3,0"><strong data-path-to-node="22,3,0" data-index-in-node="0">The "Production-Ready" Checklist:</strong> How to clean, document, and organize your code so you can use it on real client engagements next week.</p>
+</li>
+</ul>
+<p data-path-to-node="23">Week 1 is complete. You have the toolkit. Now, prove you can use it.</p>
+<p data-path-to-node="23"><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-7-week-1-integration-practice-4840f85389a3" target="_blank" rel="noopener noreferrer">READ THE FULL GUIDE ON MEDIUM ➔</a></p>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>30 Days of Red Team: Day 6 — Post-Exploitation</title>
         <author>

@@ -3,12 +3,78 @@
     <title>Maxwell Cross</title>
     <link href="https://maxwell-cross.com/feed.xml" rel="self" />
     <link href="https://maxwell-cross.com" />
-    <updated>2026-01-23T18:20:49-05:00</updated>
+    <updated>2026-01-23T18:23:50-05:00</updated>
     <author>
         <name>Maxwell Cross</name>
     </author>
     <id>https://maxwell-cross.com</id>
 
+    <entry>
+        <title>30 Days of Red Team: Day 9 — Linux Persistence</title>
+        <author>
+            <name>Maxwell Cross</name>
+        </author>
+        <link href="https://maxwell-cross.com/30-days-red-team-day-9.html"/>
+        <id>https://maxwell-cross.com/30-days-red-team-day-9.html</id>
+
+        <updated>2026-01-23T18:23:50-05:00</updated>
+            <summary type="html">
+                <![CDATA[
+                    Windows has the Registry. Linux has Everything Else. Yesterday, we hid inside the Windows Registry. Today, we enter the world of Linux, where "everything is a file"—including your malware. If you think Linux persistence is just adding a Cron job and calling it a day,&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <h4 data-path-to-node="10"><strong data-path-to-node="10" data-index-in-node="0">Windows has the Registry. Linux has Everything Else.</strong></h4>
+<p data-path-to-node="11">Yesterday, we hid inside the Windows Registry. Today, we enter the world of Linux, where "everything is a file"—including your malware.</p>
+<p data-path-to-node="12">If you think Linux persistence is just adding a Cron job and calling it a day, you are going to get caught. Modern Linux environments (especially in the cloud) are heavily monitored. To survive reboots and <code data-path-to-node="12" data-index-in-node="206">rm -rf</code> commands, you need to understand the boot process better than the sysadmin does.</p>
+<p data-path-to-node="13">Today, we cover the art of staying root.</p>
+<hr>
+<h3 data-path-to-node="15"><strong data-path-to-node="15" data-index-in-node="0">A Glimpse of the Code: Systemd Persistence</strong></h3>
+<p data-path-to-node="16">Cron is noisy. <strong data-path-to-node="16" data-index-in-node="15">Systemd</strong> is professional.</p>
+<p data-path-to-node="17">Systemd manages services on almost every modern Linux distro. By creating a custom user service, we can ensure our payload restarts automatically if it crashes or is killed. Here is the logic from the <strong data-path-to-node="17" data-index-in-node="201">Systemd Persistence Tool</strong> we build in the full article:</p>
+<pre class="language-python"><code>def create_user_service(service_name, payload_command):
+    """
+    Create a systemd user service that survives reboots (no root required).
+    """
+    service_content = f"""[Unit]
+Description=User background synchronization service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c '{payload_command}'
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=default.target
+"""
+    # Write to ~/.config/systemd/user/ and enable lingering
+    # "Lingering" ensures the service runs even when the user is logged out.
+    subprocess.run(f'loginctl enable-linger {os.getenv("USER")}', shell=True)</code></pre>
+<p>This technique allows your persistence to survive even when the user logs out, effectively turning a low-privilege user account into a permanent foothold.</p>
+<hr>
+<h4 data-path-to-node="21"><strong data-path-to-node="21" data-index-in-node="0">Read the full guide on Medium to get:</strong></h4>
+<ul data-path-to-node="22">
+<li>
+<p data-path-to-node="22,0,0"><strong data-path-to-node="22,0,0" data-index-in-node="0">The Cron Framework:</strong> How to install stealthy Cron jobs that blend in with system tasks (and how to hide them from casual inspection).</p>
+</li>
+<li>
+<p data-path-to-node="22,1,0"><strong data-path-to-node="22,1,0" data-index-in-node="0">SSH Key Injection:</strong> A script to generate backdoor SSH keys and inject them into <code data-path-to-node="22,1,0" data-index-in-node="80">authorized_keys</code> without leaving a command history trail.</p>
+</li>
+<li>
+<p data-path-to-node="22,2,0"><strong data-path-to-node="22,2,0" data-index-in-node="0">Shell Profile Poisoning:</strong> How to modify <code data-path-to-node="22,2,0" data-index-in-node="39">.bashrc</code> and <code data-path-to-node="22,2,0" data-index-in-node="51">.profile</code> so your payload executes every time an admin logs in to check the server.</p>
+</li>
+<li>
+<p data-path-to-node="22,3,0"><strong data-path-to-node="22,3,0" data-index-in-node="0">The Master Linux Framework:</strong> A Python tool that detects your privileges (Root vs. User) and automatically installs the best available persistence method.</p>
+</li>
+</ul>
+<p data-path-to-node="23">We own the server. Now, let's make sure we keep it.</p>
+<p data-path-to-node="23"><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-9-linux-persistence-techniques-surviving-in-unix-territory-d654252c61c5" target="_blank" rel="noopener noreferrer">READ THE FULL GUIDE ON MEDIUM ➔</a></p>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>30 Days of Red Team: Day 8 — Windows Persistence</title>
         <author>
@@ -807,234 +873,6 @@ You're not stealing passwords—you're harvesting what users gave Windows</code>
             print(f"[-] comsvcs dump failed")
             return None</code></pre>
 <p><strong><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-15-credential-harvesting-829737ccc5e6" target="_blank" rel="noopener noreferrer">Read The Full Article On Medium</a></strong></p>
-</div>
-</div>
-</div>
-            ]]>
-        </content>
-    </entry>
-    <entry>
-        <title>30 Days of Red Team: Day 16 — Windows Privilege Escalation</title>
-        <author>
-            <name>Maxwell Cross</name>
-        </author>
-        <link href="https://maxwell-cross.com/30-days-of-red-team-day-16-windows-privilege-escalation.html"/>
-        <id>https://maxwell-cross.com/30-days-of-red-team-day-16-windows-privilege-escalation.html</id>
-        <media:content url="https://maxwell-cross.com/media/posts/3/Adobe-Express-file.png" medium="image" />
-
-        <updated>2026-01-17T13:03:13-05:00</updated>
-            <summary type="html">
-                <![CDATA[
-                        <img src="https://maxwell-cross.com/media/posts/3/Adobe-Express-file.png" alt="" />
-                    You have a shell. The target answered. The C2 is stable. You’re in. But you’re just a regular user. No admin rights. No SYSTEM access. No credential harvesting. No lateral movement. You’re trapped in a low-privilege cage while the real targets — passwords, hashes, domain&hellip;
-                ]]>
-            </summary>
-        <content type="html">
-            <![CDATA[
-                    <p><img src="https://maxwell-cross.com/media/posts/3/Adobe-Express-file.png" class="type:primaryImage" alt="" /></p>
-                <p id="47eb" data-selectable-paragraph="">You have a shell. The target answered. The C2 is stable. You’re in.</p>
-<p id="18f3" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">But you’re just a regular user. No admin rights. No SYSTEM access. No credential harvesting. No lateral movement. You’re trapped in a low-privilege cage while the real targets — passwords, hashes, domain admin credentials — sit just out of reach behind administrator permissions.</p>
-<p id="9509" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">This is where most amateur operators give up. This is where professionals get creative.</strong></p>
-<p id="1450" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">Because here’s what separates the good from the great: <strong class="acd he">Windows privilege escalation isn’t about finding the perfect exploit. It’s about finding the dozen misconfigurations that Windows admins leave everywhere.</strong></p>
-<p id="bc0c" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">Real attackers don’t waste time searching for zero-days when there’s an unquoted service path sitting right there. They don’t compile kernel exploits when AlwaysInstallElevated is enabled. They don’t need UAC bypasses when there’s a scheduled task running as SYSTEM with a writable script path.</p>
-<p id="eae8" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">Windows privilege escalation is a hunt. And you’re about to learn where Windows hides its weaknesses.</strong></p>
-<p id="eb46" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">Today, you’re learning every technique that turns regular users into SYSTEM. By the end of this day, you’ll understand:</p>
-<ul class="">
-<li id="41a9" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Automated enumeration</strong> — Finding all privilege escalation vectors systematically</li>
-<li id="02aa" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Service exploitation</strong> — Unquoted paths, weak permissions, DLL hijacking</li>
-<li id="2e6b" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Token impersonation</strong> — The Potato family attacks for instant SYSTEM</li>
-<li id="ef97" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Registry abuse</strong> — AlwaysInstallElevated, Autoruns, stored credentials</li>
-<li id="8158" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Scheduled task exploitation</strong> — Hijacking SYSTEM-level tasks</li>
-<li id="4428" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">UAC bypass techniques</strong> — Multiple methods for different Windows versions</li>
-<li id="6583" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Credential theft at higher privileges</strong> — What changes with admin/SYSTEM access</li>
-<li id="50b9" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">OPSEC-conscious escalation</strong> — Clean exploitation that avoids detection</li>
-</ul>
-<p id="7491" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">This isn’t about theory. This is about finding the weak spots that administrators accidentally create every single day. This is about systematic privilege escalation that works on 80% of Windows environments.</p>
-<p id="b816" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">Let’s escalate.</p>
-<hr>
-<div class="ky wb wc wd we">
-<div class="o q">
-<div class="eb n ec ed ee ef">
-<h2 id="206d" class="adg adh wg as adi mk adj ml mo mp adk mq mt mu adl mv my mz adm na nd ne adn nf ni ado co" data-selectable-paragraph="">What You Should Have From Days 1–15</h2>
-<p id="a59e" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph="">Before privilege escalation, verify you have:</p>
-<p id="b6dd" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><a class="bj kp" rel="noopener" href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-15-credential-harvesting-829737ccc5e6" data-discover="true"><strong class="acd he">From Day 15 (Credential Harvesting)</strong></a><strong class="acd he">:</strong></p>
-<ul class="">
-<li id="ce16" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">✅ Understanding of credential storage mechanisms</li>
-<li id="49b5" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Knowledge of what’s possible with SYSTEM access</li>
-<li id="3dd4" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Motivation to GET those elevated privileges</li>
-</ul>
-<p id="1973" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">From Week 2 (Days 8–14):</strong></p>
-<ul class="">
-<li id="06a9" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">✅ Stable shell/C2 access</li>
-<li id="486b" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Persistence mechanisms</li>
-<li id="69dd" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ File upload/download capabilities</li>
-<li id="cfd8" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Command execution on target</li>
-</ul>
-<p id="0888" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">Current State:</strong></p>
-<ul class="">
-<li id="3864" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">✅ You have a shell as a regular user</li>
-<li id="7b14" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ No administrator privileges</li>
-<li id="a06b" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Limited access to system resources</li>
-<li id="2546" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">✅ Need to escalate to admin/SYSTEM</li>
-</ul>
-<p id="e86c" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">Technical Requirements:</strong></p>
-<ul class="">
-<li id="d82b" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">Python 3.8+ with <code class="dh adu adv adw adx b">pywin32</code>, <code class="dh adu adv adw adx b">wmi</code></li>
-<li id="d113" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">PowerShell access on target</li>
-<li id="3ece" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Understanding of Windows permissions</li>
-<li id="f9c2" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Test lab environment (never on production)</li>
-<li id="10d9" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Patience (privilege escalation is a hunt, not a sprint)</li>
-</ul>
-<hr>
-<h2 id="0f0f" class="adg adh wg as adi mk adj ml mo mp adk mq mt mu adl mv my mz adm na nd ne adn nf ni ado co" data-selectable-paragraph="">The Privilege Escalation Mindset</h2>
-<p id="1dd0" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph="">Let me tell you about a real engagement:</p>
-<p id="8f8a" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">Junior operator gets a shell on a corporate workstation. Low-privilege user. They immediately start searching for kernel exploits. “Windows 10 1809… let me find the right exploit… compile it… upload it…” Two hours later, exploit fails. Blue team notices suspicious process. Operator gets caught.</p>
-<p id="420c" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">The professional operator does this:</strong></p>
-<p id="eab6" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">They run automated enumeration. 30 seconds later, they find:</p>
-<ul class="">
-<li id="e804" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">AlwaysInstallElevated enabled in registry</li>
-<li id="7726" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Scheduled task running as SYSTEM with writable script</li>
-<li id="9b51" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Service with unquoted path and weak folder permissions</li>
-<li id="97ad" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">SeImpersonatePrivilege enabled on current user</li>
-</ul>
-<p id="55d7" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">They create an MSI installer, execute it. <strong class="acd he">SYSTEM shell in 60 seconds.</strong></p>
-<h3 id="d247" class="ady adh wg as adi uq adz ur mo us aea ut mt uu aeb uv uw ux aec uy uz va aed vb vc aee co" data-selectable-paragraph="">The Philosophy</h3>
-<pre class="language-bash"><code>Misconfigurations are more common than exploits
-Misconfigurations are quieter than exploits
-Misconfigurations work across Windows versions
-Misconfigurations are what administrators create every day</code></pre>
-<p> <strong class="acd he">The Hunt Methodology:</strong></p>
-<ol class="">
-<li id="4e2f" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act aen acv acw co" data-selectable-paragraph=""><strong class="acd he">Enumerate everything</strong> — Services, tasks, registry, permissions</li>
-<li id="1aa4" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act aen acv acw co" data-selectable-paragraph=""><strong class="acd he">Prioritize by noise level</strong> — Quiet techniques first</li>
-<li id="2c61" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act aen acv acw co" data-selectable-paragraph=""><strong class="acd he">Test systematically</strong> — Don’t skip the obvious</li>
-<li id="ee51" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act aen acv acw co" data-selectable-paragraph=""><strong class="acd he">Maintain access</strong> — Escalate, then persist at new privilege level</li>
-<li id="98ad" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act aen acv acw co" data-selectable-paragraph=""><strong class="acd he">Cover tracks</strong> — Clean up artifacts after successful escalation</li>
-</ol>
-<p id="eecc" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">Key Insight:</strong> Windows privilege escalation is 90% enumeration, 10% exploitation. If you can’t find a way to escalate, you haven’t enumerated thoroughly enough.</p>
-<hr>
-<div class="ky wb wc wd we">
-<div class="o q">
-<div class="eb n ec ed ee ef">
-<h2 id="8783" class="adg adh wg as adi mk adj ml mo mp adk mq mt mu adl mv my mz adm na nd ne adn nf ni ado co" data-selectable-paragraph="">Understanding Windows Privilege Levels</h2>
-<p id="f26d" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph="">Before escalating, understand what you’re escalating TO and FROM.</p>
-<h3 id="18be" class="ady adh wg as adi uq adz ur mo us aea ut mt uu aeb uv uw ux aec uy uz va aed vb vc aee co" data-selectable-paragraph="">The Privilege Hierarchy</h3>
-<p id="955f" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">1. User</strong> (Your typical starting point)</p>
-<ul class="">
-<li id="2e4c" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">Standard user account</li>
-<li id="d91b" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Can run most applications</li>
-<li id="9463" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Cannot modify system settings</li>
-<li id="d52c" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Cannot access other users’ files</li>
-<li id="57c4" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">This is where you usually start</strong></li>
-</ul>
-<p id="3792" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">2. Administrator</strong> (Your first target)</p>
-<ul class="">
-<li id="2fc6" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">Local admin on the machine</li>
-<li id="33f2" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Can install software and modify system settings</li>
-<li id="9300" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Can access LSASS, SAM, registry secrets</li>
-<li id="541f" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Still subject to UAC (User Access Control)</li>
-<li id="ff9e" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Most privilege escalation aims here</strong></li>
-</ul>
-<p id="a2c4" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">3. SYSTEM</strong> (The ultimate goal)</p>
-<ul class="">
-<li id="3c32" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">Highest privilege level</li>
-<li id="129f" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">NT AUTHORITY\SYSTEM account</li>
-<li id="f6c4" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Unrestricted access to all resources</li>
-<li id="0c2e" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Not subject to UAC</li>
-<li id="d327" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Used by Windows services and kernel</li>
-<li id="d034" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph=""><strong class="acd he">Where professionals always push to</strong></li>
-</ul>
-<h3 id="66e4" class="ady adh wg as adi uq adz ur mo us aea ut mt uu aeb uv uw ux aec uy uz va aed vb vc aee co" data-selectable-paragraph="">Why SYSTEM &gt; Administrator</h3>
-<p id="0f8b" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph="">Even as Administrator, you face restrictions:</p>
-<ul class="">
-<li id="d353" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">UAC prompts for sensitive operations</li>
-<li id="d7a0" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Some registry keys require SYSTEM</li>
-<li id="1fb1" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Certain processes can’t be accessed</li>
-<li id="8671" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Credential Guard/PPL may block LSASS access</li>
-</ul>
-<p id="382a" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph="">As SYSTEM:</p>
-<ul class="">
-<li id="bf62" class="acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act acu acv acw co" data-selectable-paragraph="">Zero UAC restrictions</li>
-<li id="419a" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Full registry access</li>
-<li id="cd8d" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Can access ANY process</li>
-<li id="a8e5" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Can read/write ANY file</li>
-<li id="28b6" class="acb acc wg acd b wp acx acf acg wr acy aci acj uu acz acl acm ux ada aco acp va adb acr acs act acu acv acw co" data-selectable-paragraph="">Can impersonate any user token</li>
-</ul>
-<p id="9b20" class="pw-post-body-paragraph acb acc wg acd b wp ace acf acg wr ach aci acj uu ack acl acm ux acn aco acp va acq acr acs act ky co" data-selectable-paragraph=""><strong class="acd he">Pro Tip:</strong> Many operators stop at Administrator. Professionals always push to SYSTEM.</p>
-<hr>
-<h2 id="304b" class="adg adh wg as adi mk adj ml mo mp adk mq mt mu adl mv my mz adm na nd ne adn nf ni ado co" data-selectable-paragraph="">Automated Privilege Escalation Enumeration</h2>
-<p id="597c" class="pw-post-body-paragraph acb acc wg acd b wp adp acf acg wr adq aci acj uu adr acl acm ux ads aco acp va adt acr acs act ky co" data-selectable-paragraph="">Professional privilege escalation starts with comprehensive enumeration.</p>
-<h3 id="8cd1" class="ady adh wg as adi uq adz ur mo us aea ut mt uu aeb uv uw ux aec uy uz va aed vb vc aee co" data-selectable-paragraph="">The Professional Enumeration Approach</h3>
-<pre class="language-python"><code>class PrivEscEnumerator:
-    """Systematic Windows privilege escalation enumeration"""
-    
-    def __init__(self):
-        self.findings = {
-            'high': [],      # High-probability escalation paths
-            'medium': [],    # Potential paths
-            'low': [],       # Low-probability paths
-            'info': []       # Informational findings
-        }
-    
-    def enumerate_all_vectors(self):
-        """
-        Complete privilege escalation enumeration
-        
-        This is the professional workflow:
-        1. Check current privileges (what can we do now?)
-        2. Enumerate services (unquoted paths, weak permissions)
-        3. Check scheduled tasks (writable scripts as SYSTEM)
-        4. Scan registry (AlwaysInstallElevated, Autoruns)
-        5. Check file permissions (writable system folders)
-        6. Search for credentials (stored passwords, tokens)
-        7. Analyze dangerous privileges (SeImpersonate, etc.)
-        """
-        print("[*] Starting comprehensive privilege escalation enumeration...")
-        
-        # Phase 1: Current state
-        is_admin = self.check_current_privileges()
-        
-        if is_admin:
-            print("[+] Already Administrator - focus on SYSTEM escalation")
-            self.enumerate_system_escalation_paths()
-        else:
-            print("[*] Regular user - need admin escalation first")
-            self.enumerate_admin_escalation_paths()
-        
-        # Phase 2: Generate prioritized report
-        report = self.generate_escalation_report()
-        
-        return report
-    
-    def check_current_privileges(self):
-        """
-        Check what we can do right now
-        
-        Critical privileges for escalation:
-        - SeImpersonatePrivilege → Potato attacks
-        - SeDebugPrivilege → Process injection
-        - SeLoadDriverPrivilege → Kernel driver loading
-        - SeRestorePrivilege → File system manipulation
-        """
-        import ctypes
-        is_admin = ctypes.windll.shell32.IsUserAnAdmin()
-        
-        # Check for powerful privileges
-        powerful_privs = self.get_enabled_privileges()
-        
-        for priv in powerful_privs:
-            if priv == 'SeImpersonatePrivilege':
-                self.findings['high'].append({
-                    'category': 'Dangerous Privilege',
-                    'finding': 'SeImpersonatePrivilege enabled',
-                    'exploitation': 'Use PrintSpoofer, JuicyPotato, or RoguePotato',
-                    'impact': 'Critical - Direct path to SYSTEM'
-                })
-        
-        return is_admin</code></pre>
-</div>
-</div>
-</div>
 </div>
 </div>
 </div>

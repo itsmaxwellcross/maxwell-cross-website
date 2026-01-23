@@ -3,12 +3,85 @@
     <title>Maxwell Cross</title>
     <link href="https://maxwell-cross.com/feed.xml" rel="self" />
     <link href="https://maxwell-cross.com" />
-    <updated>2026-01-23T10:14:59-05:00</updated>
+    <updated>2026-01-23T10:20:07-05:00</updated>
     <author>
         <name>Maxwell Cross</name>
     </author>
     <id>https://maxwell-cross.com</id>
 
+    <entry>
+        <title>30 Days of Red Team: Day 5 — Initial Exploitation</title>
+        <author>
+            <name>Maxwell Cross</name>
+        </author>
+        <link href="https://maxwell-cross.com/30-days-red-team-day-5.html"/>
+        <id>https://maxwell-cross.com/30-days-red-team-day-5.html</id>
+
+        <updated>2026-01-23T10:20:07-05:00</updated>
+            <summary type="html">
+                <![CDATA[
+                    Reconnaissance is over. Theory becomes reality. For four days, you’ve been gathering intelligence, building weapons, and mapping attack surfaces. You’ve been patient. Today, we cross the line from external observer to internal operator. Initial Exploitation is the moment where all your preparation converges into a&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <h4 data-path-to-node="10"><strong data-path-to-node="10" data-index-in-node="0">Reconnaissance is over. Theory becomes reality.</strong></h4>
+<p data-path-to-node="11">For four days, you’ve been gathering intelligence, building weapons, and mapping attack surfaces. You’ve been patient.</p>
+<p data-path-to-node="12">Today, we cross the line from external observer to internal operator.</p>
+<p data-path-to-node="13"><strong data-path-to-node="13" data-index-in-node="0">Initial Exploitation</strong> is the moment where all your preparation converges into a single objective: getting that first foothold inside the target network. It’s not about finding zero-days; it’s about efficiently leveraging the vulnerabilities you found in Recon to break down the door.</p>
+<hr>
+<h3 data-path-to-node="15"><strong data-path-to-node="15" data-index-in-node="0">A Glimpse of the Code: Smart Vulnerability Detection</strong></h3>
+<p data-path-to-node="16">Throwing payloads blindly is loud and amateur. Smart tools verify vulnerabilities by analyzing how the server <i data-path-to-node="16" data-index-in-node="110">breaks</i>.</p>
+<p data-path-to-node="17">Here is the core logic from the <strong data-path-to-node="17" data-index-in-node="32">Automated Vuln Scanner</strong> we build in the full article, designed to confirm SQL Injection without triggering every alarm in the building:</p>
+<pre class="language-python"><code>def check_sql_injection(self, url):
+    """Test for SQL injection vulnerabilities"""
+    payloads = [
+        "'",
+        "' OR '1'='1",
+        "admin'--"
+    ]
+    
+    # SQL error patterns that confirm vulnerability
+    sql_errors = [
+        'SQL syntax.*MySQL',
+        'Warning.*mysql_.*',
+        'PostgreSQL.*ERROR',
+        'OLE DB.*SQL Server'
+    ]
+    
+    for payload in payloads:
+        response = self.session.get(url, params={'id': payload})
+        
+        for error_pattern in sql_errors:
+            if re.search(error_pattern, response.text, re.IGNORECASE):
+                return {
+                    'type': 'SQL Injection',
+                    'severity': 'CRITICAL',
+                    'payload': payload
+                }
+    return None</code></pre>
+<p>This script automates the tedious work, letting you focus on the fun part: popping the shell.</p>
+<hr>
+<h4 data-path-to-node="21"><strong data-path-to-node="21" data-index-in-node="0">Read the full guide on Medium to get:</strong></h4>
+<ul data-path-to-node="22">
+<li>
+<p data-path-to-node="22,0,0"><strong data-path-to-node="22,0,0" data-index-in-node="0">The Web Shell Uploader:</strong> A tool that bypasses file upload filters using double extensions (<code data-path-to-node="22,0,0" data-index-in-node="90">shell.php.jpg</code>) and MIME type spoofing.</p>
+</li>
+<li>
+<p data-path-to-node="22,1,0"><strong data-path-to-node="22,1,0" data-index-in-node="0">The Shell Stabilizer:</strong> A handler that automatically upgrades your fragile netcat connection into a fully interactive PTY shell (so <code data-path-to-node="22,1,0" data-index-in-node="131">Ctrl+C</code> doesn't kill your session).</p>
+</li>
+<li>
+<p data-path-to-node="22,2,0"><strong data-path-to-node="22,2,0" data-index-in-node="0">Service Exploitation Framework:</strong> How to automate attacks against SSH, FTP, and SMB using the credentials you harvested in Day 4.</p>
+</li>
+<li>
+<p data-path-to-node="22,3,0"><strong data-path-to-node="22,3,0" data-index-in-node="0">The "First Foothold":</strong> A complete playbook for turning a single vulnerability into stable system access.</p>
+</li>
+</ul>
+<p data-path-to-node="23">We are inside the network. Tomorrow, we find out just how deep the rabbit hole goes.</p>
+<p data-path-to-node="23"><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-5-initial-exploitation-techniques-from-shell-to-system-access-fbb73d60dc27" target="_blank" rel="noopener noreferrer">READ THE FULL GUIDE ON MEDIUM ➔</a></p>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>30 Days of Red Team: Day 4 — Social Engineering &amp; Delivery</title>
         <author>

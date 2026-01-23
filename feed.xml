@@ -3,7 +3,7 @@
     <title>Maxwell Cross</title>
     <link href="https://maxwell-cross.com/feed.xml" rel="self" />
     <link href="https://maxwell-cross.com" />
-    <updated>2026-01-23T09:24:04-05:00</updated>
+    <updated>2026-01-23T09:29:45-05:00</updated>
     <author>
         <name>Maxwell Cross</name>
     </author>
@@ -25,7 +25,7 @@
             </summary>
         <content type="html">
             <![CDATA[
-                <h3 data-path-to-node="11"><strong data-path-to-node="11" data-index-in-node="0">Most security courses lie to you.</strong></h3>
+                <h4 data-path-to-node="11"><strong data-path-to-node="11" data-index-in-node="0">Most security courses lie to you.</strong></h4>
 <p data-path-to-node="12">They teach the Cyber Kill Chain as a linear, orderly process: <i data-path-to-node="12" data-index-in-node="62">Recon → Weaponize → Deliver → Win.</i></p>
 <p data-path-to-node="13">But real-world Red Teaming is messy. It’s non-linear. You gain access, you hit a wall, you re-recon, you pivot, and you try again.</p>
 <p data-path-to-node="14">In <strong data-path-to-node="14" data-index-in-node="3">Day 1</strong>, we stop treating the Kill Chain like a vocabulary list and start using it as an operational roadmap. If you don't understand this framework, you aren't a Red Teamer—you're just a script kiddie flailing in the dark.</p>
@@ -58,7 +58,7 @@
     return found_subdomains</code></pre>
 <p>This simple logic allows us to find the hidden doors into an organization's network. But finding them is only Step 1.</p>
 <hr>
-<h3 data-path-to-node="23"><strong data-path-to-node="23" data-index-in-node="0">Read the full guide on Medium to get:</strong></h3>
+<h4 data-path-to-node="23"><strong data-path-to-node="23" data-index-in-node="0">Read the full guide on Medium to get:</strong></h4>
 <ul data-path-to-node="24">
 <li>
 <p data-path-to-node="24,0,0"><strong data-path-to-node="24,0,0" data-index-in-node="0">The Complete Toolset:</strong> Get the full source code for the DNS Enumerator <i data-path-to-node="24,0,0" data-index-in-node="70">and</i> a Web Service Fingerprinter that grabs headers and SSL certs.</p>

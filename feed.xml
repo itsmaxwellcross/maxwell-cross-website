@@ -3,12 +3,71 @@
     <title>Maxwell Cross</title>
     <link href="https://maxwell-cross.com/feed.xml" rel="self" />
     <link href="https://maxwell-cross.com" />
-    <updated>2026-01-23T09:29:45-05:00</updated>
+    <updated>2026-01-23T09:35:20-05:00</updated>
     <author>
         <name>Maxwell Cross</name>
     </author>
     <id>https://maxwell-cross.com</id>
 
+    <entry>
+        <title>30 Days of Red Team: Day 2 — Weaponizing OSINT</title>
+        <author>
+            <name>Maxwell Cross</name>
+        </author>
+        <link href="https://maxwell-cross.com/30-days-red-team-day-2.html"/>
+        <id>https://maxwell-cross.com/30-days-red-team-day-2.html</id>
+
+        <updated>2026-01-23T09:35:20-05:00</updated>
+            <summary type="html">
+                <![CDATA[
+                    If Day 1 was learning to walk, Day 2 is learning to run. Most defenders focus on firewalls and intrusion detection systems. But attackers? We are building detailed maps of their infrastructure using nothing but public information. Open Source Intelligence (OSINT) is the art of&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <h4 data-path-to-node="11"><strong data-path-to-node="11" data-index-in-node="0">If Day 1 was learning to walk, Day 2 is learning to run.</strong></h4>
+<p data-path-to-node="12">Most defenders focus on firewalls and intrusion detection systems. But attackers? We are building detailed maps of their infrastructure using nothing but public information.</p>
+<p data-path-to-node="13"><strong data-path-to-node="13" data-index-in-node="0">Open Source Intelligence (OSINT)</strong> is the art of finding the data companies don't even realize they are exposing.</p>
+<p data-path-to-node="14">Every time a company posts a job listing, updates their SSL certificate, or pushes code to GitHub, they are handing us ammunition. Today, we automate the process of collecting it.</p>
+<hr>
+<h4 data-path-to-node="16"><strong data-path-to-node="16" data-index-in-node="0">A Glimpse of the Code: Automated Google Dorking</strong></h4>
+<p data-path-to-node="17">Google is the most powerful hacking tool ever created, but manual searching is too slow. In Day 2, we build a tool to automate "Dorking"—using search operators to find sensitive files.</p>
+<p data-path-to-node="18">Here is the core logic from the <strong data-path-to-node="18" data-index-in-node="32">Auto-Dorker</strong> we build in the full article:</p>
+<pre class="language-python"><code>def build_dork(self, dork_type):
+    """
+    Build targeted queries for different reconnaissance objectives
+    """
+    dorks = {
+        'subdomains': f'site:*.{self.domain} -site:www.{self.domain}',
+        'files': f'site:{self.domain} (ext:pdf OR ext:doc OR ext:xls)',
+        'logins': f'site:{self.domain} (inurl:login OR inurl:admin)',
+        'configs': f'site:{self.domain} (ext:xml OR ext:conf OR ext:cfg)',
+        'backup_files': f'site:{self.domain} (ext:bkf OR ext:bak OR ext:old)',
+        'credentials': f'site:{self.domain} (password OR passwd OR pwd)'
+    }
+    return dorks.get(dork_type, '')</code></pre>
+<p>I once used a script like this to find a database backup file (<code data-path-to-node="20" data-index-in-node="63">.bak</code>) indexed by Google for a major financial institution. It contained admin credentials. I never even had to touch their server.</p>
+<hr>
+<h4 data-path-to-node="22"><strong data-path-to-node="22" data-index-in-node="0">Read the full guide on Medium to get:</strong></h4>
+<ul data-path-to-node="23">
+<li>
+<p data-path-to-node="23,0,0"><strong data-path-to-node="23,0,0" data-index-in-node="0">The "Auto-Dorker" Tool:</strong> A Python script that iterates through 7 different dork types to find exposed secrets automatically.</p>
+</li>
+<li>
+<p data-path-to-node="23,1,0"><strong data-path-to-node="23,1,0" data-index-in-node="0">Email Enumeration Strategy:</strong> How to generate valid employee email lists using pattern detection and LinkedIn mining (crucial for the phishing attacks we do later).</p>
+</li>
+<li>
+<p data-path-to-node="23,2,0"><strong data-path-to-node="23,2,0" data-index-in-node="0">Tech Stack Fingerprinting:</strong> A script that analyzes HTTP headers and cookies to tell you exactly what software the target is running—and what exploits will work.</p>
+</li>
+<li>
+<p data-path-to-node="23,3,0"><strong data-path-to-node="23,3,0" data-index-in-node="0">The "Passive" Guarantee:</strong> How to map an entire organization without sending a single packet to their network, keeping you completely invisible.</p>
+</li>
+</ul>
+<p data-path-to-node="24">We are building the map today so we can attack tomorrow.</p>
+<p data-path-to-node="24"><strong data-path-to-node="25" data-index-in-node="2"><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-2-advanced-osint-external-reconnaissance-finding-what-they-dont-f2de32dfc1b4" target="_blank" rel="noopener noreferrer">READ THE FULL GUIDE ON MEDIUM ➔</a></strong></p>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>30 Days of Red Team: Day 1 — Mastering the Kill Chain</title>
         <author>

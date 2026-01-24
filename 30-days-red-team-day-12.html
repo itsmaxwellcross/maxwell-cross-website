@@ -1,44 +1,516 @@
-<!DOCTYPE html><html lang="en-gb"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Day 12: Data Exfiltration &amp; Steganography — Maxwell Cross</title><meta name="description" content="Day 12 of '30 Days of Red Team.' Learn how to bypass DLP systems using Steganography, DNS Tunneling, and slow-drip Cloud Exfiltration."><meta name="generator" content="Publii Open-Source CMS for Static Site"><link rel="canonical" href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-12-data-exfiltration-methods-3d030ca56cc0/"><link rel="alternate" type="application/atom+xml" href="https://maxwell-cross.com/feed.xml" title="Maxwell Cross - RSS"><link rel="alternate" type="application/json" href="https://maxwell-cross.com/feed.json" title="Maxwell Cross - JSON"><meta property="og:title" content="30 Days of Red Team: Day 12 — Data Exfiltration"><meta property="og:site_name" content="Maxwell Cross"><meta property="og:description" content="Day 12 of '30 Days of Red Team.' Learn how to bypass DLP systems using Steganography, DNS Tunneling, and slow-drip Cloud Exfiltration."><meta property="og:url" content="https://maxwell-cross.com/30-days-red-team-day-12.html"><meta property="og:type" content="article"><link rel="stylesheet" href="https://maxwell-cross.com/assets/css/style.css?v=356ea83af5e3c6b89120e70f2d6be8c5"><script type="application/ld+json">{"@context":"http://schema.org","@type":"Article","mainEntityOfPage":{"@type":"WebPage","@id":"https://maxwell-cross.com/30-days-red-team-day-12.html"},"headline":"30 Days of Red Team: Day 12 — Data Exfiltration","datePublished":"2025-12-16T19:33-05:00","dateModified":"2026-01-23T19:08-05:00","description":"Day 12 of '30 Days of Red Team.' Learn how to bypass DLP systems using Steganography, DNS Tunneling, and slow-drip Cloud Exfiltration.","author":{"@type":"Person","name":"Maxwell Cross","url":"https://maxwell-cross.com/authors/maxwell-cross/"},"publisher":{"@type":"Organization","name":"Maxwell Cross"}}</script><noscript><style>img[loading] {
+<!DOCTYPE html><html lang="en-gb"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Day 12: Data Exfiltration &amp; Steganography — Maxwell Cross</title><meta name="description" content="Day 12 of '30 Days of Red Team.' Learn how to bypass DLP systems using Steganography, DNS Tunneling, and slow-drip Cloud Exfiltration."><meta name="generator" content="Publii Open-Source CMS for Static Site"><link rel="canonical" href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-12-data-exfiltration-methods-3d030ca56cc0/"><link rel="alternate" type="application/atom+xml" href="https://maxwell-cross.com/feed.xml" title="Maxwell Cross - RSS"><link rel="alternate" type="application/json" href="https://maxwell-cross.com/feed.json" title="Maxwell Cross - JSON"><meta property="og:title" content="30 Days of Red Team: Day 12 — Data Exfiltration"><meta property="og:site_name" content="Maxwell Cross"><meta property="og:description" content="Day 12 of '30 Days of Red Team.' Learn how to bypass DLP systems using Steganography, DNS Tunneling, and slow-drip Cloud Exfiltration."><meta property="og:url" content="https://maxwell-cross.com/30-days-red-team-day-12.html"><meta property="og:type" content="article"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://maxwell-cross.com/assets/css/style.css?v=356ea83af5e3c6b89120e70f2d6be8c5"><style>:root {
+                --mc-bg-deep: #050505;
+                --mc-bg-card: #0a0a0a;
+                --mc-bg-elevated: #0d0d0d;
+                --mc-bg-input: #111111;
+                --mc-accent: #e63946;
+                --mc-accent-glow: rgba(230, 57, 70, 0.4);
+                --mc-accent-hover: #ff4d5a;
+                --mc-success: #4ade80;
+                --mc-text-primary: #f1f1f1;
+                --mc-text-secondary: #888888;
+                --mc-text-muted: #555555;
+                --mc-text-dark: #333333;
+                --mc-border: #1a1a1a;
+                --mc-border-light: #222222;
+                --mc-font-body: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+                --mc-font-mono: 'JetBrains Mono', 'Courier New', monospace;
+            }
+            
+            body {
+                background-color: var(--mc-bg-deep);
+                color: var(--mc-text-primary);
+                font-family: var(--mc-font-body);
+            }</style><script type="application/ld+json">{"@context":"http://schema.org","@type":"Article","mainEntityOfPage":{"@type":"WebPage","@id":"https://maxwell-cross.com/30-days-red-team-day-12.html"},"headline":"30 Days of Red Team: Day 12 — Data Exfiltration","datePublished":"2025-12-16T19:33-05:00","dateModified":"2026-01-23T19:08-05:00","description":"Day 12 of '30 Days of Red Team.' Learn how to bypass DLP systems using Steganography, DNS Tunneling, and slow-drip Cloud Exfiltration.","author":{"@type":"Person","name":"Maxwell Cross","url":"https://maxwell-cross.com/authors/maxwell-cross/"},"publisher":{"@type":"Organization","name":"Maxwell Cross"}}</script><noscript><style>img[loading] {
                     opacity: 1;
-                }</style></noscript></head><body class="post-template"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://maxwell-cross.com/assets/css/maxwell-cross-post.css"><link rel="stylesheet" href="https://maxwell-cross.com/assets/css/maxwell-share.css"><link rel="stylesheet" href="https://maxwell-cross.com/assets/css/prism-maxwell.css"><div class="mc-post-page"><header class="top js-header"><a class="logo" href="https://maxwell-cross.com/">Maxwell Cross</a><nav class="navbar js-navbar"><button class="navbar__toggle js-toggle" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><span class="navbar__toggle-box"><span class="navbar__toggle-inner">Menu</span></span></button><ul class="navbar__menu"><li><a href="https://maxwell-cross.com/newsletter.html" target="_self"><span class="menu-label">Newsletter</span></a></li></ul></nav><style>/* Menu Arrow Icon */
-          .mc-navbar .navbar__menu .menu-arrow {
-              margin-left: 4px;
-              opacity: 0.5;
-              transition: all 0.2s ease;
-          }
-          
-          .mc-navbar .navbar__menu > li:hover .menu-arrow {
-              opacity: 1;
-              transform: rotate(180deg);
-          }
-          
-          /* Menu Label */
-          .mc-navbar .navbar__menu .menu-label {
-              position: relative;
-          }
-          
-          /* Active indicator */
-          .mc-navbar .navbar__menu > li.active > a .menu-label::after {
-              content: '';
-              position: absolute;
-              bottom: -4px;
-              left: 0;
-              right: 0;
-              height: 2px;
-              background: #e63946;
-              border-radius: 1px;
-          }
-          
-          /* Mobile menu arrow behavior */
-          @media (max-width: 900px) {
-              .mc-navbar .navbar__menu .menu-arrow {
-                  margin-left: auto;
-              }
-              
-              .mc-navbar .navbar__menu > li.is-expanded .menu-arrow {
-                  transform: rotate(180deg);
-              }
-          }</style></header><div class="mc-grid-bg"></div><main class="mc-post-main"><article class="mc-article"><header class="mc-article__header"><div class="mc-wrapper"><div class="mc-article__classification"><span class="mc-article__tag-icon">◆</span> <span class="mc-article__tag-text">TRANSMISSION</span></div><h1 class="mc-article__title">30 Days of Red Team: Day 12 — Data Exfiltration</h1><div class="mc-article__meta"><a href="https://maxwell-cross.com/authors/maxwell-cross/" class="mc-article__author"><span>Maxwell Cross</span> </a><span class="mc-article__meta-divider">•</span> <time datetime="2025-12-16T19:33" class="mc-article__date">Dec 16, 2025</time></div></div></header><div class="mc-article__content"><div class="mc-wrapper mc-wrapper--narrow"><div class="mc-article__body"><h4 data-path-to-node="10"><strong data-path-to-node="10" data-index-in-node="0">Access means nothing if you can't get the data out.</strong></h4><p data-path-to-node="11">You have Domain Admin. You have the persistence. You have the Crown Jewels.</p><p data-path-to-node="12">But if you try to drag-and-drop 50GB of data across the network, you will trigger every alarm in the Security Operations Center (SOC).</p><p data-path-to-node="13">Amateurs think exfiltration is about speed. Professionals know it is about <strong data-path-to-node="13" data-index-in-node="75">Invisibility</strong>.</p><p data-path-to-node="14">Today, we learn how to move data past Firewalls, IDS, and Data Loss Prevention (DLP) systems by breaking it into microscopic chunks and hiding it where defenders never look.</p><hr><h3 data-path-to-node="16"><strong data-path-to-node="16" data-index-in-node="0">A Glimpse of the Code: Steganography</strong></h3><p data-path-to-node="17">DLP systems scan for keywords like "Confidential" or file types like <code data-path-to-node="17" data-index-in-node="69">.sql</code>. They don't look inside your vacation photos.</p><p data-path-to-node="18">In Day 12, we build a <strong data-path-to-node="18" data-index-in-node="22">Steganography Toolkit</strong> that hides sensitive data inside the pixels of an image using Least Significant Bit (LSB) encoding.</p><p data-path-to-node="19">Here is the logic that turns a JPEG into a data mule:</p><pre class="language-python"><code>def encode_data(self, image_path, data, output_path):
+                }</style></noscript></head><body class="mc-body post-template"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://maxwell-cross.com/assets/css/maxwell-cross-post.css"><link rel="stylesheet" href="https://maxwell-cross.com/assets/css/maxwell-share.css"><link rel="stylesheet" href="https://maxwell-cross.com/assets/css/prism-maxwell.css"><div class="mc-post-page"><header class="mc-header top js-header" id="mc-header"><div class="mc-header__inner"><a class="mc-header__logo logo" href="https://maxwell-cross.com/"><span class="mc-header__logo-text">Maxwell Cross</span></a><nav class="mc-nav" id="mc-nav"><ul class="mc-nav__list"><li class="mc-nav__item"><a href="https://maxwell-cross.com/" class="mc-nav__link">Home</a></li><li class="mc-nav__item"><a href="https://maxwell-cross.com//blog/" class="mc-nav__link">Blog</a></li><li class="mc-nav__item"><a href="https://maxwell-cross.com/newsletter.html" class="mc-nav__link" target="_self">Newsletter</a></li></ul></nav><div class="mc-header__actions"><a href="https://maxwell-cross.com//newsletter/" class="mc-header__cta"><span class="mc-header__cta-text">Subscribe</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg> </a><button class="mc-header__toggle" id="mc-menu-toggle" aria-label="Toggle menu" aria-expanded="false"><span class="mc-header__toggle-line"></span> <span class="mc-header__toggle-line"></span> <span class="mc-header__toggle-line"></span></button></div></div></header><div class="mc-mobile-menu" id="mc-mobile-menu"><div class="mc-mobile-menu__inner"><nav class="mc-mobile-menu__nav"><ul class="mc-mobile-menu__list"><li><a href="https://maxwell-cross.com/">Home</a></li><li><a href="https://maxwell-cross.com//blog/">Blog</a></li><li><a href="https://maxwell-cross.com/newsletter.html" target="_self">Newsletter</a></li></ul></nav><div class="mc-mobile-menu__footer"><a href="https://maxwell-cross.com//newsletter/" class="mc-mobile-menu__cta"><span>Join the Inner Circle</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div></div></div><style>/* ============================================
+       MAXWELL CROSS HEADER STYLES
+       ============================================ */
+    
+    /* Header Base */
+    .mc-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: rgba(5, 5, 5, 0.85);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--mc-border);
+        transition: all 0.3s ease;
+    }
+    
+    .mc-header.is-scrolled {
+        background: rgba(5, 5, 5, 0.95);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+    }
+    
+    .mc-header__inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+        height: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+    }
+    
+    /* Logo */
+    .mc-header__logo {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        flex-shrink: 0;
+    }
+    
+    .mc-header__logo img {
+        height: 38px;
+        width: auto;
+    }
+    
+    .mc-header__logo-text {
+        font-family: var(--mc-font-mono);
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--mc-text-primary);
+        letter-spacing: 0.02em;
+        transition: color 0.2s ease;
+    }
+    
+    .mc-header__logo:hover .mc-header__logo-text {
+        color: var(--mc-accent);
+    }
+    
+    /* Desktop Navigation */
+    .mc-nav {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .mc-nav__list {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .mc-nav__item {
+        position: relative;
+    }
+    
+    .mc-nav__link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 18px;
+        font-family: var(--mc-font-body);
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--mc-text-secondary);
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+    }
+    
+    .mc-nav__link:hover {
+        color: var(--mc-text-primary);
+        background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .mc-nav__item.active .mc-nav__link,
+    .mc-nav__link.is-active {
+        color: var(--mc-accent);
+    }
+    
+    .mc-nav__arrow {
+        opacity: 0.5;
+        transition: all 0.2s ease;
+    }
+    
+    .mc-nav__item:hover .mc-nav__arrow {
+        opacity: 1;
+        transform: rotate(180deg);
+    }
+    
+    /* Dropdown Submenu */
+    .mc-nav__submenu {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%) translateY(10px);
+        min-width: 200px;
+        padding: 8px 0;
+        background: var(--mc-bg-card);
+        border: 1px solid var(--mc-border);
+        border-radius: 12px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        list-style: none;
+        margin: 0;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.2s ease;
+    }
+    
+    .mc-nav__item:hover .mc-nav__submenu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
+    }
+    
+    .mc-nav__submenu li a {
+        display: block;
+        padding: 12px 20px;
+        font-family: var(--mc-font-body);
+        font-size: 14px;
+        color: var(--mc-text-secondary);
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+    
+    .mc-nav__submenu li a:hover {
+        color: var(--mc-accent);
+        background: rgba(230, 57, 70, 0.1);
+        padding-left: 24px;
+    }
+    
+    /* Header Actions */
+    .mc-header__actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-shrink: 0;
+    }
+    
+    /* Icon Button */
+    .mc-header__icon-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        background: transparent;
+        border: 1px solid var(--mc-border);
+        border-radius: 10px;
+        color: var(--mc-text-secondary);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .mc-header__icon-btn:hover {
+        border-color: var(--mc-accent);
+        color: var(--mc-accent);
+        background: rgba(230, 57, 70, 0.1);
+    }
+    
+    /* CTA Button */
+    .mc-header__cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: var(--mc-accent);
+        border: none;
+        border-radius: 10px;
+        font-family: var(--mc-font-body);
+        font-size: 14px;
+        font-weight: 600;
+        color: white;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+    
+    .mc-header__cta:hover {
+        background: var(--mc-accent-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px var(--mc-accent-glow);
+    }
+    
+    .mc-header__cta svg {
+        transition: transform 0.2s ease;
+    }
+    
+    .mc-header__cta:hover svg {
+        transform: translateX(3px);
+    }
+    
+    /* Mobile Toggle Button */
+    .mc-header__toggle {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        width: 42px;
+        height: 42px;
+        background: transparent;
+        border: 1px solid var(--mc-border);
+        border-radius: 10px;
+        cursor: pointer;
+        padding: 0;
+        transition: all 0.2s ease;
+    }
+    
+    .mc-header__toggle:hover {
+        border-color: var(--mc-accent);
+    }
+    
+    .mc-header__toggle-line {
+        display: block;
+        width: 18px;
+        height: 2px;
+        background: var(--mc-text-secondary);
+        border-radius: 2px;
+        transition: all 0.3s ease;
+    }
+    
+    .mc-header__toggle:hover .mc-header__toggle-line {
+        background: var(--mc-accent);
+    }
+    
+    .mc-header__toggle.is-active .mc-header__toggle-line:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+    
+    .mc-header__toggle.is-active .mc-header__toggle-line:nth-child(2) {
+        opacity: 0;
+        transform: scaleX(0);
+    }
+    
+    .mc-header__toggle.is-active .mc-header__toggle-line:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+    }
+    
+    /* ============================================
+       MOBILE MENU
+       ============================================ */
+    .mc-mobile-menu {
+        position: fixed;
+        top: 72px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--mc-bg-deep);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-20px);
+        transition: all 0.3s ease;
+        overflow-y: auto;
+    }
+    
+    .mc-mobile-menu.is-open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+    
+    .mc-mobile-menu__inner {
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        padding: 2rem 1.5rem;
+    }
+    
+    .mc-mobile-menu__nav {
+        flex: 1;
+    }
+    
+    .mc-mobile-menu__list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .mc-mobile-menu__list > li {
+        border-bottom: 1px solid var(--mc-border);
+    }
+    
+    .mc-mobile-menu__list > li > a {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem 0;
+        font-family: var(--mc-font-body);
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: var(--mc-text-primary);
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+    
+    .mc-mobile-menu__list > li > a:hover {
+        color: var(--mc-accent);
+    }
+    
+    .mc-mobile-menu__submenu {
+        list-style: none;
+        margin: 0;
+        padding: 0 0 1rem 1.5rem;
+    }
+    
+    .mc-mobile-menu__submenu li a {
+        display: block;
+        padding: 0.75rem 0;
+        font-family: var(--mc-font-body);
+        font-size: 15px;
+        color: var(--mc-text-secondary);
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+    
+    .mc-mobile-menu__submenu li a:hover {
+        color: var(--mc-accent);
+    }
+    
+    .mc-mobile-menu__footer {
+        padding-top: 2rem;
+        margin-top: auto;
+    }
+    
+    .mc-mobile-menu__cta {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 16px 24px;
+        background: var(--mc-accent);
+        border: none;
+        border-radius: 12px;
+        font-family: var(--mc-font-body);
+        font-size: 16px;
+        font-weight: 600;
+        color: white;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+    
+    .mc-mobile-menu__cta:hover {
+        background: var(--mc-accent-hover);
+    }
+    
+    /* ============================================
+       RESPONSIVE STYLES
+       ============================================ */
+    @media (max-width: 900px) {
+        .mc-nav {
+            display: none;
+        }
+        
+        .mc-header__toggle {
+            display: flex;
+        }
+        
+        .mc-header__cta {
+            display: none;
+        }
+        
+        .mc-header__inner {
+            height: 64px;
+        }
+        
+        .mc-mobile-menu {
+            top: 64px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .mc-header__inner {
+            padding: 0 1rem;
+        }
+        
+        .mc-header__logo-text {
+            font-size: 1rem;
+        }
+        
+        .mc-header__icon-btn {
+            width: 38px;
+            height: 38px;
+        }
+        
+        .mc-header__toggle {
+            width: 38px;
+            height: 38px;
+        }
+    }
+    
+    /* Body scroll lock when menu is open */
+    body.menu-open {
+        overflow: hidden;
+    }</style><script>(function() {
+        // Elements
+        const header = document.getElementById('mc-header');
+        const menuToggle = document.getElementById('mc-menu-toggle');
+        const mobileMenu = document.getElementById('mc-mobile-menu');
+        
+        // Scroll effect for header
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 50) {
+                header.classList.add('is-scrolled');
+            } else {
+                header.classList.remove('is-scrolled');
+            }
+            
+            lastScroll = currentScroll;
+        });
+        
+        // Mobile menu toggle
+        if (menuToggle && mobileMenu) {
+            menuToggle.addEventListener('click', () => {
+                const isOpen = mobileMenu.classList.contains('is-open');
+                
+                if (isOpen) {
+                    mobileMenu.classList.remove('is-open');
+                    menuToggle.classList.remove('is-active');
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                    document.body.classList.remove('menu-open');
+                } else {
+                    mobileMenu.classList.add('is-open');
+                    menuToggle.classList.add('is-active');
+                    menuToggle.setAttribute('aria-expanded', 'true');
+                    document.body.classList.add('menu-open');
+                }
+            });
+            
+            // Close menu when clicking a link
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('is-open');
+                    menuToggle.classList.remove('is-active');
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                    document.body.classList.remove('menu-open');
+                });
+            });
+            
+            // Close menu on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && mobileMenu.classList.contains('is-open')) {
+                    mobileMenu.classList.remove('is-open');
+                    menuToggle.classList.remove('is-active');
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                    document.body.classList.remove('menu-open');
+                }
+            });
+        }
+        
+        // Close menu on resize to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 900 && mobileMenu && mobileMenu.classList.contains('is-open')) {
+                mobileMenu.classList.remove('is-open');
+                menuToggle.classList.remove('is-active');
+                menuToggle.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('menu-open');
+            }
+        });
+    })();</script><div class="mc-grid-bg"></div><main class="mc-post-main"><article class="mc-article"><header class="mc-article__header"><div class="mc-wrapper"><div class="mc-article__classification"><span class="mc-article__tag-icon">◆</span> <span class="mc-article__tag-text">TRANSMISSION</span></div><h1 class="mc-article__title">30 Days of Red Team: Day 12 — Data Exfiltration</h1><div class="mc-article__meta"><a href="https://maxwell-cross.com/authors/maxwell-cross/" class="mc-article__author"><span>Maxwell Cross</span> </a><span class="mc-article__meta-divider">•</span> <time datetime="2025-12-16T19:33" class="mc-article__date">Dec 16, 2025</time></div></div></header><div class="mc-article__content"><div class="mc-wrapper mc-wrapper--narrow"><div class="mc-article__body"><h4 data-path-to-node="10"><strong data-path-to-node="10" data-index-in-node="0">Access means nothing if you can't get the data out.</strong></h4><p data-path-to-node="11">You have Domain Admin. You have the persistence. You have the Crown Jewels.</p><p data-path-to-node="12">But if you try to drag-and-drop 50GB of data across the network, you will trigger every alarm in the Security Operations Center (SOC).</p><p data-path-to-node="13">Amateurs think exfiltration is about speed. Professionals know it is about <strong data-path-to-node="13" data-index-in-node="75">Invisibility</strong>.</p><p data-path-to-node="14">Today, we learn how to move data past Firewalls, IDS, and Data Loss Prevention (DLP) systems by breaking it into microscopic chunks and hiding it where defenders never look.</p><hr><h3 data-path-to-node="16"><strong data-path-to-node="16" data-index-in-node="0">A Glimpse of the Code: Steganography</strong></h3><p data-path-to-node="17">DLP systems scan for keywords like "Confidential" or file types like <code data-path-to-node="17" data-index-in-node="69">.sql</code>. They don't look inside your vacation photos.</p><p data-path-to-node="18">In Day 12, we build a <strong data-path-to-node="18" data-index-in-node="22">Steganography Toolkit</strong> that hides sensitive data inside the pixels of an image using Least Significant Bit (LSB) encoding.</p><p data-path-to-node="19">Here is the logic that turns a JPEG into a data mule:</p><pre class="language-python"><code>def encode_data(self, image_path, data, output_path):
     """
     Hide data inside an image using LSB encoding.
     This modifies the last bit of each pixel, making the change 

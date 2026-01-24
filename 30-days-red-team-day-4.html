@@ -23,7 +23,7 @@
                 font-family: var(--mc-font-body);
             }</style><script type="application/ld+json">{"@context":"http://schema.org","@type":"Article","mainEntityOfPage":{"@type":"WebPage","@id":"https://maxwell-cross.com/30-days-red-team-day-4.html"},"headline":"30 Days of Red Team: Day 4 — Social Engineering & Delivery","datePublished":"2025-10-29T10:14-04:00","dateModified":"2026-01-23T19:05-05:00","description":"Day 4 of '30 Days of Red Team.' We build a complete Phishing Infrastructure to track opens, clicks, and credentials. Learn the psychology of deception.","author":{"@type":"Person","name":"Maxwell Cross","url":"https://maxwell-cross.com/authors/maxwell-cross/"},"publisher":{"@type":"Organization","name":"Maxwell Cross"}}</script><noscript><style>img[loading] {
                     opacity: 1;
-                }</style></noscript></head><body class="mc-body post-template"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://maxwell-cross.com/assets/css/maxwell-cross-post.css"><link rel="stylesheet" href="https://maxwell-cross.com/assets/css/maxwell-share.css"><link rel="stylesheet" href="https://maxwell-cross.com/assets/css/prism-maxwell.css"><div class="mc-post-page"><header class="mc-header top js-header" id="mc-header"><div class="mc-header__inner"><a class="mc-header__logo logo" href="https://maxwell-cross.com/"><span class="mc-header__logo-text">Maxwell Cross</span></a><nav class="mc-nav" id="mc-nav"><ul class="mc-nav__list"><li class="mc-nav__item"><a href="https://maxwell-cross.com/" class="mc-nav__link">Home</a></li><li class="mc-nav__item"><a href="https://maxwell-cross.com//blog/" class="mc-nav__link">Blog</a></li><li class="mc-nav__item"><a href="https://maxwell-cross.com/newsletter.html" class="mc-nav__link" target="_self">Newsletter</a></li></ul></nav><div class="mc-header__actions"><a href="https://maxwell-cross.com//newsletter/" class="mc-header__cta"><span class="mc-header__cta-text">Subscribe</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg> </a><button class="mc-header__toggle" id="mc-menu-toggle" aria-label="Toggle menu" aria-expanded="false"><span class="mc-header__toggle-line"></span> <span class="mc-header__toggle-line"></span> <span class="mc-header__toggle-line"></span></button></div></div></header><div class="mc-mobile-menu" id="mc-mobile-menu"><div class="mc-mobile-menu__inner"><nav class="mc-mobile-menu__nav"><ul class="mc-mobile-menu__list"><li><a href="https://maxwell-cross.com/">Home</a></li><li><a href="https://maxwell-cross.com//blog/">Blog</a></li><li><a href="https://maxwell-cross.com/newsletter.html" target="_self">Newsletter</a></li></ul></nav><div class="mc-mobile-menu__footer"><a href="https://maxwell-cross.com//newsletter/" class="mc-mobile-menu__cta"><span>Join the Inner Circle</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div></div></div><style>/* ============================================
+                }</style></noscript></head><body class="mc-body post-template"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://maxwell-cross.com/assets/css/maxwell-cross-post.css"><link rel="stylesheet" href="https://maxwell-cross.com/assets/css/maxwell-share.css"><link rel="stylesheet" href="https://maxwell-cross.com/assets/css/prism-maxwell.css"><div class="mc-post-page"><header class="mc-header top js-header" id="mc-header"><div class="mc-header__inner"><a class="mc-header__logo logo" href="https://maxwell-cross.com/"><span class="mc-header__logo-text">Maxwell Cross</span></a><div class="mc-header__right"><nav class="mc-nav" id="mc-nav"><ul class="mc-nav__list"><li class="mc-nav__item"><a href="https://maxwell-cross.com/" class="mc-nav__link">Home</a></li><li class="mc-nav__item"><a href="https://maxwell-cross.com//blog/" class="mc-nav__link">Blog</a></li></ul></nav><div class="mc-header__actions"><a href="https://maxwell-cross.com//newsletter/" class="mc-header__cta"><span class="mc-header__cta-text">Subscribe</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg> </a><button class="mc-header__toggle" id="mc-menu-toggle" aria-label="Toggle menu" aria-expanded="false"><span class="mc-header__toggle-line"></span> <span class="mc-header__toggle-line"></span> <span class="mc-header__toggle-line"></span></button></div></div></div></header><div class="mc-mobile-menu" id="mc-mobile-menu"><div class="mc-mobile-menu__inner"><nav class="mc-mobile-menu__nav"><ul class="mc-mobile-menu__list"><li><a href="https://maxwell-cross.com/">Home</a></li><li><a href="https://maxwell-cross.com//blog/">Blog</a></li></ul></nav><div class="mc-mobile-menu__footer"><a href="https://maxwell-cross.com//newsletter/" class="mc-mobile-menu__cta"><span>Join the Inner Circle</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div></div></div><style>/* ============================================
        MAXWELL CROSS HEADER STYLES
        ============================================ */
     
@@ -54,10 +54,9 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 2rem;
     }
     
-    /* Logo */
+    /* Logo (Left Side) */
     .mc-header__logo {
         display: flex;
         align-items: center;
@@ -83,11 +82,16 @@
         color: var(--mc-accent);
     }
     
+    /* Right Side Container */
+    .mc-header__right {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+    
     /* Desktop Navigation */
     .mc-nav {
-        flex: 1;
         display: flex;
-        justify-content: center;
     }
     
     .mc-nav__list {

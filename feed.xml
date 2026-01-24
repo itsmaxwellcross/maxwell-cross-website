@@ -3,12 +3,78 @@
     <title>Maxwell Cross</title>
     <link href="https://maxwell-cross.com/feed.xml" rel="self" />
     <link href="https://maxwell-cross.com" />
-    <updated>2026-01-23T19:13:41-05:00</updated>
+    <updated>2026-01-24T15:43:24-05:00</updated>
     <author>
         <name>Maxwell Cross</name>
     </author>
     <id>https://maxwell-cross.com</id>
 
+    <entry>
+        <title>30 Days of Red Team: Day 19 — Pivoting</title>
+        <author>
+            <name>Maxwell Cross</name>
+        </author>
+        <link href="https://maxwell-cross.com/30-days-red-team-day-19.html"/>
+        <id>https://maxwell-cross.com/30-days-red-team-day-19.html</id>
+        <media:content url="https://maxwell-cross.com/media/posts/23/Adobe-Express-file2.png" medium="image" />
+
+        <updated>2026-01-24T15:43:07-05:00</updated>
+            <summary type="html">
+                <![CDATA[
+                        <img src="https://maxwell-cross.com/media/posts/23/Adobe-Express-file2.png" alt="" />
+                    Firewalls block connections. They don't block traffic. You compromised the DMZ Web Server. You have root. But the Database is on a different VLAN, and the Firewall blocks all direct connections from the internet. To an amateur, the game is over. To a professional, the&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <p><img src="https://maxwell-cross.com/media/posts/23/Adobe-Express-file2.png" class="type:primaryImage" alt="" /></p>
+                <h4 data-path-to-node="10"><strong data-path-to-node="10" data-index-in-node="0">Firewalls block connections. They don't block traffic.</strong></h4>
+<p data-path-to-node="11">You compromised the DMZ Web Server. You have root. But the Database is on a different VLAN, and the Firewall blocks all direct connections from the internet.</p>
+<p data-path-to-node="12">To an amateur, the game is over. To a professional, the game has just begun.</p>
+<p data-path-to-node="13">Today, we stop seeing compromised systems as targets and start treating them as <strong data-path-to-node="13" data-index-in-node="80">Gateways</strong>. We are going to tunnel our traffic <i data-path-to-node="13" data-index-in-node="125">through</i> the web server, making it look like legitimate internal traffic, to reach the crown jewels hidden deep inside the network.</p>
+<hr>
+<h3 data-path-to-node="15"><strong data-path-to-node="15" data-index-in-node="0">A Glimpse of the Code: The "SOCKS" Magic Trick</strong></h3>
+<p data-path-to-node="16">SSH isn't just for remote management. It's a full VPN in a single command.</p>
+<p data-path-to-node="17">In Day 19, we use <strong data-path-to-node="17" data-index-in-node="18">Dynamic Port Forwarding</strong> to create a SOCKS proxy on our localhost that routes <i data-path-to-node="17" data-index-in-node="95">all</i> our hacking tools (Nmap, Metasploit, Browser) through the compromised host.</p>
+<p data-path-to-node="18">Here is the Python logic that automates the setup of this tunnel:</p>
+<pre class="language-python"><code>def setup_socks_proxy(pivot_host, pivot_user, pivot_key, socks_port=1080):
+    """
+    Create SOCKS5 proxy through SSH pivot.
+    This routes ALL traffic from our machine -&gt; Compromised Host -&gt; Internal Network.
+    """
+    cmd = [
+        'ssh',
+        '-i', pivot_key,
+        '-D', str(socks_port),  # The magic flag for Dynamic Forwarding
+        '-N',                    # "No Remote Command" (Just forward ports)
+        '-f',                    # Background the process
+        f'{pivot_user}@{pivot_host}'
+    ]
+    
+    subprocess.run(cmd)
+    print(f"[+] Tunnel Established! Point your tools to localhost:{socks_port}")</code></pre>
+<p>Once this is running, you can run <code data-path-to-node="20" data-index-in-node="34">proxychains nmap 192.168.1.10</code> and scan the internal network as if you were sitting in the server room.</p>
+<hr>
+<h4 data-path-to-node="22"><strong data-path-to-node="22" data-index-in-node="0">Read the full guide on Medium to get:</strong></h4>
+<ul data-path-to-node="23">
+<li>
+<p data-path-to-node="23,0,0"><strong data-path-to-node="23,0,0" data-index-in-node="0">Chisel Tunneling:</strong> How to tunnel TCP over HTTP to bypass strict firewalls that block SSH.</p>
+</li>
+<li>
+<p data-path-to-node="23,1,0"><strong data-path-to-node="23,1,0" data-index-in-node="0">Ligolo-ng:</strong> The modern, high-speed alternative to SOCKS proxies that creates a full VPN interface (TUN/TAP) for your attack box.</p>
+</li>
+<li>
+<p data-path-to-node="23,2,0"><strong data-path-to-node="23,2,0" data-index-in-node="0">The "Multi-Hop" Guide:</strong> How to chain three different compromised servers together to reach an air-gapped network segment.</p>
+</li>
+<li>
+<p data-path-to-node="23,3,0"><strong data-path-to-node="23,3,0" data-index-in-node="0">Pivot Chain Management:</strong> A framework to track which compromised host can talk to which subnet, so you never get lost in the maze.</p>
+</li>
+</ul>
+<p data-path-to-node="24">The firewall says "Access Denied." The Pivot says "Access Granted."</p>
+<p data-path-to-node="24"><strong><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-19-network-pivoting-reaching-the-unreachable-bd082b3906a2" target="_blank" rel="noopener noreferrer">READ THE FULL GUIDE ON MEDIUM ➔</a></strong></p>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>30 Days of Red Team: Day 18 — Lateral Movement</title>
         <author>

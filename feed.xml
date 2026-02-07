@@ -3,7 +3,7 @@
     <title>Maxwell Cross</title>
     <link href="https://maxwell-cross.com/feed.xml" rel="self" />
     <link href="https://maxwell-cross.com" />
-    <updated>2026-02-07T10:29:39-05:00</updated>
+    <updated>2026-02-07T10:34:32-05:00</updated>
     <author>
         <name>Maxwell Cross</name>
     </author>
@@ -17,6 +17,12 @@
         <link href="https://maxwell-cross.com/the-lobster-trap-moltbook-c2.html"/>
         <id>https://maxwell-cross.com/the-lobster-trap-moltbook-c2.html</id>
         <media:content url="https://maxwell-cross.com/media/posts/27/Gemini_Generated_Image_2e27x62e27x62e2711.png" medium="image" />
+            <category term="OpenClaw Vulnerability"/>
+            <category term="OpSec"/>
+            <category term="MoltBook Security"/>
+            <category term="Digital Sovereignty"/>
+            <category term="C2 Infrastructure"/>
+            <category term="Adversarial AI"/>
 
         <updated>2026-02-07T10:28:24-05:00</updated>
             <summary type="html">

@@ -20,9 +20,15 @@
                 "name": "Maxwell Cross"
             },
             "tags": [
+                   "OpenClaw Vulnerability",
+                   "OpSec",
+                   "MoltBook Security",
+                   "Digital Sovereignty",
+                   "C2 Infrastructure",
+                   "Adversarial AI"
             ],
             "date_published": "2026-02-07T10:28:24-05:00",
-            "date_modified": "2026-02-07T10:29:39-05:00"
+            "date_modified": "2026-02-07T10:34:32-05:00"
         },
         {
             "id": "https://maxwell-cross.com/30-days-red-team-day-22.html",

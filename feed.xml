@@ -3,7 +3,7 @@
     <title>Maxwell Cross</title>
     <link href="https://maxwell-cross.com/feed.xml" rel="self" />
     <link href="https://maxwell-cross.com" />
-    <updated>2026-02-07T07:55:45-05:00</updated>
+    <updated>2026-02-07T09:08:35-05:00</updated>
     <author>
         <name>Maxwell Cross</name>
     </author>
@@ -16,15 +16,18 @@
         </author>
         <link href="https://maxwell-cross.com/30-days-red-team-day-21.html"/>
         <id>https://maxwell-cross.com/30-days-red-team-day-21.html</id>
+        <media:content url="https://maxwell-cross.com/media/posts/25/Gemini_Generated_Image_qf7qjkqf7qjkqf7q1.png" medium="image" />
 
         <updated>2026-02-07T07:55:45-05:00</updated>
             <summary type="html">
                 <![CDATA[
+                        <img src="https://maxwell-cross.com/media/posts/25/Gemini_Generated_Image_qf7qjkqf7qjkqf7q1.png" alt="" />
                     Tools don't hack networks. Processes do. You have spent Week 3 learning the individual components of network compromise: Day 15: You learned to harvest credentials. Day 16/17: You learned to escalate to SYSTEM/Root. Day 18: You learned to move laterally via Pass-the-Hash. Day 19: You&hellip;
                 ]]>
             </summary>
         <content type="html">
             <![CDATA[
+                    <p><img src="https://maxwell-cross.com/media/posts/25/Gemini_Generated_Image_qf7qjkqf7qjkqf7q1.png" class="type:primaryImage" alt="" /></p>
                 <h4 data-path-to-node="10"><strong data-path-to-node="10" data-index-in-node="0">Tools don't hack networks. Processes do.</strong></h4>
 <p data-path-to-node="11">You have spent Week 3 learning the individual components of network compromise:</p>
 <ul data-path-to-node="12">

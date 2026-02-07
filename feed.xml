@@ -3,12 +3,77 @@
     <title>Maxwell Cross</title>
     <link href="https://maxwell-cross.com/feed.xml" rel="self" />
     <link href="https://maxwell-cross.com" />
-    <updated>2026-02-07T09:08:35-05:00</updated>
+    <updated>2026-02-07T10:17:07-05:00</updated>
     <author>
         <name>Maxwell Cross</name>
     </author>
     <id>https://maxwell-cross.com</id>
 
+    <entry>
+        <title>30 Days of Red Team: Day 22 — Active Directory Enumeration</title>
+        <author>
+            <name>Maxwell Cross</name>
+        </author>
+        <link href="https://maxwell-cross.com/30-days-red-team-day-22.html"/>
+        <id>https://maxwell-cross.com/30-days-red-team-day-22.html</id>
+
+        <updated>2026-02-07T09:15:27-05:00</updated>
+            <summary type="html">
+                <![CDATA[
+                    You are inside the castle. Do you have a map? For three weeks, you have focused on compromising individual machines. But in an Enterprise environment, a single workstation is just a node. The real target is Active Directory. Active Directory is the nervous system of&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <h4><strong data-path-to-node="10" data-index-in-node="0">You are inside the castle. Do you have a map?</strong></h4>
+<p data-path-to-node="11">For three weeks, you have focused on compromising individual machines. But in an Enterprise environment, a single workstation is just a node. The real target is <strong data-path-to-node="11" data-index-in-node="161">Active Directory</strong>.</p>
+<p data-path-to-node="12">Active Directory is the nervous system of the organization. It controls every user, every permission, and every trust relationship. If you know how to query it, AD will tell you exactly how to conquer it.</p>
+<p data-path-to-node="13">Today, we stop exploiting vulnerabilities and start exploiting <strong data-path-to-node="13" data-index-in-node="63">Logic</strong>. We are going to map the entire kingdom without firing a single exploit, identifying the hidden relationships that turn a low-privilege user into a Domain Admin.</p>
+<hr>
+<h3 data-path-to-node="15"><strong data-path-to-node="15" data-index-in-node="0">A Glimpse of the Code: The ACL Hunter</strong></h3>
+<p data-path-to-node="16">Most people look for "Domain Admins." Professionals look for <strong data-path-to-node="16" data-index-in-node="61">Access Control Lists (ACLs)</strong>.</p>
+<p data-path-to-node="17">If your low-privilege user has <code data-path-to-node="17" data-index-in-node="31">WriteDacl</code> permissions on a group object, you can add yourself to that group. It is an invisible backdoor. In Day 22, we build a tool to hunt these hidden privileges programmatically.</p>
+<p data-path-to-node="18">Here is the logic that scans for users who can reset a Domain Admin's password:</p>
+<pre class="language-python"><code>def find_acl_abuse_paths(self, target_group="Domain Admins"):
+    """
+    Hunt for ACL misconfigurations.
+    Checks if our current user has 'GenericAll', 'WriteDacl', 
+    or 'ForceChangePassword' rights over high-value targets.
+    """
+    print(f"[*] Hunting for dangerous ACLs on {target_group}...")
+    
+    # Query AD for the target's Access Control List
+    aces = self.ldap_query(target_group, attribute="nTSecurityDescriptor")
+    
+    for ace in aces:
+        # Check if the ACE grants control to our compromised user
+        if ace.TrusteeSID == self.current_user_sid:
+            if "GenericAll" in ace.AccessMask:
+                print(f"[!] CRITICAL: You have Full Control over {target_group}!")
+            elif "ResetPassword" in ace.AccessMask:
+                print(f"[!] VULN: You can reset passwords for members of {target_group}.")</code></pre>
+<p>This script reveals the "Shadow Admins"—the accounts that aren't in the Admin group, but have the power to control it.</p>
+<hr>
+<h4 data-path-to-node="22"><strong data-path-to-node="22" data-index-in-node="0">Read the full guide on Medium to get:</strong></h4>
+<ul data-path-to-node="23">
+<li>
+<p data-path-to-node="23,0,0"><strong data-path-to-node="23,0,0" data-index-in-node="0">BloodHound Automation:</strong> How to use SharpHound to visualize the "Six Degrees of Domain Admin" and find the shortest attack path.</p>
+</li>
+<li>
+<p data-path-to-node="23,1,0"><strong data-path-to-node="23,1,0" data-index-in-node="0">Kerberoast Hunting:</strong> A script to identify Service Accounts (SPNs) that can be cracked offline to reveal cleartext passwords.</p>
+</li>
+<li>
+<p data-path-to-node="23,2,0"><strong data-path-to-node="23,2,0" data-index-in-node="0">Unconstrained Delegation:</strong> Finding the "Golden Ticket" servers that cache Domain Admin credentials in memory.</p>
+</li>
+<li>
+<p data-path-to-node="23,3,0"><strong data-path-to-node="23,3,0" data-index-in-node="0">Stealth Enumeration:</strong> How to query AD using native LDAP calls instead of noisy tools like PowerView, staying under the radar of the SOC.</p>
+</li>
+</ul>
+<p data-path-to-node="24">We have the map. Tomorrow, we start the fire.</p>
+<p data-path-to-node="24"><strong data-path-to-node="25" data-index-in-node="2"><a href="https://medium.com/30-days-of-red-team/30-days-of-red-team-day-22-active-directory-enumeration-bloodhound-8240538d9edb" target="_blank" rel="noopener noreferrer">READ THE FULL GUIDE ON MEDIUM ➔</a></strong></p>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>30 Days of Red Team: Day 21 — The Attack Chain</title>
         <author>
